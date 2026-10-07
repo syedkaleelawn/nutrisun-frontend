@@ -1264,7 +1264,7 @@ export default function CustomerDashboard() {
 
                         <a
                           href={PAYMENT_CONFIG.qrAssetPath}
-                          download="NutriSun_ICICIBank_UPI_QR.jpg"
+                          download="NutriSun_KVB_UPI_QR.png"
                           className="min-h-[44px] py-2 px-3 rounded-xl bg-white border border-[#B0BE8C] hover:bg-[#B0BE8C]/20 text-[#22222B] text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-2xs text-center"
                         >
                           <Download className="w-4 h-4 text-[#741B22] shrink-0" />
@@ -1273,11 +1273,11 @@ export default function CustomerDashboard() {
                       </div>
                     </div>
 
-                    {/* ICICI Bank UPI QR Image (Displayed clearly without cropping, stretching, overlays, or changes) */}
+                    {/* Karur Vysya Bank UPI QR Image (Displayed clearly without cropping, stretching, overlays, or changes) */}
                     <div className="p-3 sm:p-4 rounded-2xl bg-white border border-[#B0BE8C]/40 flex flex-col items-center justify-center shadow-xs">
                       <img
                         src={PAYMENT_CONFIG.qrAssetPath}
-                        alt="ICICI Bank UPI QR Code - Syed Kaleel Awn M"
+                        alt="Karur Vysya Bank UPI QR Code - Syed Kaleel Awn Mohamed Ismail"
                         className="w-full max-w-[260px] sm:max-w-[280px] h-auto object-contain rounded-xl"
                       />
                     </div>
@@ -1456,7 +1456,7 @@ export default function CustomerDashboard() {
 
                 <a
                   href={PAYMENT_CONFIG.qrAssetPath}
-                  download="NutriSun_ICICIBank_UPI_QR.jpg"
+                  download="NutriSun_KVB_UPI_QR.png"
                   className="min-h-[44px] py-2 px-3 rounded-xl bg-white border border-[#B0BE8C] hover:bg-[#B0BE8C]/20 text-[#22222B] text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-2xs text-center"
                 >
                   <Download className="w-4 h-4 text-[#741B22] shrink-0" />
@@ -1465,11 +1465,11 @@ export default function CustomerDashboard() {
               </div>
             </div>
 
-            {/* ICICI Bank UPI QR Image */}
+            {/* Karur Vysya Bank UPI QR Image */}
             <div className="p-3 sm:p-4 rounded-2xl bg-white border border-[#B0BE8C]/40 flex flex-col items-center justify-center shadow-xs">
               <img
                 src={PAYMENT_CONFIG.qrAssetPath}
-                alt="ICICI Bank UPI QR Code - Syed Kaleel Awn M"
+                alt="Karur Vysya Bank UPI QR Code - Syed Kaleel Awn Mohamed Ismail"
                 className="w-full max-w-[260px] sm:max-w-[280px] h-auto object-contain rounded-xl"
               />
             </div>
