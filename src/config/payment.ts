@@ -6,9 +6,9 @@ export interface PaymentConfig {
 }
 
 export const PAYMENT_CONFIG: PaymentConfig = {
-  accountHolder: process.env.NEXT_PUBLIC_PAYEE_NAME || 'Syed Kaleel Awn M',
-  upiId: process.env.NEXT_PUBLIC_UPI_ID || 'syedkaleelawn@icici',
-  qrAssetPath: process.env.NEXT_PUBLIC_QR_ASSET_PATH || '/ICICIBank_QR.jpg',
+  accountHolder: 'Syed Kaleel Awn Mohamed Ismail',
+  upiId: 'nutrisun@kvb',
+  qrAssetPath: '/KVB_QR.png',
   instruction:
     process.env.NEXT_PUBLIC_PAYMENT_INSTRUCTION ||
     'Scan this QR using any UPI app, enter the exact amount shown, and upload your payment screenshot for admin verification.',
