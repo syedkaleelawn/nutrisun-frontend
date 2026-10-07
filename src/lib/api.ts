@@ -239,7 +239,6 @@ export interface DailyMealLog {
   user_id: number;
   date: string; // YYYY-MM-DD
   meal_slot: MealSlot;
-  dietary_type: DietaryType;
   status: MealStatus;
   delivery_status: DeliveryStatus;
   credit_deducted: boolean;
