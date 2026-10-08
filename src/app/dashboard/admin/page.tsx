@@ -639,13 +639,13 @@ export default function AdminDashboard() {
           className="bg-emerald-50/70 border-emerald-200 p-3.5 sm:p-4 rounded-3xl border text-left transition-all min-h-[44px] flex flex-col justify-between hover:bg-emerald-100/70"
         >
           <div className="flex items-center justify-between gap-1">
-            <span className="text-[10px] font-black uppercase text-emerald-800 truncate">Pending Credits</span>
+            <span className="text-[10px] font-black uppercase text-emerald-800 truncate">Automatically Rescheduled</span>
             <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
           </div>
           <div className="text-xl sm:text-2xl font-black text-emerald-700 mt-1">
             {requests.filter((r) => r.is_on_time && r.request_type !== 'RESUME').length}
           </div>
-          <p className="text-[10px] text-slate-400 mt-0.5 truncate">Before-cutoff preserved</p>
+          <p className="text-[10px] text-slate-400 mt-0.5 truncate">Moved to next matching slot</p>
         </button>
 
         <button
@@ -656,7 +656,7 @@ export default function AdminDashboard() {
           className="bg-rose-50/70 border-rose-200 p-3.5 sm:p-4 rounded-3xl border text-left transition-all min-h-[44px] flex flex-col justify-between hover:bg-rose-100/70"
         >
           <div className="flex items-center justify-between gap-1">
-            <span className="text-[10px] font-black uppercase text-rose-800 truncate">Forfeited Credits</span>
+            <span className="text-[10px] font-black uppercase text-rose-800 truncate">Late Cancellations</span>
             <Clock className="w-4 h-4 text-rose-600 shrink-0" />
           </div>
           <div className="text-xl sm:text-2xl font-black text-rose-700 mt-1">
@@ -1050,8 +1050,8 @@ export default function AdminDashboard() {
                   className="w-full min-h-[40px] px-3 py-2 rounded-xl border border-[#B0BE8C]/40 text-xs font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
                 >
                   <option value="ALL">All Outcomes</option>
-                  <option value="ON_TIME">Before Cutoff (Pending Credit)</option>
-                  <option value="LATE">Late (Credit Forfeited)</option>
+                  <option value="ON_TIME">Before Cutoff (Rescheduled)</option>
+                  <option value="LATE">Late (Cancelled)</option>
                 </select>
               </div>
             </div>
@@ -1094,11 +1094,11 @@ export default function AdminDashboard() {
                             </span>
                           ) : r.is_on_time ? (
                             <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
-                              Pending Credit
+                              Rescheduled
                             </span>
                           ) : (
                             <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200">
-                              Forfeited Credit
+                              Cancelled
                             </span>
                           )}
                         </div>
@@ -1148,7 +1148,7 @@ export default function AdminDashboard() {
                         <th className="p-3">Affected Date / Slot</th>
                         <th className="p-3">Submission Time (IST)</th>
                         <th className="p-3">Cutoff Timing</th>
-                        <th className="p-3">Credit Result</th>
+                        <th className="p-3">Outcome</th>
                         <th className="p-3">Status</th>
                       </tr>
                     </thead>
@@ -1194,17 +1194,13 @@ export default function AdminDashboard() {
                               <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-200">
                                 Resumed
                               </span>
-                            ) : r.credit_result === 'MIXED' ? (
-                              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
-                                Mixed Credits
-                              </span>
                             ) : r.is_on_time ? (
                               <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
-                                Pending Credit
+                                Rescheduled
                               </span>
                             ) : (
                               <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200">
-                                Forfeited Credit
+                                Cancelled
                               </span>
                             )}
                           </td>

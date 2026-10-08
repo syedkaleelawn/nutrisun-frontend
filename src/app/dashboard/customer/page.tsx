@@ -399,10 +399,9 @@ export default function CustomerDashboard() {
     );
   }
 
-  // Active subscriptions count, total remaining credits, and pending credits
+  // Active subscriptions count and remaining credits
   const activeSubs = subscriptions.filter((s) => s.status === 'ACTIVE');
   const totalRemainingCredits = activeSubs.reduce((acc, s) => acc + s.remaining_credits, 0);
-  const totalPendingCredits = subscriptions.reduce((acc, s) => acc + (s.pending_credits || 0), 0);
 
   return (
     <div className="max-w-6xl mx-auto px-3 sm:px-4 py-4 sm:py-8 space-y-4 sm:space-y-6 w-full max-w-full">
@@ -432,10 +431,6 @@ export default function CustomerDashboard() {
             <div className="p-3 rounded-2xl bg-white/90 border border-[#B0BE8C]/35 shadow-xs text-center flex-1 sm:min-w-[110px]">
               <span className="text-[10px] font-black uppercase text-slate-400">Active Credits</span>
               <div className="text-xl sm:text-2xl font-black text-[#741B22]">{totalRemainingCredits}</div>
-            </div>
-            <div className="p-3 rounded-2xl bg-emerald-50/90 border border-emerald-200 shadow-xs text-center flex-1 sm:min-w-[110px]">
-              <span className="text-[10px] font-black uppercase text-emerald-800">Pending Credits</span>
-              <div className="text-xl sm:text-2xl font-black text-emerald-700">{totalPendingCredits}</div>
             </div>
             <button
               onClick={() => setActiveTab('plans')}
@@ -753,11 +748,11 @@ export default function CustomerDashboard() {
                         {isDelivered ? (
                           <span className="text-emerald-700 font-bold">Delivered (1 Credit Deducted)</span>
                         ) : isSkippedOnTime ? (
-                          <span className="text-emerald-700 font-bold">Skipped (Pending Credit Available)</span>
+                          <span className="text-emerald-700 font-bold">Cancelled and Automatically Rescheduled</span>
                         ) : isSkippedLate ? (
-                          <span className="text-rose-700 font-bold">Cancelled Late (Credit Forfeited)</span>
+                          <span className="text-rose-700 font-bold">Cancelled After Cutoff</span>
                         ) : isPaused ? (
-                          <span className="text-amber-700 font-bold">Paused (Pending Credit)</span>
+                          <span className="text-amber-700 font-bold">Paused</span>
                         ) : meal.status === 'REALLOCATED' ? (
                           <span className="text-indigo-700 font-bold">Reallocated</span>
                         ) : (
@@ -1622,7 +1617,7 @@ export default function CustomerDashboard() {
                   </div>
                   <p>• Automatically processed immediately with no admin approval needed.</p>
                   <p>• Delivery will be cancelled.</p>
-                  <p>• 1 meal credit will move to <strong>Pending Credits</strong> and be available for replacement/reallocation after your subscription ends.</p>
+                  <p>• The meal will automatically move to the next available date for the same meal type.</p>
                 </div>
               ) : (
                 <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-300 text-rose-950 text-xs font-medium space-y-1.5">
@@ -1632,7 +1627,7 @@ export default function CustomerDashboard() {
                   </div>
                   <p className="font-bold text-rose-900">• Cut-off passed (Breakfast/Lunch: prior night, Dinner: 12:00 PM same day).</p>
                   <p>• Delivery will be stopped immediately so preparation/food is not wasted.</p>
-                  <p className="font-bold text-rose-700">• This meal credit is forfeited: no Pending Credit and no replacement.</p>
+                  <p className="font-bold text-rose-700">• The meal will be cancelled without a replacement.</p>
                 </div>
               )}
 
@@ -1650,7 +1645,7 @@ export default function CustomerDashboard() {
                     isOnTime ? 'bg-emerald-700 hover:bg-emerald-800' : 'bg-[#B92F25] hover:bg-[#741B22]'
                   }`}
                 >
-                  {submittingSkip ? 'Processing...' : isOnTime ? 'Confirm Skip (Pending Credit)' : 'Cancel Meal (Forfeit Credit)'}
+                  {submittingSkip ? 'Processing...' : isOnTime ? 'Confirm & Move Meal' : 'Confirm Cancellation'}
                 </button>
               </div>
             </div>
@@ -1692,8 +1687,8 @@ export default function CustomerDashboard() {
             <div className="p-3.5 rounded-2xl bg-[#B0BE8C]/20 border border-[#B0BE8C]/40 text-[#22222B] text-xs space-y-1">
               <p className="font-bold">• Automatic Per-Meal Processing:</p>
               <p>Each affected meal during the pause is evaluated individually against its own cutoff.</p>
-              <p>• Meals before cutoff move to <strong>Pending Credits</strong> for replacement after your subscription ends.</p>
-              <p>• Meals at/after cutoff will be cancelled without credit replacement.</p>
+              <p>• Meals before cutoff automatically move to their next available dates for the same meal types.</p>
+              <p>• Meals at or after cutoff are cancelled without replacement.</p>
             </div>
 
             <div className="flex gap-2">
