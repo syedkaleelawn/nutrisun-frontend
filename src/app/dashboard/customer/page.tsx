@@ -24,8 +24,6 @@ import {
   Clock,
   Sparkles,
   CreditCard,
-  PauseCircle,
-  PlayCircle,
   SkipForward,
   MapPin,
   RefreshCw,
@@ -91,17 +89,6 @@ export default function CustomerDashboard() {
   // "Skip Meal" Modal
   const [mealToSkip, setMealToSkip] = useState<DailyMealLog | null>(null);
   const [submittingSkip, setSubmittingSkip] = useState(false);
-
-  // "Pause Subscription" Modal
-  const [subToPause, setSubToPause] = useState<UserSubscription | null>(null);
-  const [pauseStartDate, setPauseStartDate] = useState('');
-  const [pauseEstimatedResume, setPauseEstimatedResume] = useState('');
-  const [submittingPause, setSubmittingPause] = useState(false);
-
-  // "Resume Subscription" Modal
-  const [subToResume, setSubToResume] = useState<UserSubscription | null>(null);
-  const [actualResumeDate, setActualResumeDate] = useState('');
-  const [submittingResume, setSubmittingResume] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -319,43 +306,6 @@ export default function CustomerDashboard() {
     }
   };
 
-  const handleConfirmPause = async () => {
-    if (!subToPause || !pauseStartDate) return;
-    setSubmittingPause(true);
-    try {
-      const res = await customerApi.requestPause({
-        subscription_id: subToPause.id,
-        pause_start_date: pauseStartDate,
-        estimated_resume_date: pauseEstimatedResume || undefined,
-      });
-      setNotification(res.data.message);
-      setSubToPause(null);
-      await loadData(true);
-    } catch (err: any) {
-      alert(err.response?.data?.error || 'Failed to submit pause request.');
-    } finally {
-      setSubmittingPause(false);
-    }
-  };
-
-  const handleConfirmResume = async () => {
-    if (!subToResume || !actualResumeDate) return;
-    setSubmittingResume(true);
-    try {
-      const res = await customerApi.requestResume({
-        subscription_id: subToResume.id,
-        actual_resume_date: actualResumeDate,
-      });
-      setNotification(res.data.message);
-      setSubToResume(null);
-      await loadData(true);
-    } catch (err: any) {
-      alert(err.response?.data?.error || 'Failed to submit resume request.');
-    } finally {
-      setSubmittingResume(false);
-    }
-  };
-
   const getSlotIcon = (slot: string) => {
     switch (slot.toLowerCase()) {
       case 'breakfast':
@@ -525,7 +475,6 @@ export default function CustomerDashboard() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {subscriptions.map((sub) => {
                   const isPending = sub.payment_status === 'PENDING';
-                  const isPaused = sub.status === 'PAUSED';
                   const isActive = sub.status === 'ACTIVE';
 
                   return (
@@ -545,11 +494,6 @@ export default function CustomerDashboard() {
                             {isPending && (
                               <span className="px-2.5 py-1 rounded-full bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80 text-[10px] font-bold shadow-2xs whitespace-nowrap">
                                 Payment Pending
-                              </span>
-                            )}
-                            {isPaused && (
-                              <span className="px-2.5 py-1 rounded-full bg-blue-100 text-blue-800 text-[10px] font-bold border border-blue-200 whitespace-nowrap">
-                                Paused
                               </span>
                             )}
                             {isActive && (
@@ -632,25 +576,11 @@ export default function CustomerDashboard() {
                           })()
                         ) : isActive ? (
                           <button
-                            onClick={() => {
-                              setSubToPause(sub);
-                              setPauseStartDate(new Date().toISOString().split('T')[0]);
-                            }}
-                            className="w-full sm:w-auto min-h-[44px] px-4 py-2 rounded-xl bg-[#DCE5CC] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-all flex items-center justify-center gap-1.5"
+                            onClick={() => setActiveTab('schedule')}
+                            className="w-full min-h-[44px] px-4 py-2 rounded-xl bg-[#DCE5CC] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-all flex items-center justify-center gap-1.5"
                           >
-                            <PauseCircle className="w-4 h-4 text-[#741B22] shrink-0" />
-                            Request Pause
-                          </button>
-                        ) : isPaused ? (
-                          <button
-                            onClick={() => {
-                              setSubToResume(sub);
-                              setActualResumeDate(new Date().toISOString().split('T')[0]);
-                            }}
-                            className="w-full sm:w-auto min-h-[44px] px-4 py-2 rounded-xl bg-[#DCE5CC] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-all flex items-center justify-center gap-1.5"
-                          >
-                            <PlayCircle className="w-4 h-4 text-emerald-700 shrink-0" />
-                            Request Resume
+                            <SkipForward className="w-4 h-4 text-[#741B22] shrink-0" />
+                            Cancel Meals from Schedule
                           </button>
                         ) : null}
                       </div>
@@ -730,7 +660,6 @@ export default function CustomerDashboard() {
                 const isDelivered = meal.delivery_status === 'DELIVERED';
                 const isSkippedOnTime = meal.status === 'SKIPPED_ON_TIME';
                 const isSkippedLate = meal.status === 'SKIPPED_LATE';
-                const isPaused = meal.status === 'PAUSED';
 
                 return (
                   <div key={meal.id} className="glass-card rounded-2xl p-4 border border-[#B0BE8C]/35 shadow-xs flex flex-col justify-between">
@@ -751,8 +680,7 @@ export default function CustomerDashboard() {
                           <span className="text-emerald-700 font-bold">Cancelled and Automatically Rescheduled</span>
                         ) : isSkippedLate ? (
                           <span className="text-rose-700 font-bold">Cancelled After Cutoff</span>
-                        ) : isPaused ? (
-                          <span className="text-amber-700 font-bold">Paused</span>
+                       
                         ) : meal.status === 'REALLOCATED' ? (
                           <span className="text-indigo-700 font-bold">Reallocated</span>
                         ) : (
@@ -922,11 +850,11 @@ export default function CustomerDashboard() {
       {/* TAB 4: SERVICE REQUESTS & HISTORY */}
       {activeTab === 'requests' && (
         <div className="space-y-4">
-          <h2 className="text-base font-black text-[#22222B]">Skip / Pause / Resume Requests History</h2>
+          <h2 className="text-base font-black text-[#22222B]">Meal Cancellation History</h2>
 
           {requests.length === 0 ? (
             <div className="glass-card rounded-2xl p-6 sm:p-8 text-center text-slate-500 border border-[#B0BE8C]/35">
-              <p className="text-xs">No service requests submitted yet.</p>
+              <p className="text-xs">No meal cancellations submitted yet.</p>
             </div>
           ) : (
             <div className="space-y-2.5">
@@ -1653,103 +1581,7 @@ export default function CustomerDashboard() {
         );
       })()}
 
-      {/* MODAL: PAUSE SUBSCRIPTION */}
-      {subToPause && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-[100] overflow-y-auto">
-          <div className="bg-white rounded-3xl p-5 sm:p-8 max-w-md w-full border border-[#B0BE8C]/40 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto my-auto">
-            <h3 className="text-lg font-black text-[#22222B]">Pause Subscription</h3>
-            <p className="text-xs text-slate-600">
-              Sub #{subToPause.id} ({subToPause.plan_snapshot_name || 'Active Plan'}).
-            </p>
 
-            <div className="space-y-3 text-xs">
-              <div>
-                <label className="block font-bold text-[#22222B] mb-1">Pause Start Date (YYYY-MM-DD)</label>
-                <input
-                  type="date"
-                  required
-                  value={pauseStartDate}
-                  onChange={(e) => setPauseStartDate(e.target.value)}
-                  className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-bold focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
-                />
-              </div>
-              <div>
-                <label className="block font-bold text-[#22222B] mb-1">Estimated Resume Date (Optional)</label>
-                <input
-                  type="date"
-                  value={pauseEstimatedResume}
-                  onChange={(e) => setPauseEstimatedResume(e.target.value)}
-                  className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-bold focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
-                />
-              </div>
-            </div>
-
-            <div className="p-3.5 rounded-2xl bg-[#B0BE8C]/20 border border-[#B0BE8C]/40 text-[#22222B] text-xs space-y-1">
-              <p className="font-bold">• Automatic Per-Meal Processing:</p>
-              <p>Each affected meal during the pause is evaluated individually against its own cutoff.</p>
-              <p>• Meals before cutoff automatically move to their next available dates for the same meal types.</p>
-              <p>• Meals at or after cutoff are cancelled without replacement.</p>
-            </div>
-
-            <div className="flex gap-2">
-              <button
-                onClick={() => setSubToPause(null)}
-                className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#DCE5CC] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleConfirmPause}
-                disabled={submittingPause}
-                className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white text-xs font-black shadow-md transition-colors flex items-center justify-center"
-              >
-                {submittingPause ? 'Pausing...' : 'Confirm Pause'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* MODAL: RESUME SUBSCRIPTION */}
-      {subToResume && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-[100] overflow-y-auto">
-          <div className="bg-white rounded-3xl p-5 sm:p-8 max-w-md w-full border border-[#B0BE8C]/40 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto my-auto">
-            <h3 className="text-lg font-black text-[#22222B]">Resume Subscription</h3>
-            <p className="text-xs text-slate-600">
-              Sub #{subToResume.id} will be reactivated and scheduled deliveries will resume.
-            </p>
-
-            <div className="space-y-3 text-xs">
-              <div>
-                <label className="block font-bold text-[#22222B] mb-1">Resume Date (YYYY-MM-DD)</label>
-                <input
-                  type="date"
-                  required
-                  value={actualResumeDate}
-                  onChange={(e) => setActualResumeDate(e.target.value)}
-                  className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-bold focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
-                />
-              </div>
-            </div>
-
-            <div className="flex gap-2">
-              <button
-                onClick={() => setSubToResume(null)}
-                className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#DCE5CC] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleConfirmResume}
-                disabled={submittingResume}
-                className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white text-xs font-black shadow-md transition-colors flex items-center justify-center"
-              >
-                {submittingResume ? 'Resuming...' : 'Confirm Resume'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
