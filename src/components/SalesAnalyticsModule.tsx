@@ -33,6 +33,11 @@ interface SalesAnalyticsModuleProps {
   onNotification: (msg: string) => void;
 }
 
+const toFiniteNumber = (value: unknown): number => {
+  const numberValue = typeof value === 'number' ? value : Number(value);
+  return Number.isFinite(numberValue) ? numberValue : 0;
+};
+
 export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsModuleProps) {
   // 1. Filter States
   const [selectedMonth, setSelectedMonth] = useState<string>(() => {
@@ -92,13 +97,87 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
       ]);
 
       if (analRes.status === 'fulfilled') {
-        setAnalytics(analRes.value.data);
+        const rawAnalytics = analRes.value.data;
+        setAnalytics({
+          ...rawAnalytics,
+          total_confirmed_sales: toFiniteNumber(rawAnalytics.total_confirmed_sales),
+          total_pending_amount: toFiniteNumber(rawAnalytics.total_pending_amount),
+          confirmed_payment_count: toFiniteNumber(rawAnalytics.confirmed_payment_count),
+          pending_payment_count: toFiniteNumber(rawAnalytics.pending_payment_count),
+          total_delivered_meals: toFiniteNumber(rawAnalytics.total_delivered_meals),
+          breakfast_delivered: toFiniteNumber(rawAnalytics.breakfast_delivered),
+          lunch_delivered: toFiniteNumber(rawAnalytics.lunch_delivered),
+          dinner_delivered: toFiniteNumber(rawAnalytics.dinner_delivered),
+          customer_sales: Array.isArray(rawAnalytics.customer_sales)
+            ? rawAnalytics.customer_sales.map((customer) => ({
+                ...customer,
+                confirmed_sales: toFiniteNumber(customer.confirmed_sales),
+                pending_amount: toFiniteNumber(customer.pending_amount),
+                payments_count: toFiniteNumber(customer.payments_count),
+              }))
+            : [],
+          daily_sales: Array.isArray(rawAnalytics.daily_sales)
+            ? rawAnalytics.daily_sales.map((day) => ({
+                ...day,
+                confirmed_amount: toFiniteNumber(day.confirmed_amount),
+                pending_amount: toFiniteNumber(day.pending_amount),
+                payments_count: toFiniteNumber(day.payments_count),
+                payments: Array.isArray(day.payments)
+                  ? day.payments.map((payment) => ({
+                      ...payment,
+                      amount: toFiniteNumber(payment.amount),
+                    }))
+                  : [],
+              }))
+            : [],
+          recent_payments: Array.isArray(rawAnalytics.recent_payments)
+            ? rawAnalytics.recent_payments.map((payment) => ({
+                ...payment,
+                amount: toFiniteNumber(payment.amount),
+              }))
+            : [],
+        });
       } else {
         throw new Error('Failed to load sales analytics data.');
       }
 
       if (custRes.status === 'fulfilled') {
-        const custList = custRes.value.data.customers || [];
+        const rawCustomers = custRes.value.data.customers;
+        const custList: CustomerReportItem[] = Array.isArray(rawCustomers)
+          ? rawCustomers.map((customer) => ({
+              ...customer,
+              name: customer.name || 'Unnamed customer',
+              phone: customer.phone || '',
+              email: customer.email || '',
+              delivery_address: customer.delivery_address || '',
+              credit_balance: {
+                available: toFiniteNumber(customer.credit_balance?.available),
+                used: toFiniteNumber(customer.credit_balance?.used),
+                total: toFiniteNumber(customer.credit_balance?.total),
+              },
+              subscriptions: Array.isArray(customer.subscriptions)
+                ? customer.subscriptions.map((subscription) => ({
+                    ...subscription,
+                    plan_price: toFiniteNumber(subscription.plan_price),
+                    total_credits: toFiniteNumber(subscription.total_credits),
+                    used_credits: toFiniteNumber(subscription.used_credits),
+                    remaining_credits: toFiniteNumber(subscription.remaining_credits),
+                  }))
+                : [],
+              payment_history: Array.isArray(customer.payment_history)
+                ? customer.payment_history.map((payment) => ({
+                    ...payment,
+                    amount: toFiniteNumber(payment.amount),
+                  }))
+                : [],
+              activity_history: Array.isArray(customer.activity_history)
+                ? customer.activity_history.map((activity) => ({
+                    ...activity,
+                    credit_change: activity.credit_change || 'Not recorded',
+                  }))
+                : [],
+            }))
+          : [];
         setCustomers(custList);
         if (custList.length > 0 && !selectedCustomerId) {
           setSelectedCustomerId(custList[0].id);
