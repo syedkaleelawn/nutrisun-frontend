@@ -208,8 +208,6 @@ export interface UserSubscription {
   total_credits: number;
   used_credits: number;
   remaining_credits: number;
-  pending_credits: number;
-  forfeited_credits: number;
   payment_confirmed_at?: string;
   payment_record?: PaymentRecord;
   user?: User;
@@ -271,9 +269,6 @@ export interface ServiceRequest {
   actual_resume_date?: string;
   submission_time: string;
   is_on_time: boolean;
-  credit_result?: string;
-  pending_credits_added?: number;
-  forfeited_credits_count?: number;
   decision_time?: string;
   decided_by_admin_id?: number;
   admin_notes?: string;
@@ -478,8 +473,6 @@ export interface CustomerSubscriptionDetail {
   total_credits: number;
   used_credits: number;
   remaining_credits: number;
-  pending_credits: number;
-  forfeited_credits: number;
   payment_confirmed_at: string;
   created_at: string;
 }
@@ -487,8 +480,6 @@ export interface CustomerSubscriptionDetail {
 export interface CustomerCreditSummary {
   available: number;
   used: number;
-  pending: number;
-  forfeited: number;
   total: number;
 }
 
@@ -652,7 +643,6 @@ export const adminApi = {
     meal?: string;
     customer?: string;
     timing?: string;
-    credit_result?: string;
     scope?: string;
   }) =>
     api.get<{ count: number; requests: ServiceRequest[] }>('/admin/requests', { params }),
