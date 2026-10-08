@@ -53,8 +53,6 @@ export default function AdminDashboard() {
   const [counts, setCounts] = useState<PendingCountsResponse>({
     payment_pending: 0,
     skip_requests: 0,
-    pause_requests: 0,
-    resume_requests: 0,
     total_pending: 0,
   });
 
@@ -136,10 +134,6 @@ export default function AdminDashboard() {
     };
   }, [confirmSub?.payment_record?.proof_image_url]);
 
-  // Decide Request Modal
-  const [selectedRequest, setSelectedRequest] = useState<ServiceRequest | null>(null);
-  const [adminDecisionNotes, setAdminDecisionNotes] = useState('');
-  const [decidingRequest, setDecidingRequest] = useState(false);
 
   // Edit Customer Address Modal
   const [editingCust, setEditingCust] = useState<User | null>(null);
@@ -189,11 +183,10 @@ export default function AdminDashboard() {
   const [reallocReason, setReallocReason] = useState('');
   const [submittingRealloc, setSubmittingRealloc] = useState(false);
 
-  // Skip / Pause History Filters
+  // Meal cancellation history filters
   const [reqFilterCustomer, setReqFilterCustomer] = useState('');
   const [reqFilterDate, setReqFilterDate] = useState('');
   const [reqFilterMeal, setReqFilterMeal] = useState<'ALL' | 'breakfast' | 'lunch' | 'dinner'>('ALL');
-  const [reqFilterType, setReqFilterType] = useState<'ALL' | 'SKIP' | 'PAUSE' | 'RESUME'>('ALL');
   const [reqFilterTiming, setReqFilterTiming] = useState<'ALL' | 'ON_TIME' | 'LATE'>('ALL');
   const [reqFilterScope, setReqFilterScope] = useState<'ALL' | 'TODAY' | 'UPCOMING'>('ALL');
 
@@ -321,24 +314,6 @@ export default function AdminDashboard() {
       alert(err.response?.data?.error || 'Failed to reject payment.');
     } finally {
       setRejectingPayment(false);
-    }
-  };
-
-  const handleDecideRequest = async (decision: 'APPROVE' | 'REJECT') => {
-    if (!selectedRequest) return;
-    setDecidingRequest(true);
-    try {
-      const res = await adminApi.decideRequest(selectedRequest.id, {
-        action: decision,
-        admin_notes: adminDecisionNotes || undefined,
-      });
-      setNotification(res.data.message);
-      setSelectedRequest(null);
-      await loadAll();
-    } catch (err: any) {
-      alert(err.response?.data?.error || 'Failed to process request decision.');
-    } finally {
-      setDecidingRequest(false);
     }
   };
 
@@ -624,7 +599,7 @@ export default function AdminDashboard() {
           className="bg-white border-[#B0BE8C]/35 p-3.5 sm:p-4 rounded-3xl border text-left transition-all min-h-[44px] flex flex-col justify-between hover:bg-[#B0BE8C]/10"
         >
           <div className="flex items-center justify-between gap-1">
-            <span className="text-[10px] font-black uppercase text-[#22222B] truncate">Total Skip / Pause</span>
+            <span className="text-[10px] font-black uppercase text-[#22222B] truncate">Total Cancellations</span>
             <SkipForward className="w-4 h-4 text-[#741B22] shrink-0" />
           </div>
           <div className="text-xl sm:text-2xl font-black text-[#22222B] mt-1">{requests.length}</div>
@@ -643,7 +618,7 @@ export default function AdminDashboard() {
             <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
           </div>
           <div className="text-xl sm:text-2xl font-black text-emerald-700 mt-1">
-            {requests.filter((r) => r.is_on_time && r.request_type !== 'RESUME').length}
+            {requests.filter((r) => r.is_on_time).length}
           </div>
           <p className="text-[10px] text-slate-400 mt-0.5 truncate">Moved to next matching slot</p>
         </button>
@@ -660,7 +635,7 @@ export default function AdminDashboard() {
             <Clock className="w-4 h-4 text-rose-600 shrink-0" />
           </div>
           <div className="text-xl sm:text-2xl font-black text-rose-700 mt-1">
-            {requests.filter((r) => !r.is_on_time && r.request_type !== 'RESUME').length}
+            {requests.filter((r) => !r.is_on_time).length}
           </div>
           <p className="text-[10px] text-slate-400 mt-0.5 truncate">Late cancellations</p>
         </button>
@@ -690,7 +665,7 @@ export default function AdminDashboard() {
         {[
           { id: 'pending', label: `Payment Approvals (${pendingPayments.length})` },
           { id: 'subscriptions', label: `All Subscriptions (${subscriptions.length})` },
-          { id: 'requests', label: `Skip / Pause History (${requests.length})` },
+          { id: 'requests', label: `Meal Cancellation History (${requests.length})` },
           { id: 'customers', label: `Customers (${customers.length})` },
           { id: 'staff', label: `Staff Accounts (${staff.length})` },
           { id: 'plans', label: `Plans Catalog (${plans.length})` },
@@ -930,15 +905,14 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      {/* TAB 3: SKIP / PAUSE HISTORY */}
+      {/* TAB 3: MEAL CANCELLATION HISTORY */}
       {activeTab === 'requests' && (() => {
         const todayStr = new Date().toISOString().split('T')[0];
         const filteredRequests = requests.filter((r) => {
-          if (reqFilterType !== 'ALL' && r.request_type !== reqFilterType) return false;
           if (reqFilterMeal !== 'ALL' && r.meal_slot !== reqFilterMeal) return false;
-          if (reqFilterDate && r.effective_date !== reqFilterDate && r.pause_start_date !== reqFilterDate) return false;
+          if (reqFilterDate && r.effective_date !== reqFilterDate) return false;
           if (reqFilterTiming === 'ON_TIME' && !r.is_on_time) return false;
-          if (reqFilterTiming === 'LATE' && (r.is_on_time || r.request_type === 'RESUME')) return false;
+          if (reqFilterTiming === 'LATE' && r.is_on_time) return false;
 
           if (reqFilterCustomer) {
             const q = reqFilterCustomer.toLowerCase();
@@ -948,10 +922,10 @@ export default function AdminDashboard() {
           }
 
           if (reqFilterScope === 'TODAY') {
-            const eff = r.effective_date || r.pause_start_date;
+            const eff = r.effective_date;
             if (eff !== todayStr) return false;
           } else if (reqFilterScope === 'UPCOMING') {
-            const eff = r.effective_date || r.pause_start_date;
+            const eff = r.effective_date;
             if (!eff || eff < todayStr) return false;
           }
 
@@ -962,9 +936,9 @@ export default function AdminDashboard() {
           <div className="space-y-4">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
               <div>
-                <h2 className="text-base font-black text-[#22222B]">Skip / Pause History</h2>
+                <h2 className="text-base font-black text-[#22222B]">Meal Cancellation History</h2>
                 <p className="text-xs text-slate-500">
-                  Automatically processed customer skip, pause, and resume records.
+                  Automatically processed customer meal cancellations.
                 </p>
               </div>
 
@@ -1029,20 +1003,6 @@ export default function AdminDashboard() {
               </div>
 
               <div>
-                <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Request Type</label>
-                <select
-                  value={reqFilterType}
-                  onChange={(e) => setReqFilterType(e.target.value as any)}
-                  className="w-full min-h-[40px] px-3 py-2 rounded-xl border border-[#B0BE8C]/40 text-xs font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
-                >
-                  <option value="ALL">All Types</option>
-                  <option value="SKIP">Skip Only</option>
-                  <option value="PAUSE">Pause Only</option>
-                  <option value="RESUME">Resume Only</option>
-                </select>
-              </div>
-
-              <div>
                 <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Timing / Outcome</label>
                 <select
                   value={reqFilterTiming}
@@ -1065,7 +1025,6 @@ export default function AdminDashboard() {
                     setReqFilterCustomer('');
                     setReqFilterDate('');
                     setReqFilterMeal('ALL');
-                    setReqFilterType('ALL');
                     setReqFilterTiming('ALL');
                     setReqFilterScope('ALL');
                   }}
@@ -1088,11 +1047,7 @@ export default function AdminDashboard() {
                           </span>
                         </div>
                         <div>
-                          {r.request_type === 'RESUME' ? (
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-200">
-                              Resumed
-                            </span>
-                          ) : r.is_on_time ? (
+                          {r.is_on_time ? (
                             <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
                               Rescheduled
                             </span>
@@ -1111,15 +1066,10 @@ export default function AdminDashboard() {
                         </div>
                         <div>
                           Affected: <strong>{r.effective_date}</strong> {r.meal_slot && <span className="capitalize">({r.meal_slot})</span>}
-                          {r.pause_start_date && r.pause_resume_date && (
-                            <span className="text-slate-500"> • Range: {r.pause_start_date} → {r.pause_resume_date}</span>
-                          )}
                         </div>
                         <div>
                           Timing:{' '}
-                          {r.request_type === 'RESUME' ? (
-                            <span className="text-slate-600 font-bold">Standard Resume</span>
-                          ) : r.is_on_time ? (
+                          {r.is_on_time ? (
                             <span className="text-emerald-700 font-bold">Before Cutoff</span>
                           ) : (
                             <span className="text-rose-700 font-bold">Late Cancellation</span>
@@ -1171,30 +1121,19 @@ export default function AdminDashboard() {
                           </td>
                           <td className="p-3 font-medium whitespace-nowrap">
                             <div>{r.effective_date} {r.meal_slot && <span className="capitalize font-bold">({r.meal_slot})</span>}</div>
-                            {r.pause_start_date && (
-                              <div className="text-[10px] text-slate-400">
-                                {r.pause_start_date} → {r.pause_resume_date || 'Open'}
-                              </div>
-                            )}
                           </td>
                           <td className="p-3 text-slate-500 whitespace-nowrap">
                             {new Date(r.submission_time).toLocaleString()}
                           </td>
                           <td className="p-3">
-                            {r.request_type === 'RESUME' ? (
-                              <span className="text-slate-500 font-bold">Standard</span>
-                            ) : r.is_on_time ? (
+                            {r.is_on_time ? (
                               <span className="text-emerald-700 font-bold">Before Cutoff</span>
                             ) : (
                               <span className="text-rose-700 font-bold">Late Cancellation</span>
                             )}
                           </td>
                           <td className="p-3">
-                            {r.request_type === 'RESUME' ? (
-                              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-200">
-                                Resumed
-                              </span>
-                            ) : r.is_on_time ? (
+                            {r.is_on_time ? (
                               <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
                                 Rescheduled
                               </span>
@@ -1882,63 +1821,6 @@ export default function AdminDashboard() {
                 className="order-1 sm:order-3 flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white font-black text-xs shadow-md transition-colors flex items-center justify-center disabled:opacity-50"
               >
                 {confirmingPayment ? 'Activating...' : 'Approve & Activate'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* MODAL: DECIDE SERVICE REQUEST */}
-      {selectedRequest && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-[100] overflow-y-auto">
-          <div className="bg-white rounded-3xl p-5 sm:p-8 max-w-md w-full border border-[#B0BE8C]/40 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto my-auto">
-            <h3 className="text-lg font-black text-[#22222B]">
-              Decide {selectedRequest.request_type} Request #{selectedRequest.id}
-            </h3>
-            <div className="text-xs text-slate-600 space-y-1">
-              <p>Customer: <strong>{selectedRequest.user?.name}</strong> ({selectedRequest.user?.phone})</p>
-              <p>Effective Date: <strong>{selectedRequest.effective_date}</strong></p>
-              <p>
-                Timing:{' '}
-                {selectedRequest.is_on_time ? (
-                  <strong className="text-emerald-700">On-Time (Before cut-off)</strong>
-                ) : (
-                  <strong className="text-amber-700">Late (After cut-off)</strong>
-                )}
-              </p>
-            </div>
-
-            <div className="space-y-2 text-xs">
-              <label className="block font-bold text-slate-700">Admin Decision Note (Optional)</label>
-              <input
-                type="text"
-                value={adminDecisionNotes}
-                onChange={(e) => setAdminDecisionNotes(e.target.value)}
-                placeholder="Reason or verification note"
-                className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
-              />
-            </div>
-
-            <div className="flex flex-wrap gap-2 pt-2">
-              <button
-                onClick={() => setSelectedRequest(null)}
-                className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#DCE5CC] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => handleDecideRequest('REJECT')}
-                disabled={decidingRequest}
-                className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-black text-xs transition-colors flex items-center justify-center"
-              >
-                Reject
-              </button>
-              <button
-                onClick={() => handleDecideRequest('APPROVE')}
-                disabled={decidingRequest}
-                className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white font-black text-xs shadow-md transition-colors flex items-center justify-center"
-              >
-                Approve
               </button>
             </div>
           </div>
