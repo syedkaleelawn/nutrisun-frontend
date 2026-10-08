@@ -301,21 +301,20 @@ export interface ShiftKitchenResponse {
 }
 
 export interface DeliveryItem {
-  meal_log_id: number;
-  subscription_id: number;
+  customer_id: number;
   customer_name: string;
   customer_phone: string;
   delivery_address: string;
   meal_slot: MealSlot;
   quantity: number;
-  delivery_status: DeliveryStatus;
-  delivered_at?: string;
+  schedule_status: 'SCHEDULED' | 'COMPLETED';
 }
 
 export interface DeliverySheetResponse {
   date: string;
   shift: MealSlot;
   total_meals: number;
+  total_customers: number;
   deliveries: DeliveryItem[];
 }
 
@@ -614,8 +613,6 @@ export const kitchenApi = {
 export const deliveryApi = {
   getSheet: (params: { date?: string; shift?: MealSlot }) =>
     api.get<DeliverySheetResponse>('/delivery/sheet', { params }),
-  updateStatus: (id: number) =>
-    api.put<{ message: string; meal_log_id: number; delivery_status: DeliveryStatus; delivered_at?: string; remaining_credits: number }>(`/delivery/${id}/status`),
 };
 
 export const adminApi = {

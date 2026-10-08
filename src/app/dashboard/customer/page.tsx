@@ -657,7 +657,8 @@ export default function CustomerDashboard() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {meals.map((meal) => {
-                const isDelivered = meal.delivery_status === 'DELIVERED';
+                const todayIST = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+                const isCompleted = meal.status === 'TAKE' && meal.date < todayIST;
                 const isSkippedOnTime = meal.status === 'SKIPPED_ON_TIME';
                 const isSkippedLate = meal.status === 'SKIPPED_LATE';
 
@@ -674,8 +675,8 @@ export default function CustomerDashboard() {
 
                       <div className="text-xs font-medium text-slate-700 mb-3">
                         Status:{' '}
-                        {isDelivered ? (
-                          <span className="text-emerald-700 font-bold">Delivered (1 Credit Deducted)</span>
+                        {isCompleted ? (
+                          <span className="text-emerald-700 font-bold">Completed</span>
                         ) : isSkippedOnTime ? (
                           <span className="text-emerald-700 font-bold">Cancelled and Automatically Rescheduled</span>
                         ) : isSkippedLate ? (
@@ -689,7 +690,7 @@ export default function CustomerDashboard() {
                       </div>
                     </div>
 
-                    {!isDelivered && meal.status === 'TAKE' && (
+                    {!isCompleted && meal.status === 'TAKE' && (
                       <button
                         onClick={() => setMealToSkip(meal)}
                         className="w-full min-h-[44px] py-2 px-3 rounded-xl border border-[#B92F25]/40 hover:bg-[#B92F25]/10 text-[#B92F25] text-xs font-bold transition-all flex items-center justify-center gap-1.5 active:scale-95"
