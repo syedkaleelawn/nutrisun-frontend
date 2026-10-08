@@ -683,10 +683,10 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
               <div className="flex items-center gap-2 mb-2">
                 <Coins className="w-4 h-4 text-[#741B22]" />
                 <h4 className="text-xs font-black uppercase text-slate-600 tracking-wider">
-                  NutriSun Meal Credit Balance Model
+                  Meal Balance
                 </h4>
               </div>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="grid grid-cols-2 gap-3">
                 <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-xs space-y-1">
                   <span className="text-[10px] font-black uppercase text-emerald-700">Available Credits</span>
                   <div className="text-2xl font-black text-emerald-800">
@@ -703,21 +703,6 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
                   <p className="text-[10px] text-blue-600 font-medium">Completed meals</p>
                 </div>
 
-                <div className="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200 text-xs space-y-1">
-                  <span className="text-[10px] font-black uppercase text-amber-700">Pending / Preserved</span>
-                  <div className="text-2xl font-black text-amber-800">
-                    {activeCustomer.credit_balance.pending}
-                  </div>
-                  <p className="text-[10px] text-amber-600 font-medium">Saved via on-time skips/pause</p>
-                </div>
-
-                <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-300 text-xs space-y-1">
-                  <span className="text-[10px] font-black uppercase text-slate-500">Forfeited Credits</span>
-                  <div className="text-2xl font-black text-slate-700">
-                    {activeCustomer.credit_balance.forfeited}
-                  </div>
-                  <p className="text-[10px] text-slate-500 font-medium">Late skips / cut-off losses</p>
-                </div>
               </div>
             </div>
 
