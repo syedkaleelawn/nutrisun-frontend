@@ -637,8 +637,6 @@ export const adminApi = {
     scope?: string;
   }) =>
     api.get<{ count: number; requests: ServiceRequest[] }>('/admin/requests', { params }),
-  decideRequest: (id: number, data: { action: 'APPROVE' | 'REJECT'; admin_notes?: string }) =>
-    api.put<{ message: string; request: ServiceRequest }>(`/admin/requests/${id}/decide`, data),
   reallocate: (data: { original_meal_log_id: number; new_date: string; new_slot: MealSlot; reason?: string }) =>
     api.post<{ message: string; original_meal_id: number; new_meal_id: number; new_date: string; new_slot: MealSlot }>('/admin/reallocate', data),
   adjustCredits: (data: { subscription_id: number; delta: number; reason: string }) =>
