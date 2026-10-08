@@ -1043,7 +1043,7 @@ export default function AdminDashboard() {
                         <div className="flex items-center gap-1.5">
                           <span className="font-bold text-xs text-[#22222B]">#{r.id}</span>
                           <span className="px-2 py-0.5 rounded-md bg-[#B0BE8C]/20 border border-[#B0BE8C]/35 text-[#22222B] font-bold text-xs">
-                            {r.request_type}
+                            Meal Cancellation
                           </span>
                         </div>
                         <div>
@@ -1094,7 +1094,7 @@ export default function AdminDashboard() {
                         <th className="p-3">ID</th>
                         <th className="p-3">Customer & Phone</th>
                         <th className="p-3">Subscription / Plan</th>
-                        <th className="p-3">Request Type</th>
+                        <th className="p-3">Action</th>
                         <th className="p-3">Affected Date / Slot</th>
                         <th className="p-3">Submission Time (IST)</th>
                         <th className="p-3">Cutoff Timing</th>
@@ -1116,7 +1116,7 @@ export default function AdminDashboard() {
                           </td>
                           <td className="p-3">
                             <span className="px-2 py-0.5 rounded-md bg-[#B0BE8C]/25 text-[#3F4D25] border border-[#B0BE8C]/40 text-[10px] font-black">
-                              {r.request_type}
+                              Meal Cancellation
                             </span>
                           </td>
                           <td className="p-3 font-medium whitespace-nowrap">
