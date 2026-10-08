@@ -600,7 +600,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
               </h3>
             </div>
             <p className="text-xs text-slate-500 mt-1">
-              Deep historical record of subscriptions, UPI payments, meal credits, and IST skip/pause/resume events.
+              Historical record of subscriptions, UPI payments, meal balances, and IST meal cancellations.
             </p>
           </div>
 
@@ -665,8 +665,6 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
                   className={`mt-1 px-3 py-1 rounded-full font-black text-xs uppercase tracking-wider ${
                     activeCustomer.current_status === 'ACTIVE'
                       ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-                      : activeCustomer.current_status === 'PAUSED'
-                      ? 'bg-amber-100 text-amber-800 border border-amber-300'
                       : 'bg-slate-100 text-slate-700 border border-slate-300'
                   }`}
                 >
@@ -846,8 +844,6 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
                                 ? 'bg-emerald-100 text-emerald-800'
                                 : act.event_type === 'SKIP'
                                 ? 'bg-amber-100 text-amber-800'
-                                : act.event_type === 'PAUSE' || act.event_type === 'RESUME'
-                                ? 'bg-blue-100 text-blue-800'
                                 : act.event_type === 'REALLOCATION'
                                 ? 'bg-purple-100 text-purple-800'
                                 : 'bg-slate-100 text-slate-700'

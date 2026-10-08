@@ -156,11 +156,11 @@ export async function fetchReceiptBlobUrl(receiptPath: string): Promise<string |
 export type Role = 'customer' | 'admin' | 'chef' | 'delivery';
 export type MealSlot = 'breakfast' | 'lunch' | 'dinner';
 export type DietaryType = 'veg' | 'non_veg' | 'egg';
-export type MealStatus = 'TAKE' | 'SKIPPED_ON_TIME' | 'SKIPPED_LATE' | 'PAUSED' | 'REALLOCATED';
+export type MealStatus = 'TAKE' | 'SKIPPED_ON_TIME' | 'SKIPPED_LATE' | 'REALLOCATED';
 export type DeliveryStatus = 'PENDING' | 'DELIVERED';
 export type PaymentStatus = 'PENDING' | 'PAID';
-export type SubscriptionStatus = 'PAYMENT_PENDING' | 'ACTIVE' | 'PAUSED' | 'COMPLETED' | 'CANCELLED';
-export type RequestType = 'SKIP' | 'PAUSE' | 'RESUME';
+export type SubscriptionStatus = 'PAYMENT_PENDING' | 'ACTIVE' | 'COMPLETED' | 'CANCELLED';
+export type RequestType = 'SKIP';
 export type RequestStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
 
 export interface User {
@@ -264,9 +264,6 @@ export interface ServiceRequest {
   daily_meal_log_id?: number;
   effective_date: string;
   meal_slot?: MealSlot;
-  pause_start_date?: string;
-  pause_resume_date?: string;
-  actual_resume_date?: string;
   submission_time: string;
   is_on_time: boolean;
   decision_time?: string;
@@ -292,8 +289,6 @@ export interface CreditTransaction {
 export interface PendingCountsResponse {
   payment_pending: number;
   skip_requests: number;
-  pause_requests: number;
-  resume_requests: number;
   total_pending: number;
 }
 
@@ -584,10 +579,6 @@ export const customerApi = {
     api.get<{ count: number; meals: DailyMealLog[] }>('/customer/my-meals', { params }),
   requestSkip: (meal_log_id: number) =>
     api.post<{ message: string; request_id: number; is_on_time: boolean; status: string }>('/customer/requests/skip', { meal_log_id }),
-  requestPause: (data: { subscription_id: number; pause_start_date: string; estimated_resume_date?: string }) =>
-    api.post<{ message: string; request_id: number; is_on_time: boolean; status: string }>('/customer/requests/pause', data),
-  requestResume: (data: { subscription_id: number; actual_resume_date: string }) =>
-    api.post<{ message: string; request_id: number; is_on_time: boolean; status: string }>('/customer/requests/resume', data),
   getRequests: () =>
     api.get<{ count: number; requests: ServiceRequest[] }>('/customer/requests'),
   getCredits: (params?: { subscription_id?: number }) =>
@@ -646,8 +637,6 @@ export const adminApi = {
     scope?: string;
   }) =>
     api.get<{ count: number; requests: ServiceRequest[] }>('/admin/requests', { params }),
-  decideRequest: (id: number, data: { action: 'APPROVE' | 'REJECT'; admin_notes?: string }) =>
-    api.put<{ message: string; request: ServiceRequest }>(`/admin/requests/${id}/decide`, data),
   reallocate: (data: { original_meal_log_id: number; new_date: string; new_slot: MealSlot; reason?: string }) =>
     api.post<{ message: string; original_meal_id: number; new_meal_id: number; new_date: string; new_slot: MealSlot }>('/admin/reallocate', data),
   adjustCredits: (data: { subscription_id: number; delta: number; reason: string }) =>
