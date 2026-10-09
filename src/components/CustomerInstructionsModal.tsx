@@ -233,28 +233,26 @@ export default function CustomerInstructionsModal({
             </div>
             <p className="text-[13px] text-slate-800 pl-7 leading-[1.45]">
               Tiffin boxes must be washed thoroughly with soap and returned during the next delivery.
-              If not returned, your meal delivery will be skipped and no replacement will be
-              provided.
+              If a box is not returned, the affected meal will be cancelled without a replacement.
             </p>
           </div>
 
-          {/* 3. Meal Cancellation & Replacement */}
+          {/* 3. Meal Cancellation & Rescheduling */}
           <div className="p-2.5 sm:p-3 rounded-xl bg-[#F3F5F4] border border-[#B0BE8C]/30 space-y-1">
             <div className="flex items-center gap-2 font-black text-[13.5px] text-[#22222B]">
               <div className="w-5 h-5 rounded-full bg-[#741B22] text-white flex items-center justify-center text-[10px] font-black shrink-0">
                 3
               </div>
               <RotateCcw className="w-3.5 h-3.5 text-[#741B22] shrink-0" />
-              <span>Meal Cancellation & Replacement</span>
+              <span>Meal Cancellation & Rescheduling</span>
             </div>
             <div className="text-[13px] text-slate-800 pl-7 space-y-1 leading-[1.45]">
               <p>
-                You can skip a meal and receive a free replacement at the end of your subscription,
-                provided you inform NutriSun within these deadlines:
+                When you cancel before the cutoff, the meal is automatically moved to the next available date for the same meal type. Cancellations at or after the cutoff do not receive a replacement.
               </p>
               <ul className="list-disc list-inside space-y-0.5 font-semibold text-[#22222B] pt-0.5">
-                <li>Breakfast and Lunch: Inform us the previous day.</li>
-                <li>Dinner: Inform us on the same day before 12:00 PM.</li>
+                <li>Breakfast and lunch: Cancel before midnight on the previous day.</li>
+                <li>Dinner: Cancel before 12:00 noon on the delivery day.</li>
               </ul>
             </div>
           </div>
@@ -269,9 +267,7 @@ export default function CustomerInstructionsModal({
               <span>Holidays</span>
             </div>
             <p className="text-[13px] text-slate-800 pl-7 leading-[1.45]">
-              NutriSun has no fixed holidays. Any holidays will be announced in advance. Meals
-              skipped due to these holidays will automatically be added to the end of your
-              subscription.
+              NutriSun has no fixed holidays. Any holidays will be announced in advance. Affected meals will be rescheduled automatically.
             </p>
           </div>
 
