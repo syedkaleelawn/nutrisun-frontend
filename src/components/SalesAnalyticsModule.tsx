@@ -781,11 +781,11 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
                 </div>
 
                 <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-1">
-                  <span className="text-[10px] font-black uppercase text-slate-700">Total Scheduled</span>
+                  <span className="text-[10px] font-black uppercase text-slate-700">Total Meals</span>
                   <div className="text-2xl font-black text-slate-800">
                     {activeCustomer.credit_balance.total}
                   </div>
-                  <p className="text-[10px] text-slate-600 font-medium">Upcoming plus completed</p>
+                  <p className="text-[10px] text-slate-600 font-medium">Completed plus upcoming meals</p>
                 </div>
               </div>
             </div>
