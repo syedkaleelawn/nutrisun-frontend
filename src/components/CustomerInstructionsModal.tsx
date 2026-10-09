@@ -158,11 +158,11 @@ export default function CustomerInstructionsModal({
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2 min-w-0">
               <Image
-                src="/logo.png"
-                alt="NUTRISUN"
+                src="/nutrisun-logo.png"
+                alt="NutriSun logo"
                 width={26}
                 height={26}
-                className="w-6 h-6 object-contain rounded-full shrink-0"
+                className="w-6 h-6 object-contain shrink-0"
               />
               <span className="text-[11px] font-black tracking-wider text-[#22222B] uppercase">
                 NutriSun
