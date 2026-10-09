@@ -109,8 +109,8 @@ export default function RegisterPage() {
         <div className="text-center mb-5 sm:mb-6">
           <div className="flex justify-center mb-2">
             <Image
-              src="/logo.png"
-              alt="NUTRISUN - Healthy Tasty Daily"
+              src="/nutrisun-logo.png"
+              alt="NutriSun — Healthy Tasty Daily"
               width={76}
               height={76}
               priority
