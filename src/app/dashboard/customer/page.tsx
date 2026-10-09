@@ -349,7 +349,7 @@ export default function CustomerDashboard() {
     );
   }
 
-  // Active subscriptions count and remaining credits
+  // Active subscriptions count and remaining meals
   const activeSubs = subscriptions.filter((s) => s.status === 'ACTIVE');
   const totalRemainingCredits = activeSubs.reduce((acc, s) => acc + s.remaining_credits, 0);
 
@@ -379,7 +379,7 @@ export default function CustomerDashboard() {
 
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 w-full md:w-auto">
             <div className="p-3 rounded-2xl bg-white/90 border border-[#B0BE8C]/35 shadow-xs text-center flex-1 sm:min-w-[110px]">
-              <span className="text-[10px] font-black uppercase text-slate-400">Active Credits</span>
+              <span className="text-[10px] font-black uppercase text-slate-400">Meals Remaining</span>
               <div className="text-xl sm:text-2xl font-black text-[#741B22]">{totalRemainingCredits}</div>
             </div>
             <button
@@ -431,10 +431,10 @@ export default function CustomerDashboard() {
       <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar pb-1 border-b border-[#B0BE8C]/30 -mx-3 px-3 sm:mx-0 sm:px-0">
         {[
           { id: 'overview', label: 'My Subscriptions & Daily Menu' },
-          { id: 'schedule', label: 'Meal Schedule & Skip Requests' },
+          { id: 'schedule', label: 'Meal Schedule & Cancellations' },
           { id: 'plans', label: 'Available Plans (Buy)' },
           { id: 'requests', label: `Pending & Past Requests (${requests.length})` },
-          { id: 'credits', label: 'Credit History Ledger' },
+          { id: 'credits', label: 'Meal Change History' },
         ].map((t) => (
           <button
             key={t.id}
@@ -696,7 +696,7 @@ export default function CustomerDashboard() {
                         className="w-full min-h-[44px] py-2 px-3 rounded-xl border border-[#B92F25]/40 hover:bg-[#B92F25]/10 text-[#B92F25] text-xs font-bold transition-all flex items-center justify-center gap-1.5 active:scale-95"
                       >
                         <SkipForward className="w-4 h-4 shrink-0" />
-                        Skip / Cancel Meal
+                        Cancel Meal
                       </button>
                     )}
                   </div>
@@ -819,7 +819,7 @@ export default function CustomerDashboard() {
                           </div>
                         )}
 
-                        <p className="text-[11px] text-slate-500">• Total Credits: <strong className="text-[#22222B]">{plan.meal_credits} credits</strong></p>
+                        <p className="text-[11px] text-slate-500">• Total Meals: <strong className="text-[#22222B]">{plan.meal_credits} meals</strong></p>
                         <p className="text-[11px] text-slate-500">• Sunday delivery & delivery charges included</p>
                       </div>
                     </div>
@@ -916,11 +916,11 @@ export default function CustomerDashboard() {
       {/* TAB 5: CREDIT HISTORY LEDGER */}
       {activeTab === 'credits' && (
         <div className="space-y-4">
-          <h2 className="text-base font-black text-[#22222B]">Meal Credit Transaction Ledger</h2>
+          <h2 className="text-base font-black text-[#22222B]">Meal Change History</h2>
 
           {credits.length === 0 ? (
             <div className="glass-card rounded-2xl p-6 sm:p-8 text-center text-slate-500 border border-[#B0BE8C]/35">
-              <p className="text-xs">No credit ledger records yet.</p>
+              <p className="text-xs">No meal adjustments recorded yet.</p>
             </div>
           ) : (
             <>
@@ -931,7 +931,7 @@ export default function CustomerDashboard() {
                     <div className="flex items-center justify-between text-xs font-bold">
                       <span className="text-[#22222B]">Sub #{tx.subscription_id}</span>
                       <span className={`font-black text-sm ${tx.delta > 0 ? 'text-emerald-700' : 'text-[#B92F25]'}`}>
-                        {tx.delta > 0 ? `+${tx.delta}` : tx.delta} credits
+                        {tx.delta > 0 ? `+${tx.delta}` : tx.delta} meals
                       </span>
                     </div>
                     <div className="text-xs text-slate-700 break-words">
@@ -1223,7 +1223,7 @@ export default function CustomerDashboard() {
                           <span>Payment submitted — awaiting admin verification.</span>
                         </div>
                         <p className="text-emerald-900 leading-relaxed text-[11px]">
-                          Uploading a screenshot does not automatically mark payment as successful or activate meal credits. The Admin will verify your payment and activate your subscription.
+                          Uploading a screenshot does not automatically mark payment as successful or activate meal meals. The Admin will verify your payment and activate your subscription.
                         </p>
                       </div>
                     ) : null}
@@ -1415,7 +1415,7 @@ export default function CustomerDashboard() {
                   <span>Payment submitted — awaiting admin verification.</span>
                 </div>
                 <p className="text-emerald-900 leading-relaxed text-[11px]">
-                  Uploading a screenshot does not automatically mark payment as successful or activate meal credits. The Admin will verify your payment and activate your subscription.
+                  Uploading a screenshot does not automatically mark payment as successful or activate meal meals. The Admin will verify your payment and activate your subscription.
                 </p>
                 {activePaymentModalSub.payment_record?.proof_image_url && (
                   <div className="pt-1">
@@ -1533,7 +1533,7 @@ export default function CustomerDashboard() {
         return (
           <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-[100] overflow-y-auto">
             <div className="bg-white rounded-3xl p-5 sm:p-8 max-w-md w-full border border-[#B0BE8C]/40 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto my-auto">
-              <h3 className="text-lg font-black text-[#22222B]">Skip / Cancel Scheduled Meal</h3>
+              <h3 className="text-lg font-black text-[#22222B]">Cancel Scheduled Meal</h3>
               <p className="text-xs text-slate-600">
                 Meal: <strong className="capitalize">{mealToSkip.meal_slot}</strong> on <strong>{mealToSkip.date}</strong>.
               </p>
@@ -1542,7 +1542,7 @@ export default function CustomerDashboard() {
                 <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-950 text-xs font-medium space-y-1.5">
                   <div className="font-black text-emerald-800 flex items-center gap-1.5">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>Before Cutoff (On-Time Skip)</span>
+                    <span>Before Cutoff (Eligible for Rescheduling)</span>
                   </div>
                   <p>• Automatically processed immediately with no admin approval needed.</p>
                   <p>• Delivery will be cancelled.</p>
