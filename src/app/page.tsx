@@ -135,8 +135,8 @@ export default function EntryPage() {
         <div className="text-center mb-5 sm:mb-6">
           <div className="flex justify-center mb-2">
             <Image
-              src="/logo.png"
-              alt="NUTRISUN"
+              src="/nutrisun-logo.png"
+              alt="NutriSun logo"
               width={76}
               height={76}
               priority
