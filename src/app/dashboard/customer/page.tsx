@@ -3,16 +3,13 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import CustomerInstructionsModal from '@/components/CustomerInstructionsModal';
 import { PAYMENT_CONFIG } from '@/config/payment';
 import {
   customerApi,
-  menuApi,
   UserSubscription,
   SubscriptionPlan,
   DailyMealLog,
-  MenuItem,
   ServiceRequest,
   CreditTransaction,
   fetchReceiptBlobUrl,
@@ -30,7 +27,6 @@ import {
   Info,
   Check,
   CheckCircle2,
-  ChevronRight,
   Copy,
   Download,
   Upload,
@@ -73,7 +69,6 @@ export default function CustomerDashboard() {
   const [subscriptions, setSubscriptions] = useState<UserSubscription[]>([]);
   const [availablePlans, setAvailablePlans] = useState<SubscriptionPlan[]>([]);
   const [meals, setMeals] = useState<DailyMealLog[]>([]);
-  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [requests, setRequests] = useState<ServiceRequest[]>([]);
   const [credits, setCredits] = useState<CreditTransaction[]>([]);
   const [loading, setLoading] = useState(true);
@@ -123,11 +118,10 @@ export default function CustomerDashboard() {
   const loadData = async (silent = false) => {
     if (!silent) setLoading(true);
     try {
-      const [subRes, plansRes, mealsRes, menuRes, reqRes, credRes] = await Promise.allSettled([
+      const [subRes, plansRes, mealsRes, reqRes, credRes] = await Promise.allSettled([
         customerApi.getSubscriptions(),
         customerApi.getPlans(),
         customerApi.getMyMeals(),
-        menuApi.getMenu(),
         customerApi.getRequests(),
         customerApi.getCredits(),
       ]);
@@ -149,12 +143,6 @@ export default function CustomerDashboard() {
         setMeals(mealsRes.value.data.meals || []);
       } else {
         failed.push('Meal Schedule');
-      }
-
-      if (menuRes.status === 'fulfilled') {
-        setMenuItems(menuRes.value.data.menu || []);
-      } else {
-        failed.push('Monthly Menu');
       }
 
       if (reqRes.status === 'fulfilled') {
@@ -452,7 +440,7 @@ export default function CustomerDashboard() {
       {/* Tabs */}
       <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar pb-1 border-b border-[#B0BE8C]/30 -mx-3 px-3 sm:mx-0 sm:px-0">
         {[
-          { id: 'overview', label: 'My Subscriptions & Daily Menu' },
+          { id: 'overview', label: 'My Subscriptions' },
           { id: 'schedule', label: 'Meal Schedule & Cancellations' },
           { id: 'plans', label: 'Available Plans (Buy)' },
           { id: 'requests', label: `Pending & Past Requests (${requests.length})` },
@@ -472,7 +460,7 @@ export default function CustomerDashboard() {
         ))}
       </div>
 
-      {/* TAB 1: OVERVIEW (Subscriptions + Daily Menu) */}
+      {/* TAB 1: MY SUBSCRIPTIONS */}
       {activeTab === 'overview' && (
         <div className="space-y-6">
           {/* Active / Pending Subscriptions */}
@@ -613,45 +601,7 @@ export default function CustomerDashboard() {
             )}
           </div>
 
-          {/* Today & Upcoming Menu */}
-          <div>
-            <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-              <h2 className="text-base font-black text-[#22222B] flex items-center gap-2">
-                <Utensils className="w-4 h-4 text-[#741B22] shrink-0" />
-                Featured Planned Dishes
-              </h2>
-              <Link
-                href="/dashboard/menu"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#B0BE8C]/25 text-[#3F4D25] hover:bg-[#B0BE8C]/40 border border-[#B0BE8C]/40 text-xs font-black transition-all"
-              >
-                <span>View Full Monthly Menu</span>
-                <ChevronRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
 
-            {menuItems.length === 0 ? (
-              <div className="glass-card rounded-2xl p-6 text-center text-slate-500 border border-[#B0BE8C]/35">
-                <p className="text-xs">No menu entries added for this month yet.</p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                {menuItems.slice(0, 9).map((item) => (
-                  <div key={item.id} className="glass-card rounded-2xl p-4 border border-[#B0BE8C]/35 shadow-xs">
-                    <div className="flex items-center justify-between text-xs font-bold text-slate-400 mb-1">
-                      <span>{item.date}</span>
-                      <span className="capitalize flex items-center gap-1 text-[#22222B]">
-                        {getSlotIcon(item.meal_slot)} {item.meal_slot}
-                      </span>
-                    </div>
-                    <p className="text-xs font-black text-[#22222B] line-clamp-2 mt-1">{item.item_name}</p>
-                    <span className="mt-2 inline-block px-2 py-0.5 rounded-md bg-[#B0BE8C]/20 border border-[#B0BE8C]/30 text-[#3F4D25] text-[10px] font-bold uppercase">
-                      {item.dietary_type}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
         </div>
       )}
 
