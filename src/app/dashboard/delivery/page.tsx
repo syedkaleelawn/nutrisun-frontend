@@ -137,7 +137,7 @@ export default function DeliveryDashboard() {
             Doorstep Delivery Run-Sheet
           </h1>
           <p className="text-xs text-slate-600 mt-1">
-            Past uncancelled meals are completed automatically. Today and future meals remain scheduled.
+            Uncancelled meals complete automatically after service: breakfast at 9:00 AM, lunch at 3:00 PM, and dinner at 9:00 PM.
           </p>
         </div>
 
