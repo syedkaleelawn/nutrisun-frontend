@@ -96,7 +96,7 @@ export default function ChefDashboard() {
             <span className="px-3 py-1 rounded-full bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80 font-bold text-[11px] uppercase tracking-wider">
               Head Chef Command
             </span>
-            <span className="text-xs text-slate-500">Live Kitchen HUD</span>
+            <span className="text-xs text-slate-500">Live Kitchen View</span>
           </div>
           <h1 className="text-xl sm:text-3xl font-black text-[#22222B] mt-2 flex items-center gap-2 break-words">
             <ChefHat className="w-6 h-6 sm:w-7 sm:h-7 text-[#741B22] shrink-0" />
