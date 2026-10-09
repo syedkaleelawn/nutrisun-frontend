@@ -386,7 +386,7 @@ export default function PublicPricingPage() {
                         <div className="flex items-start gap-2">
                           <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                           <span>
-                            {plan.meal_credits} meal credits included
+                            {plan.meal_credits} meals included
                           </span>
                         </div>
 
@@ -428,7 +428,7 @@ export default function PublicPricingPage() {
           </h2>
 
           <p className="text-sm text-white/80 mt-2">
-            Create your Nutrisun account and choose your meal plan.
+            Create your NutriSun account and choose your meal plan.
           </p>
 
           <a
