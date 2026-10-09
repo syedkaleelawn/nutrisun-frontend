@@ -150,7 +150,7 @@ export default function EntryPage() {
             Healthy Tasty Daily
           </p>
           <p className="text-[11px] sm:text-xs text-[#22222B]/70 mt-1.5 font-medium px-2">
-            Subscription Meal Service • English-Only Platform
+            Fresh subscription meals, delivered daily
           </p>
         </div>
 
@@ -258,7 +258,7 @@ export default function EntryPage() {
                 <p className="text-[11px] text-slate-500">
                   Forgot password?{' '}
                   <span className="font-bold text-[#741B22]">
-                    Contact Admin to verify identity and get a temporary password.
+                    Contact an administrator to verify identity and get a temporary password.
                   </span>
                 </p>
               </div>
@@ -285,7 +285,7 @@ export default function EntryPage() {
 
               <div>
                 <label className="block text-[10px] font-black uppercase tracking-wider text-[#22222B]/70 mb-1">
-                  Phone Number (Unique)
+                  Phone Number
                 </label>
                 <div className="relative">
                   <Phone className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -316,7 +316,7 @@ export default function EntryPage() {
                   />
                 </div>
                 <p className="text-[10px] text-slate-400 mt-0.5">
-                  Note: Any later address changes must be handled by Admin.
+                  Note: Contact an administrator to update this address later.
                 </p>
               </div>
 
