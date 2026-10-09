@@ -332,6 +332,38 @@ export default function CustomerDashboard() {
     }
   };
 
+  const subscriptionMealSummaries = useMemo(() => {
+    const summaries = new Map<number, { delivered: number; scheduled: number; total: number }>();
+
+    subscriptions.forEach((subscription) => {
+      summaries.set(subscription.id, { delivered: 0, scheduled: 0, total: 0 });
+    });
+
+    meals.forEach((meal) => {
+      if (meal.status !== 'TAKE') return;
+      const summary = summaries.get(meal.subscription_id) || { delivered: 0, scheduled: 0, total: 0 };
+      if (isMealCompleted(meal)) {
+        summary.delivered += 1;
+      } else {
+        summary.scheduled += 1;
+      }
+      summary.total = summary.delivered + summary.scheduled;
+      summaries.set(meal.subscription_id, summary);
+    });
+
+    return summaries;
+  }, [meals, subscriptions]);
+
+  const customerMealTotals = useMemo(() => {
+    let delivered = 0;
+    let scheduled = 0;
+    subscriptionMealSummaries.forEach((summary) => {
+      delivered += summary.delivered;
+      scheduled += summary.scheduled;
+    });
+    return { delivered, scheduled, total: delivered + scheduled };
+  }, [subscriptionMealSummaries]);
+
   const scheduleYearOptions = useMemo(() => {
     const years = new Set<number>([scheduleYear, Number(currentISTDate.slice(0, 4))]);
     meals.forEach((meal) => {
@@ -437,10 +469,6 @@ export default function CustomerDashboard() {
     );
   }
 
-  // Active subscriptions count and remaining meals
-  const activeSubs = subscriptions.filter((s) => s.status === 'ACTIVE');
-  const totalRemainingCredits = activeSubs.reduce((acc, s) => acc + s.remaining_credits, 0);
-
   return (
     <div className="max-w-6xl mx-auto px-3 sm:px-4 py-4 sm:py-8 space-y-4 sm:space-y-6 w-full max-w-full">
       {/* Welcome Banner */}
@@ -467,8 +495,8 @@ export default function CustomerDashboard() {
 
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 w-full md:w-auto">
             <div className="p-3 rounded-2xl bg-white/90 border border-[#B0BE8C]/35 shadow-xs text-center flex-1 sm:min-w-[110px]">
-              <span className="text-[10px] font-black uppercase text-slate-400">Meals Remaining</span>
-              <div className="text-xl sm:text-2xl font-black text-[#741B22]">{totalRemainingCredits}</div>
+              <span className="text-[10px] font-black uppercase text-slate-400">Scheduled Meals</span>
+              <div className="text-xl sm:text-2xl font-black text-[#741B22]">{customerMealTotals.scheduled}</div>
             </div>
             <button
               onClick={() => setActiveTab('plans')}
@@ -564,6 +592,11 @@ export default function CustomerDashboard() {
                 {subscriptions.map((sub) => {
                   const isPending = sub.payment_status === 'PENDING';
                   const isActive = sub.status === 'ACTIVE';
+                  const mealSummary = subscriptionMealSummaries.get(sub.id) || {
+                    delivered: 0,
+                    scheduled: 0,
+                    total: 0,
+                  };
 
                   return (
                     <div
@@ -607,19 +640,19 @@ export default function CustomerDashboard() {
                           </p>
                         </div>
 
-                        {/* Credits breakdown */}
+                        {/* Live meal-log summary */}
                         <div className="grid grid-cols-3 gap-1.5 sm:gap-2 p-2.5 sm:p-3 rounded-2xl bg-[#F3F5F4] border border-[#B0BE8C]/30 text-center mb-3">
                           <div>
-                            <div className="text-[10px] font-bold text-slate-400">Total</div>
-                            <div className="text-sm font-black text-[#22222B]">{sub.total_credits}</div>
+                            <div className="text-[10px] font-bold text-slate-400">Total Meals</div>
+                            <div className="text-sm font-black text-[#22222B]">{mealSummary.total}</div>
                           </div>
                           <div>
-                            <div className="text-[10px] font-bold text-slate-400">Used</div>
-                            <div className="text-sm font-black text-rose-600">{sub.used_credits}</div>
+                            <div className="text-[10px] font-bold text-slate-400">Delivered Meals</div>
+                            <div className="text-sm font-black text-emerald-700">{mealSummary.delivered}</div>
                           </div>
                           <div>
-                            <div className="text-[10px] font-bold text-slate-400">Remaining</div>
-                            <div className="text-sm font-black text-emerald-600">{sub.remaining_credits}</div>
+                            <div className="text-[10px] font-bold text-slate-400">Scheduled Meals</div>
+                            <div className="text-sm font-black text-blue-700">{mealSummary.scheduled}</div>
                           </div>
                         </div>
 
