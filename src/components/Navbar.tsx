@@ -81,7 +81,7 @@ export default function Navbar() {
       case 'customer':
       default:
         return [
-          { label: 'My Subscriptions & Meals', href: '/dashboard/customer', icon: CalendarDays },
+          { label: 'My Subscriptions', href: '/dashboard/customer', icon: CalendarDays },
           { label: 'Monthly Menu', href: '/dashboard/menu', icon: Calendar },
         ];
     }
