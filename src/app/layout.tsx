@@ -24,8 +24,30 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: 'NutriSun | Healthy Tasty Daily',
-  description: 'Fresh breakfast, lunch, and dinner subscription plans with convenient doorstep delivery.',
+  metadataBase: new URL('https://app.nutrisun.cloud'),
+  title: {
+    default: 'NutriSun | Healthy Tasty Daily',
+    template: '%s | NutriSun',
+  },
+  description:
+    'Fresh breakfast, lunch, and dinner subscription plans with convenient doorstep delivery.',
+  applicationName: 'NutriSun',
+  alternates: { canonical: '/' },
+  openGraph: {
+    type: 'website',
+    url: '/',
+    siteName: 'NutriSun',
+    title: 'NutriSun | Healthy Tasty Daily',
+    description:
+      'Fresh breakfast, lunch, and dinner subscription plans with convenient doorstep delivery.',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'NutriSun | Healthy Tasty Daily',
+    description:
+      'Fresh breakfast, lunch, and dinner subscription plans with convenient doorstep delivery.',
+  },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({
