@@ -771,14 +771,18 @@ export default function AdminDashboard() {
                   <span className="font-bold text-xs text-[#22222B]">Sub #{s.id}</span>
                   <div>
                     {s.payment_status === 'PENDING' ? (
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80">
-                        PENDING
-                      </span>
-                    ) : (
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#B0BE8C]/30 text-[#3F4D25] border border-[#B0BE8C]">
-                        {s.status}
-                      </span>
-                    )}
+                       <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80">
+                         PENDING
+                       </span>
+                     ) : s.payment_status === 'REJECTED' ? (
+                       <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200">
+                         REJECTED
+                       </span>
+                     ) : (
+                       <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#B0BE8C]/30 text-[#3F4D25] border border-[#B0BE8C]">
+                         {s.status}
+                       </span>
+                     )}
                   </div>
                 </div>
 
@@ -876,14 +880,18 @@ export default function AdminDashboard() {
                     </td>
                     <td className="p-3">
                       {s.payment_status === 'PENDING' ? (
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80">
-                          PENDING
-                        </span>
-                      ) : (
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#B0BE8C]/30 text-[#3F4D25] border border-[#B0BE8C]">
-                          {s.status}
-                        </span>
-                      )}
+                       <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80">
+                         PENDING
+                       </span>
+                     ) : s.payment_status === 'REJECTED' ? (
+                       <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200">
+                         REJECTED
+                       </span>
+                     ) : (
+                       <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#B0BE8C]/30 text-[#3F4D25] border border-[#B0BE8C]">
+                         {s.status}
+                       </span>
+                     )}
                     </td>
                     <td className="p-3">
                       {s.payment_status === 'PENDING' && (
