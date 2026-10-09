@@ -755,21 +755,21 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
               </div>
             </div>
 
-            {/* Credit Breakdown Cards */}
+            {/* Live Meal Schedule Summary */}
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <Coins className="w-4 h-4 text-[#741B22]" />
                 <h4 className="text-xs font-black uppercase text-slate-600 tracking-wider">
-                  Meal Balance
+                  Live Meal Schedule
                 </h4>
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-xs space-y-1">
-                  <span className="text-[10px] font-black uppercase text-emerald-700">Available Meals</span>
+                  <span className="text-[10px] font-black uppercase text-emerald-700">Upcoming Meals</span>
                   <div className="text-2xl font-black text-emerald-800">
                     {activeCustomer.credit_balance.available}
                   </div>
-                  <p className="text-[10px] text-emerald-600 font-medium">Ready for meal delivery</p>
+                  <p className="text-[10px] text-emerald-600 font-medium">Paid, uncancelled deliveries still scheduled</p>
                 </div>
 
                 <div className="p-3.5 rounded-2xl bg-blue-50/70 border border-blue-200 text-xs space-y-1">
@@ -777,9 +777,16 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
                   <div className="text-2xl font-black text-blue-800">
                     {activeCustomer.credit_balance.used}
                   </div>
-                  <p className="text-[10px] text-blue-600 font-medium">Completed meals</p>
+                  <p className="text-[10px] text-blue-600 font-medium">Past service times</p>
                 </div>
 
+                <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-1">
+                  <span className="text-[10px] font-black uppercase text-slate-700">Total Scheduled</span>
+                  <div className="text-2xl font-black text-slate-800">
+                    {activeCustomer.credit_balance.total}
+                  </div>
+                  <p className="text-[10px] text-slate-600 font-medium">Upcoming plus completed</p>
+                </div>
               </div>
             </div>
 
