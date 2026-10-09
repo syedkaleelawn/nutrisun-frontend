@@ -24,8 +24,30 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: 'NUTRISUN | Healthy Tasty Daily • Luxury Daily Nutrition SaaS',
-  description: 'Ultra-premium chef-crafted daily meal subscriptions with single-click take/skip control and multi-address schedule routing.',
+  metadataBase: new URL('https://app.nutrisun.cloud'),
+  title: {
+    default: 'NutriSun | Healthy Tasty Daily',
+    template: '%s | NutriSun',
+  },
+  description:
+    'Fresh breakfast, lunch, and dinner subscription plans with convenient doorstep delivery.',
+  applicationName: 'NutriSun',
+  alternates: { canonical: '/' },
+  openGraph: {
+    type: 'website',
+    url: '/',
+    siteName: 'NutriSun',
+    title: 'NutriSun | Healthy Tasty Daily',
+    description:
+      'Fresh breakfast, lunch, and dinner subscription plans with convenient doorstep delivery.',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'NutriSun | Healthy Tasty Daily',
+    description:
+      'Fresh breakfast, lunch, and dinner subscription plans with convenient doorstep delivery.',
+  },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({
@@ -61,7 +83,7 @@ export default function RootLayout({
                     </span>
                   </div>
                   <p className="text-[11px] text-[#741B22] italic font-medium break-words">
-                    Engineered daily nutrition • Precision macro balancing • Dynamic address routing
+                    Fresh subscription meals • Clear schedules • Doorstep delivery
                   </p>
                 </div>
               </div>
@@ -69,15 +91,15 @@ export default function RootLayout({
               <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-[#22222B]/75 font-semibold">
                 <span className="flex items-center gap-1 text-[#3F4D25]">
                   <Leaf className="w-3.5 h-3.5 text-[#B0BE8C]" />
-                  100% Organic Sourced
+                  Breakfast, Lunch & Dinner
                 </span>
                 <span className="flex items-center gap-1 text-[#741B22]">
                   <HeartPulse className="w-3.5 h-3.5 text-[#B92F25]" />
-                  Clinical Macro Precision
+                  Flexible Meal Plans
                 </span>
                 <span className="flex items-center gap-1.5 text-[#3F4D25] font-bold bg-[#B0BE8C]/20 px-3 py-1 rounded-full border border-[#B0BE8C]">
                   <span className="w-2 h-2 rounded-full bg-[#B0BE8C] animate-pulse"></span>
-                  Kitchen HUD Live
+                  Kitchen Schedule Live
                 </span>
               </div>
             </div>

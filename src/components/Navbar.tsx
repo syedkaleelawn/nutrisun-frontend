@@ -64,7 +64,7 @@ export default function Navbar() {
     switch (user.role) {
       case 'chef':
         return [
-          { label: 'Kitchen Command HUD', href: '/dashboard/chef', icon: ChefHat },
+          { label: 'Kitchen View', href: '/dashboard/chef', icon: ChefHat },
           { label: 'Monthly Menu', href: '/dashboard/menu', icon: Calendar },
         ];
       case 'delivery':
