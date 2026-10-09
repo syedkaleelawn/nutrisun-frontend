@@ -40,6 +40,28 @@ import {
   AlertCircle,
 } from 'lucide-react';
 
+function isMealCompleted(meal: DailyMealLog): boolean {
+  if (meal.status !== 'TAKE') return false;
+
+  const now = new Date();
+  const todayIST = now.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+  if (meal.date < todayIST) return true;
+  if (meal.date > todayIST) return false;
+
+  const hourPart = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Asia/Kolkata',
+    hour: '2-digit',
+    hourCycle: 'h23',
+  })
+    .formatToParts(now)
+    .find((part) => part.type === 'hour');
+  const hourIST = Number(hourPart?.value ?? '0');
+  const completionHour =
+    meal.meal_slot === 'breakfast' ? 9 : meal.meal_slot === 'lunch' ? 15 : 21;
+
+  return hourIST >= completionHour;
+}
+
 export default function CustomerDashboard() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
@@ -657,8 +679,7 @@ export default function CustomerDashboard() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {meals.map((meal) => {
-                const todayIST = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
-                const isCompleted = meal.status === 'TAKE' && meal.date < todayIST;
+                const isCompleted = isMealCompleted(meal);
                 const isSkippedOnTime = meal.status === 'SKIPPED_ON_TIME';
                 const isSkippedLate = meal.status === 'SKIPPED_LATE';
 
