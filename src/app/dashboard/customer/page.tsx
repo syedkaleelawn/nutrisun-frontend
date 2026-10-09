@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import CustomerInstructionsModal from '@/components/CustomerInstructionsModal';
@@ -77,6 +77,9 @@ export default function CustomerDashboard() {
   // Filter and Meal Selection states
   const [planFilter, setPlanFilter] = useState<'all' | 'weekly' | 'monthly'>('all');
   const [chosenMealOption, setChosenMealOption] = useState<string>('');
+  const currentISTDate = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+  const [scheduleYear, setScheduleYear] = useState<number>(() => Number(currentISTDate.slice(0, 4)));
+  const [scheduleMonth, setScheduleMonth] = useState<number>(() => Number(currentISTDate.slice(5, 7)));
 
   // "Buy Plan" & Payment Modal state
   const [selectedPlanToBuy, setSelectedPlanToBuy] = useState<SubscriptionPlan | null>(null);
@@ -315,6 +318,68 @@ export default function CustomerDashboard() {
       setSubmittingSkip(false);
     }
   };
+
+  const scheduleYearOptions = useMemo(() => {
+    const years = new Set<number>([scheduleYear, Number(currentISTDate.slice(0, 4))]);
+    meals.forEach((meal) => {
+      const year = Number(meal.date.slice(0, 4));
+      if (Number.isFinite(year)) years.add(year);
+    });
+    return Array.from(years).sort((a, b) => b - a);
+  }, [meals, scheduleYear, currentISTDate]);
+
+  const monthlyMealLedger = useMemo(() => {
+    type MealSlot = 'breakfast' | 'lunch' | 'dinner';
+    type SlotCounts = Record<MealSlot, number>;
+    type ScheduledMeals = Record<MealSlot, DailyMealLog[]>;
+
+    const slots: MealSlot[] = ['breakfast', 'lunch', 'dinner'];
+    const createCounts = (): SlotCounts => ({ breakfast: 0, lunch: 0, dinner: 0 });
+    const createScheduledMeals = (): ScheduledMeals => ({ breakfast: [], lunch: [], dinner: [] });
+    const deliveredTotals = createCounts();
+    const scheduledTotals = createCounts();
+    const daysInMonth = new Date(Date.UTC(scheduleYear, scheduleMonth, 0)).getUTCDate();
+    const monthPrefix = `${scheduleYear}-${String(scheduleMonth).padStart(2, '0')}`;
+
+    const rows = Array.from({ length: daysInMonth }, (_, index) => {
+      const dayNumber = index + 1;
+      const date = `${monthPrefix}-${String(dayNumber).padStart(2, '0')}`;
+      const dateValue = new Date(Date.UTC(scheduleYear, scheduleMonth - 1, dayNumber));
+      return {
+        date,
+        dateLabel: dateValue.toLocaleDateString('en-IN', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric',
+          timeZone: 'UTC',
+        }),
+        dayLabel: dateValue.toLocaleDateString('en-IN', { weekday: 'short', timeZone: 'UTC' }),
+        delivered: createCounts(),
+        scheduled: createCounts(),
+        scheduledMeals: createScheduledMeals(),
+      };
+    });
+
+    const rowByDate = new Map(rows.map((row) => [row.date, row]));
+    meals.forEach((meal) => {
+      if (meal.status !== 'TAKE' || !meal.date.startsWith(monthPrefix)) return;
+      const slot = meal.meal_slot.toLowerCase() as MealSlot;
+      if (!slots.includes(slot)) return;
+      const row = rowByDate.get(meal.date);
+      if (!row) return;
+
+      if (isMealCompleted(meal)) {
+        row.delivered[slot] += 1;
+        deliveredTotals[slot] += 1;
+      } else {
+        row.scheduled[slot] += 1;
+        row.scheduledMeals[slot].push(meal);
+        scheduledTotals[slot] += 1;
+      }
+    });
+
+    return { rows, deliveredTotals, scheduledTotals, slots };
+  }, [meals, scheduleMonth, scheduleYear]);
 
   const getSlotIcon = (slot: string) => {
     switch (slot.toLowerCase()) {
@@ -605,76 +670,138 @@ export default function CustomerDashboard() {
         </div>
       )}
 
-      {/* TAB 2: MEAL SCHEDULE & SKIP REQUESTS */}
+      {/* TAB 2: MONTHLY MEAL SCHEDULE & CANCELLATIONS */}
       {activeTab === 'schedule' && (
         <div className="space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-            <div>
-              <h2 className="text-base font-black text-[#22222B]">Scheduled Deliveries</h2>
-              <p className="text-xs text-slate-500">
-                Only meals from active, paid subscriptions are scheduled here. Sunday delivery is included.
-              </p>
+          <div className="glass-card rounded-3xl p-4 sm:p-5 border border-[#B0BE8C]/35 shadow-sm space-y-4">
+            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+              <div>
+                <h2 className="text-base font-black text-[#22222B]">Meal Schedule & Cancellations</h2>
+                <p className="text-xs text-slate-500 mt-1">
+                  Every active meal is classified by its service time as delivered or scheduled. Cancelled source entries are excluded.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-end gap-3">
+                <label className="space-y-1">
+                  <span className="block text-[10px] font-black uppercase tracking-wider text-slate-500">Month</span>
+                  <select
+                    value={scheduleMonth}
+                    onChange={(event) => setScheduleMonth(Number(event.target.value))}
+                    className="min-h-[44px] rounded-xl border border-[#B0BE8C]/50 bg-white px-3 text-xs font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#741B22]/20"
+                  >
+                    {[
+                      'January', 'February', 'March', 'April', 'May', 'June',
+                      'July', 'August', 'September', 'October', 'November', 'December',
+                    ].map((monthName, index) => (
+                      <option key={monthName} value={index + 1}>{monthName}</option>
+                    ))}
+                  </select>
+                </label>
+
+                <label className="space-y-1">
+                  <span className="block text-[10px] font-black uppercase tracking-wider text-slate-500">Year</span>
+                  <select
+                    value={scheduleYear}
+                    onChange={(event) => setScheduleYear(Number(event.target.value))}
+                    className="min-h-[44px] rounded-xl border border-[#B0BE8C]/50 bg-white px-3 text-xs font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#741B22]/20"
+                  >
+                    {scheduleYearOptions.map((year) => (
+                      <option key={year} value={year}>{year}</option>
+                    ))}
+                  </select>
+                </label>
+              </div>
             </div>
-            <div className="p-2.5 rounded-xl bg-[#F7DE9D]/30 border border-[#F7DE9D] text-[#22222B] text-[11px] font-bold flex items-start gap-1.5">
-              <Info className="w-4 h-4 text-[#741B22] shrink-0 mt-0.5" />
-              <span>IST Cut-offs: Breakfast & Lunch before 00:00 • Dinner before 12:00 noon</span>
+
+            <div className="flex flex-col sm:flex-row gap-2 text-[11px] font-bold">
+              <div className="flex-1 p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800">
+                Delivered: service time has passed — Breakfast 9:00 AM, Lunch 3:00 PM, Dinner 9:00 PM IST.
+              </div>
+              <div className="flex-1 p-2.5 rounded-xl bg-blue-50 border border-blue-200 text-blue-800">
+                Scheduled: service time is still ahead. Each scheduled meal can be cancelled below.
+              </div>
             </div>
           </div>
 
-          {meals.length === 0 ? (
-            <div className="glass-card rounded-2xl p-6 sm:p-8 text-center text-slate-500 border border-[#B0BE8C]/35">
-              <p className="text-sm font-bold text-[#22222B]">No active scheduled meals right now.</p>
-              <p className="text-xs mt-1">Once Admin confirms payment for your subscription, your schedule appears here.</p>
+          <div className="glass-card rounded-3xl border border-[#B0BE8C]/35 shadow-sm overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[940px] border-collapse text-xs">
+                <thead>
+                  <tr className="bg-[#F3F5F4] text-[#22222B]">
+                    <th rowSpan={2} className="px-3 py-3 text-left font-black border-b border-r border-[#B0BE8C]/30">Date</th>
+                    <th rowSpan={2} className="px-3 py-3 text-left font-black border-b border-r border-[#B0BE8C]/30">Day</th>
+                    <th colSpan={3} className="px-3 py-2 text-center font-black text-emerald-800 border-b border-r border-[#B0BE8C]/30">
+                      Delivered Meals
+                    </th>
+                    <th colSpan={3} className="px-3 py-2 text-center font-black text-blue-800 border-b border-[#B0BE8C]/30">
+                      Scheduled Meals
+                    </th>
+                  </tr>
+                  <tr className="bg-[#F8FAF7] text-[10px] uppercase tracking-wider text-slate-600">
+                    {monthlyMealLedger.slots.map((slot) => (
+                      <th key={`delivered-${slot}`} className="px-3 py-2 text-center border-b border-r border-[#B0BE8C]/25 capitalize">
+                        {slot}
+                      </th>
+                    ))}
+                    {monthlyMealLedger.slots.map((slot) => (
+                      <th key={`scheduled-${slot}`} className="px-3 py-2 text-center border-b border-r last:border-r-0 border-[#B0BE8C]/25 capitalize">
+                        {slot}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#B0BE8C]/20">
+                  <tr className="bg-[#F7DE9D]/25 font-black text-[#22222B]">
+                    <td className="px-3 py-3 border-r border-[#B0BE8C]/25">Monthly Total</td>
+                    <td className="px-3 py-3 border-r border-[#B0BE8C]/25">—</td>
+                    {monthlyMealLedger.slots.map((slot) => (
+                      <td key={`total-delivered-${slot}`} className="px-3 py-3 text-center text-emerald-800 border-r border-[#B0BE8C]/25">
+                        {monthlyMealLedger.deliveredTotals[slot]}
+                      </td>
+                    ))}
+                    {monthlyMealLedger.slots.map((slot) => (
+                      <td key={`total-scheduled-${slot}`} className="px-3 py-3 text-center text-blue-800 border-r last:border-r-0 border-[#B0BE8C]/25">
+                        {monthlyMealLedger.scheduledTotals[slot]}
+                      </td>
+                    ))}
+                  </tr>
+
+                  {monthlyMealLedger.rows.map((row) => (
+                    <tr key={row.date} className="align-top hover:bg-[#B0BE8C]/10 transition-colors">
+                      <td className="px-3 py-3 font-bold text-[#22222B] whitespace-nowrap border-r border-[#B0BE8C]/20">
+                        {row.dateLabel}
+                      </td>
+                      <td className="px-3 py-3 text-slate-600 font-bold border-r border-[#B0BE8C]/20">{row.dayLabel}</td>
+                      {monthlyMealLedger.slots.map((slot) => (
+                        <td key={`${row.date}-delivered-${slot}`} className="px-3 py-3 text-center text-emerald-800 font-black border-r border-[#B0BE8C]/20">
+                          {row.delivered[slot]}
+                        </td>
+                      ))}
+                      {monthlyMealLedger.slots.map((slot) => (
+                        <td key={`${row.date}-scheduled-${slot}`} className="px-2 py-2 text-center border-r last:border-r-0 border-[#B0BE8C]/20">
+                          <div className="flex flex-col items-center gap-1.5">
+                            <span className="font-black text-blue-800">{row.scheduled[slot]}</span>
+                            {row.scheduledMeals[slot].map((meal, index) => (
+                              <button
+                                key={meal.id}
+                                type="button"
+                                onClick={() => setMealToSkip(meal)}
+                                className="min-h-[32px] px-2.5 py-1 rounded-lg border border-[#B92F25]/40 bg-white hover:bg-[#B92F25]/10 text-[#B92F25] text-[10px] font-black transition-colors whitespace-nowrap"
+                                aria-label={`Cancel ${slot} on ${row.date}`}
+                              >
+                                Cancel{row.scheduledMeals[slot].length > 1 ? ` ${index + 1}` : ''}
+                              </button>
+                            ))}
+                          </div>
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {meals.map((meal) => {
-                const isCompleted = isMealCompleted(meal);
-                const isSkippedOnTime = meal.status === 'SKIPPED_ON_TIME';
-                const isSkippedLate = meal.status === 'SKIPPED_LATE';
-
-                return (
-                  <div key={meal.id} className="glass-card rounded-2xl p-4 border border-[#B0BE8C]/35 shadow-xs flex flex-col justify-between">
-                    <div>
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs font-black text-[#22222B] flex items-center gap-1.5">
-                          {getSlotIcon(meal.meal_slot)}
-                          <span className="capitalize">{meal.meal_slot}</span>
-                        </span>
-                        <span className="text-xs font-bold text-slate-500">{meal.date}</span>
-                      </div>
-
-                      <div className="text-xs font-medium text-slate-700 mb-3">
-                        Status:{' '}
-                        {isCompleted ? (
-                          <span className="text-emerald-700 font-bold">Completed</span>
-                        ) : isSkippedOnTime ? (
-                          <span className="text-emerald-700 font-bold">Cancelled and Automatically Rescheduled</span>
-                        ) : isSkippedLate ? (
-                          <span className="text-rose-700 font-bold">Cancelled After Cutoff</span>
-                       
-                        ) : meal.status === 'REALLOCATED' ? (
-                          <span className="text-indigo-700 font-bold">Reallocated</span>
-                        ) : (
-                          <span className="text-[#22222B] font-bold">Scheduled to Deliver</span>
-                        )}
-                      </div>
-                    </div>
-
-                    {!isCompleted && meal.status === 'TAKE' && (
-                      <button
-                        onClick={() => setMealToSkip(meal)}
-                        className="w-full min-h-[44px] py-2 px-3 rounded-xl border border-[#B92F25]/40 hover:bg-[#B92F25]/10 text-[#B92F25] text-xs font-bold transition-all flex items-center justify-center gap-1.5 active:scale-95"
-                      >
-                        <SkipForward className="w-4 h-4 shrink-0" />
-                        Cancel Meal
-                      </button>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          )}
+          </div>
         </div>
       )}
 
