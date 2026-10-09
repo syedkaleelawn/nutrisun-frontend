@@ -183,7 +183,7 @@ export default function PublicPricingPage() {
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F7DE9D] border border-[#F7DE9D]/80 text-[#22222B] text-[11px] font-black uppercase tracking-wider">
                 <Sparkles className="w-3.5 h-3.5" />
-                Nutrisun Plans
+                NutriSun Plans
               </div>
 
               <h1 className="text-3xl sm:text-4xl font-black mt-3">
