@@ -203,7 +203,7 @@ export default function LoginPage() {
             </button>
 
             <p className="text-center text-[11px] text-slate-500 mt-3">
-              Forgot password? Contact Admin to verify your account and obtain a temporary password.
+              Forgot password? Contact an administrator to verify your account and obtain a temporary password.
             </p>
           </form>
         </div>
