@@ -286,7 +286,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
               Monthly Sales & Customer Intelligence
             </h2>
             <p className="text-xs text-slate-600 mt-0.5">
-              Strictly tracks confirmed manual UPI payments, customer credit balances, and chronological activity.
+              Tracks confirmed manual UPI payments and customer meal balances, and chronological activity.
             </p>
           </div>
 
@@ -459,11 +459,11 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
             </div>
           </div>
 
-          {/* Delivered Meals */}
+          {/* Completed Meals */}
           <div className="glass-card rounded-3xl p-5 border border-[#B0BE8C]/40 bg-gradient-to-br from-white via-white to-[#F7DE9D]/20 shadow-xs space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">
-                Delivered Meals
+                Completed Meals
               </span>
               <span className="p-1.5 rounded-xl bg-[#F7DE9D] text-[#741B22]">
                 <Truck className="w-4 h-4" />
@@ -621,7 +621,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
                   <th className="py-3 px-4">Confirmed Sales</th>
                   <th className="py-3 px-4">Pending Amount</th>
                   <th className="py-3 px-4">Transactions</th>
-                  <th className="py-3 px-4 text-right">Activity & Credits</th>
+                  <th className="py-3 px-4 text-right">Activity & Meals</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -765,7 +765,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-xs space-y-1">
-                  <span className="text-[10px] font-black uppercase text-emerald-700">Available Credits</span>
+                  <span className="text-[10px] font-black uppercase text-emerald-700">Available Meals</span>
                   <div className="text-2xl font-black text-emerald-800">
                     {activeCustomer.credit_balance.available}
                   </div>
@@ -773,7 +773,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
                 </div>
 
                 <div className="p-3.5 rounded-2xl bg-blue-50/70 border border-blue-200 text-xs space-y-1">
-                  <span className="text-[10px] font-black uppercase text-blue-700">Used / Delivered</span>
+                  <span className="text-[10px] font-black uppercase text-blue-700">Completed Meals</span>
                   <div className="text-2xl font-black text-blue-800">
                     {activeCustomer.credit_balance.used}
                   </div>
@@ -947,7 +947,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
                           <strong className="text-slate-800">{act.meal_shift}</strong>
                         </div>
                         <div>
-                          <span className="text-slate-400">Credit Change:</span>{' '}
+                          <span className="text-slate-400">Meal Change:</span>{' '}
                           <strong
                             className={
                               act.credit_change.includes('+')
