@@ -107,7 +107,8 @@ export default function CustomerDashboard() {
   const [submittedProofSubIds, setSubmittedProofSubIds] = useState<number[]>([]);
 
   // "Skip Meal" Modal
-  const [mealToSkip, setMealToSkip] = useState<DailyMealLog | null>(null);
+  const [mealsToSkip, setMealsToSkip] = useState<DailyMealLog[]>([]);
+  const [skipQuantity, setSkipQuantity] = useState(1);
   const [submittingSkip, setSubmittingSkip] = useState(false);
 
   useEffect(() => {
@@ -305,15 +306,27 @@ export default function CustomerDashboard() {
   };
 
   const handleConfirmSkip = async () => {
-    if (!mealToSkip) return;
+    if (mealsToSkip.length === 0) return;
+    const quantity = Math.min(Math.max(skipQuantity, 1), mealsToSkip.length);
+    let completed = 0;
     setSubmittingSkip(true);
     try {
-      const res = await customerApi.requestSkip(mealToSkip.id);
-      setNotification(res.data.message);
-      setMealToSkip(null);
+      for (const meal of mealsToSkip.slice(0, quantity)) {
+        await customerApi.requestSkip(meal.id);
+        completed += 1;
+      }
+      setNotification(`${completed} ${completed === 1 ? 'meal' : 'meals'} cancelled successfully.`);
+      setMealsToSkip([]);
+      setSkipQuantity(1);
       await loadData(true);
     } catch (err: any) {
-      alert(err.response?.data?.error || 'Failed to submit skip request.');
+      const detail = err.response?.data?.error || 'Failed to complete the cancellation.';
+      alert(completed > 0 ? `${completed} meal(s) were cancelled before an error occurred. ${detail}` : detail);
+      if (completed > 0) {
+        setMealsToSkip([]);
+        setSkipQuantity(1);
+        await loadData(true);
+      }
     } finally {
       setSubmittingSkip(false);
     }
@@ -782,17 +795,19 @@ export default function CustomerDashboard() {
                         <td key={`${row.date}-scheduled-${slot}`} className="px-2 py-2 text-center border-r last:border-r-0 border-[#B0BE8C]/20">
                           <div className="flex flex-col items-center gap-1.5">
                             <span className="font-black text-blue-800">{row.scheduled[slot]}</span>
-                            {row.scheduledMeals[slot].map((meal, index) => (
+                            {row.scheduledMeals[slot].length > 0 && (
                               <button
-                                key={meal.id}
                                 type="button"
-                                onClick={() => setMealToSkip(meal)}
+                                onClick={() => {
+                                  setMealsToSkip(row.scheduledMeals[slot]);
+                                  setSkipQuantity(1);
+                                }}
                                 className="min-h-[32px] px-2.5 py-1 rounded-lg border border-[#B92F25]/40 bg-white hover:bg-[#B92F25]/10 text-[#B92F25] text-[10px] font-black transition-colors whitespace-nowrap"
-                                aria-label={`Cancel ${slot} on ${row.date}`}
+                                aria-label={`Cancel ${slot} meals on ${row.date}`}
                               >
-                                Cancel{row.scheduledMeals[slot].length > 1 ? ` ${index + 1}` : ''}
+                                Cancel
                               </button>
-                            ))}
+                            )}
                           </div>
                         </td>
                       ))}
@@ -1625,16 +1640,35 @@ export default function CustomerDashboard() {
         </div>
       )}
 
-      {/* MODAL: SKIP MEAL */}
-      {mealToSkip && (() => {
-        const isOnTime = checkMealIsOnTime(mealToSkip.date, mealToSkip.meal_slot);
+      {/* MODAL: CANCEL SCHEDULED MEALS */}
+      {mealsToSkip.length > 0 && (() => {
+        const firstMeal = mealsToSkip[0];
+        const isOnTime = checkMealIsOnTime(firstMeal.date, firstMeal.meal_slot);
         return (
           <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-[100] overflow-y-auto">
             <div className="bg-white rounded-3xl p-5 sm:p-8 max-w-md w-full border border-[#B0BE8C]/40 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto my-auto">
-              <h3 className="text-lg font-black text-[#22222B]">Cancel Scheduled Meal</h3>
+              <h3 className="text-lg font-black text-[#22222B]">Cancel Scheduled Meals</h3>
               <p className="text-xs text-slate-600">
-                Meal: <strong className="capitalize">{mealToSkip.meal_slot}</strong> on <strong>{mealToSkip.date}</strong>.
+                Meal: <strong className="capitalize">{firstMeal.meal_slot}</strong> on <strong>{firstMeal.date}</strong>.
               </p>
+
+              <label className="block p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
+                <span className="block text-xs font-black text-[#22222B] mb-1.5">Number of meals to cancel</span>
+                <input
+                  type="number"
+                  min={1}
+                  max={mealsToSkip.length}
+                  value={skipQuantity}
+                  onChange={(event) => {
+                    const value = Number(event.target.value);
+                    setSkipQuantity(Math.min(Math.max(Number.isFinite(value) ? value : 1, 1), mealsToSkip.length));
+                  }}
+                  className="w-full min-h-[44px] rounded-xl border border-[#B0BE8C]/60 bg-white px-3 text-sm font-black text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#741B22]/20"
+                />
+                <span className="block text-[10px] text-slate-500 font-bold mt-1.5">
+                  Choose from 1 to {mealsToSkip.length}, the number currently scheduled.
+                </span>
+              </label>
 
               {isOnTime ? (
                 <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-950 text-xs font-medium space-y-1.5">
@@ -1642,9 +1676,8 @@ export default function CustomerDashboard() {
                     <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                     <span>Before Cutoff (Eligible for Rescheduling)</span>
                   </div>
-                  <p>• Automatically processed immediately with no admin approval needed.</p>
-                  <p>• Delivery will be cancelled.</p>
-                  <p>• The meal will automatically move to the next available date for the same meal type.</p>
+                  <p>• The selected meal quantity will be cancelled immediately.</p>
+                  <p>• Each cancelled meal will automatically move to the next available date for the same meal type.</p>
                 </div>
               ) : (
                 <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-300 text-rose-950 text-xs font-medium space-y-1.5">
@@ -1653,26 +1686,34 @@ export default function CustomerDashboard() {
                     <span>At or After Cut-off (Late Cancellation)</span>
                   </div>
                   <p className="font-bold text-rose-900">• Cut-off passed (Breakfast/Lunch: prior night, Dinner: 12:00 PM same day).</p>
-                  <p>• Delivery will be stopped immediately so preparation/food is not wasted.</p>
-                  <p className="font-bold text-rose-700">• The meal will be cancelled without a replacement.</p>
+                  <p>• The selected meal quantity will be cancelled immediately.</p>
+                  <p className="font-bold text-rose-700">• No replacement meals will be added.</p>
                 </div>
               )}
 
               <div className="flex gap-2 pt-2">
                 <button
-                  onClick={() => setMealToSkip(null)}
-                  className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#DCE5CC] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center"
+                  onClick={() => {
+                    setMealsToSkip([]);
+                    setSkipQuantity(1);
+                  }}
+                  disabled={submittingSkip}
+                  className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#DCE5CC] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center disabled:opacity-60"
                 >
-                  Keep Meal
+                  Keep Meals
                 </button>
                 <button
                   onClick={handleConfirmSkip}
                   disabled={submittingSkip}
-                  className={`flex-1 min-h-[44px] py-2.5 px-3 rounded-xl text-white text-xs font-black shadow-md transition-colors flex items-center justify-center ${
+                  className={`flex-1 min-h-[44px] py-2.5 px-3 rounded-xl text-white text-xs font-black shadow-md transition-colors flex items-center justify-center disabled:opacity-60 ${
                     isOnTime ? 'bg-emerald-700 hover:bg-emerald-800' : 'bg-[#B92F25] hover:bg-[#741B22]'
                   }`}
                 >
-                  {submittingSkip ? 'Processing...' : isOnTime ? 'Confirm & Move Meal' : 'Confirm Cancellation'}
+                  {submittingSkip
+                    ? 'Processing...'
+                    : isOnTime
+                      ? `Cancel & Move ${skipQuantity}`
+                      : `Cancel ${skipQuantity}`}
                 </button>
               </div>
             </div>
