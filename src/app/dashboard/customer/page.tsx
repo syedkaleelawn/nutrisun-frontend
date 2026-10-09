@@ -549,7 +549,7 @@ export default function CustomerDashboard() {
           { id: 'overview', label: 'My Subscriptions' },
           { id: 'schedule', label: 'Meal Schedule & Cancellations' },
           { id: 'plans', label: 'Available Plans (Buy)' },
-          { id: 'requests', label: `Pending & Past Requests (${requests.length})` },
+          { id: 'requests', label: `Meal Cancellation History (${requests.length})` },
           { id: 'credits', label: 'Meal Change History' },
         ].map((t) => (
           <button
