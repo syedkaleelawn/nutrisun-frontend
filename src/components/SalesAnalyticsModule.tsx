@@ -805,7 +805,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
                         <th className="py-2.5 px-3">Period</th>
                         <th className="py-2.5 px-3">Status</th>
                         <th className="py-2.5 px-3">Payment</th>
-                        <th className="py-2.5 px-3">Credits</th>
+                        <th className="py-2.5 px-3">Original Plan Meals</th>
                         <th className="py-2.5 px-3">Confirmed (IST)</th>
                       </tr>
                     </thead>
@@ -827,15 +827,16 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
                               className={`px-2 py-0.5 rounded-full text-[10px] font-black ${
                                 s.payment_status === 'PAID'
                                   ? 'bg-emerald-100 text-emerald-800'
-                                  : 'bg-amber-100 text-amber-800'
+                                  : s.payment_status === 'REJECTED'
+                                    ? 'bg-rose-100 text-rose-800'
+                                    : 'bg-amber-100 text-amber-800'
                               }`}
                             >
                               {s.payment_status}
                             </span>
                           </td>
                           <td className="py-2.5 px-3">
-                            <span className="font-bold text-[#741B22]">{s.remaining_credits}</span>
-                            <span className="text-slate-400">/{s.total_credits}</span>
+                            <span className="font-bold text-[#741B22]">{s.total_credits}</span>
                           </td>
                           <td className="py-2.5 px-3 text-slate-500 whitespace-nowrap">
                             {s.payment_confirmed_at}
