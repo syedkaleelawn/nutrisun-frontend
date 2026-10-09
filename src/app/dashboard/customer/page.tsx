@@ -11,7 +11,6 @@ import {
   SubscriptionPlan,
   DailyMealLog,
   ServiceRequest,
-  CreditTransaction,
   fetchReceiptBlobUrl,
 } from '@/lib/api';
 import {
@@ -63,14 +62,13 @@ export default function CustomerDashboard() {
   const router = useRouter();
 
   // Active Tab
-  const [activeTab, setActiveTab] = useState<'overview' | 'plans' | 'schedule' | 'requests' | 'credits'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'plans' | 'schedule' | 'requests'>('overview');
 
   // Data states
   const [subscriptions, setSubscriptions] = useState<UserSubscription[]>([]);
   const [availablePlans, setAvailablePlans] = useState<SubscriptionPlan[]>([]);
   const [meals, setMeals] = useState<DailyMealLog[]>([]);
   const [requests, setRequests] = useState<ServiceRequest[]>([]);
-  const [credits, setCredits] = useState<CreditTransaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState<string | null>(null);
 
@@ -122,12 +120,11 @@ export default function CustomerDashboard() {
   const loadData = async (silent = false) => {
     if (!silent) setLoading(true);
     try {
-      const [subRes, plansRes, mealsRes, reqRes, credRes] = await Promise.allSettled([
+      const [subRes, plansRes, mealsRes, reqRes] = await Promise.allSettled([
         customerApi.getSubscriptions(),
         customerApi.getPlans(),
         customerApi.getMyMeals(),
         customerApi.getRequests(),
-        customerApi.getCredits(),
       ]);
 
       const failed: string[] = [];
@@ -153,12 +150,6 @@ export default function CustomerDashboard() {
         setRequests(reqRes.value.data.requests || []);
       } else {
         failed.push('Service Requests');
-      }
-
-      if (credRes.status === 'fulfilled') {
-        setCredits(credRes.value.data.transactions || []);
-      } else {
-        failed.push('Credit Ledger');
       }
 
       setLoadErrors(failed);
@@ -550,7 +541,6 @@ export default function CustomerDashboard() {
           { id: 'schedule', label: 'Meal Schedule & Cancellations' },
           { id: 'plans', label: 'Available Plans (Buy)' },
           { id: 'requests', label: `Meal Cancellation History (${requests.length})` },
-          { id: 'credits', label: 'Meal Change History' },
         ].map((t) => (
           <button
             key={t.id}
@@ -1055,74 +1045,6 @@ export default function CustomerDashboard() {
                 </div>
               ))}
             </div>
-          )}
-        </div>
-      )}
-
-      {/* TAB 5: CREDIT HISTORY LEDGER */}
-      {activeTab === 'credits' && (
-        <div className="space-y-4">
-          <h2 className="text-base font-black text-[#22222B]">Meal Change History</h2>
-
-          {credits.length === 0 ? (
-            <div className="glass-card rounded-2xl p-6 sm:p-8 text-center text-slate-500 border border-[#B0BE8C]/35">
-              <p className="text-xs">No meal adjustments recorded yet.</p>
-            </div>
-          ) : (
-            <>
-              {/* Mobile Cards View */}
-              <div className="block md:hidden space-y-2.5">
-                {credits.map((tx) => (
-                  <div key={tx.id} className="glass-card rounded-2xl p-4 border border-[#B0BE8C]/35 shadow-xs space-y-2">
-                    <div className="flex items-center justify-between text-xs font-bold">
-                      <span className="text-[#22222B]">Sub #{tx.subscription_id}</span>
-                      <span className={`font-black text-sm ${tx.delta > 0 ? 'text-emerald-700' : 'text-[#B92F25]'}`}>
-                        {tx.delta > 0 ? `+${tx.delta}` : tx.delta} meals
-                      </span>
-                    </div>
-                    <div className="text-xs text-slate-700 break-words">
-                      <strong>Reason:</strong> {tx.reason}
-                      {tx.notes && <span className="block text-[11px] text-slate-500 mt-0.5">{tx.notes}</span>}
-                    </div>
-                    <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1.5 border-t border-[#B0BE8C]/20">
-                      <span>{new Date(tx.created_at).toLocaleString()}</span>
-                      <span>Balance: <strong className="text-[#22222B] text-xs">{tx.balance_after}</strong></span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Desktop Table View */}
-              <div className="hidden md:block glass-card rounded-3xl overflow-hidden border border-[#B0BE8C]/35 overflow-x-auto">
-                <table className="w-full text-left text-xs">
-                  <thead className="bg-[#F3F5F4] text-[#22222B] font-bold border-b border-[#B0BE8C]/35">
-                    <tr>
-                      <th className="p-3">Timestamp</th>
-                      <th className="p-3">Subscription</th>
-                      <th className="p-3">Reason</th>
-                      <th className="p-3 text-center">Change</th>
-                      <th className="p-3 text-right">Balance After</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-[#B0BE8C]/20">
-                    {credits.map((tx) => (
-                      <tr key={tx.id} className="hover:bg-[#B0BE8C]/10 transition-colors">
-                        <td className="p-3 text-slate-500 whitespace-nowrap">{new Date(tx.created_at).toLocaleString()}</td>
-                        <td className="p-3 font-bold text-[#22222B] whitespace-nowrap">Sub #{tx.subscription_id}</td>
-                        <td className="p-3 text-slate-600">
-                          {tx.reason}
-                          {tx.notes && <span className="block text-[10px] text-slate-400">{tx.notes}</span>}
-                        </td>
-                        <td className={`p-3 text-center font-black ${tx.delta > 0 ? 'text-emerald-700' : 'text-[#B92F25]'}`}>
-                          {tx.delta > 0 ? `+${tx.delta}` : tx.delta}
-                        </td>
-                        <td className="p-3 text-right font-black text-[#22222B]">{tx.balance_after}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </>
           )}
         </div>
       )}
