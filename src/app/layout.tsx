@@ -32,6 +32,12 @@ export const metadata: Metadata = {
   description:
     'Fresh breakfast, lunch, and dinner subscription plans with convenient doorstep delivery.',
   applicationName: 'NutriSun',
+  manifest: '/manifest.webmanifest',
+  icons: {
+    icon: [{ url: '/nutrisun-logo.png', type: 'image/png', sizes: '1080x1080' }],
+    shortcut: '/nutrisun-logo.png',
+    apple: [{ url: '/nutrisun-logo.png', type: 'image/png', sizes: '1080x1080' }],
+  },
   alternates: { canonical: '/' },
   openGraph: {
     type: 'website',
@@ -40,14 +46,32 @@ export const metadata: Metadata = {
     title: 'NutriSun | Healthy Tasty Daily',
     description:
       'Fresh breakfast, lunch, and dinner subscription plans with convenient doorstep delivery.',
+    images: [
+      {
+        url: '/nutrisun-logo.png',
+        width: 1080,
+        height: 1080,
+        alt: 'NutriSun — Healthy Tasty Daily',
+      },
+    ],
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
     title: 'NutriSun | Healthy Tasty Daily',
     description:
       'Fresh breakfast, lunch, and dinner subscription plans with convenient doorstep delivery.',
+    images: ['/nutrisun-logo.png'],
   },
   robots: { index: true, follow: true },
+};
+
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'NutriSun',
+  url: 'https://app.nutrisun.cloud',
+  logo: 'https://app.nutrisun.cloud/nutrisun-logo.png',
+  slogan: 'Healthy Tasty Daily',
 };
 
 export default function RootLayout({
@@ -59,6 +83,10 @@ export default function RootLayout({
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
       </head>
       <body className="min-h-full flex flex-col bg-[#F3F5F4] text-[#22222B] selection:bg-[#B92F25] selection:text-white bg-mesh-glow">
         <ToastProvider>
@@ -69,11 +97,11 @@ export default function RootLayout({
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-3 min-w-0 w-full sm:w-auto">
                 <Image
-                  src="/logo.png"
-                  alt="NUTRISUN"
+                  src="/nutrisun-logo.png"
+                  alt="NutriSun logo"
                   width={32}
                   height={32}
-                  className="w-8 h-8 object-contain rounded-full shrink-0"
+                  className="w-8 h-8 object-contain shrink-0"
                 />
                 <div className="min-w-0">
                   <div className="font-black text-[#22222B] flex items-center gap-2">
