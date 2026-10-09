@@ -783,7 +783,7 @@ export default function AdminDashboard() {
                 <div className="text-xs space-y-0.5">
                   <div className="font-bold text-[#22222B]">{s.user?.name} <span className="font-normal text-slate-400">({s.user?.phone})</span></div>
                   <div>Plan: <strong>{s.plan_snapshot_name || s.plan?.name}</strong> (<span className="text-[#741B22] font-bold">{formatShiftName(s.selected_shifts || s.plan_snapshot_shifts)}</span>)</div>
-                  <div>Credits: <strong className="text-emerald-700">{s.remaining_credits}</strong> remaining of {s.total_credits}</div>
+                  <div>Meals: <strong className="text-emerald-700">{s.remaining_credits}</strong> remaining of {s.total_credits}</div>
                   <div className="text-[11px] text-slate-500">Dates: {s.start_date || 'Pending'} → {s.end_date || 'Pending'}</div>
                   {s.payment_record?.proof_image_url && (
                     <div className="text-[10px] text-emerald-700 font-bold flex items-center gap-1">
@@ -818,7 +818,7 @@ export default function AdminDashboard() {
                   <th className="p-3">Customer</th>
                   <th className="p-3">Plan</th>
                   <th className="p-3">Shifts</th>
-                  <th className="p-3">Credits (Rem / Total)</th>
+                  <th className="p-3">Meals (Remaining / Total)</th>
                   <th className="p-3">Payment Proof</th>
                   <th className="p-3">Start & End</th>
                   <th className="p-3">Status</th>
@@ -1451,7 +1451,7 @@ export default function AdminDashboard() {
                 <div>
                   <div className="flex items-center justify-between text-xs text-slate-400 font-bold mb-1">
                     <span>{p.days_count} Days</span>
-                    <span>{p.meal_credits} Credits</span>
+                    <span>{p.meal_credits} Meals</span>
                   </div>
                   <h3 className="text-base font-black text-[#22222B] break-words">{p.name}</h3>
                   <div className="text-xl font-black text-[#741B22] my-2">₹{p.price.toFixed(2)}</div>
@@ -1600,7 +1600,7 @@ export default function AdminDashboard() {
             <h2 className="text-base font-black text-[#22222B]">Meal Reallocation Tool</h2>
           </div>
           <p className="text-xs text-slate-600">
-            Admin can move a meal entitlement to another date and/or meal shift for the same subscription. This preserves the schedule audit history and does not duplicate credits or meals.
+            Admin can move a meal entitlement to another date and/or meal shift for the same subscription. This preserves the schedule audit history and does not duplicate meals.
           </p>
 
           <div className="space-y-3 text-xs">
@@ -1703,8 +1703,8 @@ export default function AdminDashboard() {
                 </strong>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-slate-500 font-medium">Total Meal Credits:</span>
-                <strong className="text-emerald-700 font-black">{confirmSub.total_credits} Credits</strong>
+                <span className="text-slate-500 font-medium">Total Meals:</span>
+                <strong className="text-emerald-700 font-black">{confirmSub.total_credits} Meals</strong>
               </div>
               <div className="text-[11px] text-slate-500 pt-1 border-t border-[#B0BE8C]/20">
                 <span>Address: </span>
@@ -2050,7 +2050,7 @@ export default function AdminDashboard() {
                 />
               </div>
               <div>
-                <label className="block font-bold mb-1 text-[#22222B]">Total Eligible Credits</label>
+                <label className="block font-bold mb-1 text-[#22222B]">Total Included Meals</label>
                 <input
                   type="number"
                   min={1}
