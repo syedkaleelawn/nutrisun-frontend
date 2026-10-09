@@ -129,8 +129,8 @@ export default function Navbar() {
           <Link href="/" className="flex items-center gap-2 sm:gap-3 group min-w-0">
             <div className="relative shrink-0">
               <Image
-                src="/logo.png"
-                alt="NUTRISUN - Healthy Tasty Daily"
+                src="/nutrisun-logo.png"
+                alt="NutriSun — Healthy Tasty Daily"
                 width={48}
                 height={48}
                 priority
