@@ -1,6 +1,16 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 
 const getApiBaseUrl = () => {
+  // Browser traffic uses the app's same-origin rewrite so mobile networks never
+  // need to connect directly to the Render hostname.
+  if (typeof window !== 'undefined') {
+    const hostname = window.location.hostname;
+    const isLocal = hostname === 'localhost' || hostname === '127.0.0.1';
+    if (!isLocal) {
+      return '/api';
+    }
+  }
+
   const directUrl = process.env.NEXT_PUBLIC_API_URL;
   if (directUrl && directUrl.startsWith('http')) {
     return directUrl.endsWith('/api') ? directUrl : `${directUrl.replace(/\/+$/, '')}/api`;
