@@ -299,7 +299,7 @@ export default function MonthlyMenuPage() {
 
       {/* Current Menu Period */}
       <div className="glass-card rounded-3xl p-4 sm:p-6 border border-[#B0BE8C]/35 shadow-sm">
-        <div className="flex items-center justify-between gap-3 bg-[#F3F5F4] px-4 py-3 rounded-2xl border border-[#B0BE8C]/30 text-xs font-bold text-[#22222B]">
+        <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-3 bg-[#F3F5F4] px-4 py-3 rounded-2xl border border-[#B0BE8C]/30 text-xs font-bold text-[#22222B]">
           <span>
             Current menu: <strong className="text-[#741B22]">{selectedMonthName} {selectedYear}</strong>
           </span>
@@ -504,7 +504,7 @@ export default function MonthlyMenuPage() {
           role="dialog"
           aria-modal="true"
         >
-          <div className="w-full max-w-2xl bg-white rounded-3xl p-5 sm:p-7 shadow-2xl border border-amber-300 space-y-4 max-h-[90vh] flex flex-col animate-in fade-in zoom-in-95 my-auto">
+          <div className="w-full max-w-2xl bg-white rounded-3xl p-5 sm:p-7 shadow-2xl border border-amber-300 space-y-4 max-h-[90dvh] flex flex-col animate-in fade-in zoom-in-95 my-auto">
             {/* Modal Header */}
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 shrink-0">
               <div className="flex items-center gap-3 text-amber-600">
@@ -777,3 +777,4 @@ export default function MonthlyMenuPage() {
     </div>
   );
 }
+
