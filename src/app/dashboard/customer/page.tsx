@@ -1052,7 +1052,7 @@ export default function CustomerDashboard() {
       {/* MODAL: BUY PLAN & UPI QR DISPLAY */}
       {selectedPlanToBuy && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-[100] overflow-y-auto">
-          <div className="bg-white rounded-3xl p-5 sm:p-8 max-w-md w-full border border-[#B0BE8C]/40 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto my-auto">
+          <div className="bg-white rounded-3xl p-5 sm:p-8 max-w-md w-full border border-[#B0BE8C]/40 shadow-2xl space-y-4 max-h-[90dvh] overflow-y-auto overscroll-contain my-auto">
             {!purchaseSuccessData ? (
               <>
                 <div className="flex items-center justify-between">
@@ -1385,7 +1385,7 @@ export default function CustomerDashboard() {
       {/* MODAL: VIEW PAYMENT QR / SUBMIT PROOF FOR EXISTING PENDING SUBSCRIPTION */}
       {activePaymentModalSub && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-[100] overflow-y-auto">
-          <div className="bg-white rounded-3xl p-5 sm:p-7 max-w-md w-full border border-[#B0BE8C]/40 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto my-auto">
+          <div className="bg-white rounded-3xl p-5 sm:p-7 max-w-md w-full border border-[#B0BE8C]/40 shadow-2xl space-y-4 max-h-[92dvh] overflow-y-auto overscroll-contain my-auto">
             {/* Header */}
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
@@ -1601,7 +1601,7 @@ export default function CustomerDashboard() {
         const isOnTime = checkMealIsOnTime(firstMeal.date, firstMeal.meal_slot);
         return (
           <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-[100] overflow-y-auto">
-            <div className="bg-white rounded-3xl p-5 sm:p-8 max-w-md w-full border border-[#B0BE8C]/40 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto my-auto">
+            <div className="bg-white rounded-3xl p-5 sm:p-8 max-w-md w-full border border-[#B0BE8C]/40 shadow-2xl space-y-4 max-h-[90dvh] overflow-y-auto overscroll-contain my-auto">
               <h3 className="text-lg font-black text-[#22222B]">Cancel Scheduled Meals</h3>
               <p className="text-xs text-slate-600">
                 Meal: <strong className="capitalize">{firstMeal.meal_slot}</strong> on <strong>{firstMeal.date}</strong>.
@@ -1680,3 +1680,4 @@ export default function CustomerDashboard() {
     </div>
   );
 }
+
