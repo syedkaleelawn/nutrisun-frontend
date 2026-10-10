@@ -353,7 +353,7 @@ export default function EntryPage() {
       {/* Force Change Temporary Password Modal */}
       {showChangePasswordModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50 overflow-y-auto">
-          <div className="bg-white rounded-3xl p-5 sm:p-8 max-w-md w-full border border-[#F7DE9D] shadow-2xl max-h-[90vh] overflow-y-auto my-auto">
+          <div className="bg-white rounded-3xl p-5 sm:p-8 max-w-md w-full border border-[#F7DE9D] shadow-2xl max-h-[90dvh] overflow-y-auto overscroll-contain my-auto">
             <div className="flex items-center gap-3 mb-4 text-[#741B22]">
               <KeyRound className="w-7 h-7 text-[#741B22] shrink-0" />
               <div>
@@ -390,3 +390,4 @@ export default function EntryPage() {
     </div>
   );
 }
+
