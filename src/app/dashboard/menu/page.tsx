@@ -47,9 +47,8 @@ export default function MonthlyMenuPage() {
   const currentYearNum = String(now.getFullYear());
   const todayDateStr = now.toISOString().split('T')[0];
 
-  // Month & Year Selector State (defaulting to current month/year)
-  const [selectedMonth, setSelectedMonth] = useState<string>(currentMonthNum);
-  const [selectedYear, setSelectedYear] = useState<string>(currentYearNum);
+  const selectedMonth = currentMonthNum;
+  const selectedYear = currentYearNum;
 
   // Menu Data State
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
@@ -90,10 +89,7 @@ export default function MonthlyMenuPage() {
   const fetchMenu = async (silent = false) => {
     if (!silent) setLoadingMenu(true);
     try {
-      const res = await menuApi.getMenu({
-        month: selectedMonth,
-        year: selectedYear,
-      });
+      const res = await menuApi.getMenu();
       setMenuItems(res.data?.menu || []);
       setMenuError(null);
       setLastRefreshed(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
@@ -109,7 +105,7 @@ export default function MonthlyMenuPage() {
     if (user) {
       fetchMenu();
     }
-  }, [user?.id, selectedMonth, selectedYear]);
+  }, [user?.id]);
 
   // Group menu items by date
   const groupedMenu = useMemo(() => {
@@ -301,60 +297,15 @@ export default function MonthlyMenuPage() {
         </div>
       </div>
 
-      {/* Month and Year Filter Bar */}
+      {/* Current Menu Period */}
       <div className="glass-card rounded-3xl p-4 sm:p-6 border border-[#B0BE8C]/35 shadow-sm">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
-            {/* Month Selector */}
-            <div className="flex-1 sm:flex-initial">
-              <label className="block text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1">
-                Select Month
-              </label>
-              <select
-                value={selectedMonth}
-                onChange={(e) => setSelectedMonth(e.target.value)}
-                className="w-full sm:w-44 min-h-[44px] px-3.5 py-2 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-bold text-[#22222B] bg-white focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
-              >
-                {MONTH_NAMES.map((m, idx) => {
-                  const val = String(idx + 1).padStart(2, '0');
-                  return (
-                    <option key={val} value={val}>
-                      {m}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
-
-            {/* Year Selector */}
-            <div className="flex-1 sm:flex-initial">
-              <label className="block text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1">
-                Select Year
-              </label>
-              <select
-                value={selectedYear}
-                onChange={(e) => setSelectedYear(e.target.value)}
-                className="w-full sm:w-32 min-h-[44px] px-3.5 py-2 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-bold text-[#22222B] bg-white focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
-              >
-                {['2025', '2026', '2027', '2028'].map((y) => (
-                  <option key={y} value={y}>
-                    {y}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          {/* Month Overview Counter */}
-          <div className="flex items-center gap-3 self-end sm:self-center bg-[#F3F5F4] px-4 py-2 rounded-2xl border border-[#B0BE8C]/30 text-xs font-bold text-[#22222B]">
-            <span>
-              Target: <strong className="text-[#741B22]">{selectedMonthName} {selectedYear}</strong>
-            </span>
-            <span className="text-slate-300">•</span>
-            <span>
-              Dishes: <strong className="text-[#741B22]">{menuItems.length}</strong>
-            </span>
-          </div>
+        <div className="flex items-center justify-between gap-3 bg-[#F3F5F4] px-4 py-3 rounded-2xl border border-[#B0BE8C]/30 text-xs font-bold text-[#22222B]">
+          <span>
+            Current menu: <strong className="text-[#741B22]">{selectedMonthName} {selectedYear}</strong>
+          </span>
+          <span>
+            Dishes: <strong className="text-[#741B22]">{menuItems.length}</strong>
+          </span>
         </div>
       </div>
 
