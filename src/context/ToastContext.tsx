@@ -95,7 +95,7 @@ function ToastContainer({ toasts, onDismiss }: { toasts: Toast[]; onDismiss: (id
 
   return (
     <div
-      className="fixed bottom-4 right-4 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none px-3"
+      className="fixed left-3 right-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-[110] flex flex-col gap-2.5 pointer-events-none sm:left-auto sm:right-4 sm:w-full sm:max-w-sm"
       role="region"
       aria-label="Notifications"
     >
@@ -162,3 +162,4 @@ function ToastContainer({ toasts, onDismiss }: { toasts: Toast[]; onDismiss: (id
     </div>
   );
 }
+

@@ -34,6 +34,17 @@ html, body {
   overflow-x: hidden;
 }
 
+*, *::before, *::after {
+  min-width: 0;
+}
+
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+}
+
 body {
   background-color: #F3F5F4;
   color: #22222B;
@@ -73,10 +84,12 @@ body {
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.glass-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(176, 190, 140, 0.65);
-  box-shadow: 0 20px 30px -10px rgba(34, 34, 43, 0.08), 0 10px 15px -5px rgba(34, 34, 43, 0.04);
+@media (hover: hover) and (pointer: fine) {
+  .glass-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(176, 190, 140, 0.65);
+    box-shadow: 0 20px 30px -10px rgba(34, 34, 43, 0.08), 0 10px 15px -5px rgba(34, 34, 43, 0.04);
+  }
 }
 
 .glass-pill {
@@ -213,3 +226,18 @@ body {
   align-items: center;
   justify-content: center;
 }
+
+/* Keep fixed UI clear of phone notches and home indicators. */
+.safe-area-bottom {
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+

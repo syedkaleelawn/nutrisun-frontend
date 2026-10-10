@@ -107,7 +107,7 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
       aria-labelledby="change-password-title"
     >
       <div
-        className="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-[#B0BE8C]/40 overflow-hidden"
+        className="w-full max-w-md max-h-[calc(100dvh-1.5rem)] bg-white rounded-3xl shadow-2xl border border-[#B0BE8C]/40 overflow-y-auto overscroll-contain"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -268,3 +268,4 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
     </div>
   );
 }
+

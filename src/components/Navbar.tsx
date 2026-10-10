@@ -153,7 +153,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1 lg:gap-2">
+          <nav className="hidden xl:flex items-center gap-1 xl:gap-2">
             {navLinks.map((link) => {
               const Icon = link.icon;
               const isActive = pathname === link.href;
@@ -182,7 +182,7 @@ export default function Navbar() {
           </nav>
 
           {/* Right Actions / User Profile Ring & Account Menu */}
-          <div className="hidden md:flex items-center gap-2">
+          <div className="hidden xl:flex items-center gap-2">
             {user ? (
               <div className="relative flex items-center gap-1 pl-2 border-l border-[#B0BE8C]/40" ref={accountMenuRef}>
                 {/* Account Trigger Button */}
@@ -309,7 +309,7 @@ export default function Navbar() {
           </div>
 
           {/* Mobile Menu Hamburger */}
-          <div className="md:hidden flex items-center gap-2">
+          <div className="xl:hidden flex items-center gap-2">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="w-11 h-11 flex items-center justify-center text-[#22222B] hover:text-[#B92F25] rounded-xl hover:bg-[#B0BE8C]/20 transition-colors"
@@ -322,7 +322,7 @@ export default function Navbar() {
 
         {/* Mobile Drawer */}
         {mobileMenuOpen && (
-          <div className="md:hidden mt-2 p-3.5 rounded-3xl glass-panel border border-[#B0BE8C]/40 shadow-2xl animate-in slide-in-from-top-2 duration-200 space-y-2 max-h-[calc(100vh-5rem)] overflow-y-auto">
+          <div className="xl:hidden mt-2 p-3.5 rounded-3xl glass-panel border border-[#B0BE8C]/40 shadow-2xl animate-in slide-in-from-top-2 duration-200 space-y-2 max-h-[calc(100dvh-5rem)] overflow-y-auto overscroll-contain safe-area-bottom">
             {navLinks.map((link) => {
               const Icon = link.icon;
               const isActive = pathname === link.href;
@@ -418,7 +418,7 @@ export default function Navbar() {
       {/* Backdrop for open mobile menu */}
       {mobileMenuOpen && (
         <div
-          className="fixed inset-0 bg-black/20 backdrop-blur-[2px] z-40 md:hidden"
+          className="fixed inset-0 bg-black/20 backdrop-blur-[2px] z-40 xl:hidden"
           onClick={() => setMobileMenuOpen(false)}
           aria-hidden="true"
         />
@@ -431,3 +431,4 @@ export default function Navbar() {
     </>
   );
 }
+

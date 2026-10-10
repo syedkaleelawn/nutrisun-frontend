@@ -579,7 +579,7 @@ export default function AdminDashboard() {
       )}
 
       {/* Badges / Counters Overview */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
+      <div className="grid grid-cols-1 min-[420px]:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
         <button
           onClick={() => setActiveTab('pending')}
           className={`p-3.5 sm:p-4 rounded-3xl border text-left transition-all min-h-[44px] flex flex-col justify-between ${
@@ -589,7 +589,7 @@ export default function AdminDashboard() {
           }`}
         >
           <div className="flex items-center justify-between gap-1">
-            <span className="text-[10px] font-black uppercase text-[#22222B] px-2 py-0.5 rounded-full bg-[#F7DE9D] truncate">Payment Pending</span>
+            <span className="text-[10px] font-black uppercase leading-tight text-[#22222B] px-2 py-0.5 rounded-full bg-[#F7DE9D]">Payment Pending</span>
             <CreditCard className="w-4 h-4 text-[#741B22] shrink-0" />
           </div>
           <div className="text-xl sm:text-2xl font-black text-[#22222B] mt-1">{counts.payment_pending}</div>
@@ -601,7 +601,7 @@ export default function AdminDashboard() {
           className="bg-white border-[#B0BE8C]/35 p-3.5 sm:p-4 rounded-3xl border text-left transition-all min-h-[44px] flex flex-col justify-between hover:bg-[#B0BE8C]/10"
         >
           <div className="flex items-center justify-between gap-1">
-            <span className="text-[10px] font-black uppercase text-[#22222B] truncate">Total Cancellations</span>
+            <span className="text-[10px] font-black uppercase leading-tight text-[#22222B]">Total Cancellations</span>
             <SkipForward className="w-4 h-4 text-[#741B22] shrink-0" />
           </div>
           <div className="text-xl sm:text-2xl font-black text-[#22222B] mt-1">{requests.length}</div>
@@ -616,7 +616,7 @@ export default function AdminDashboard() {
           className="bg-emerald-50/70 border-emerald-200 p-3.5 sm:p-4 rounded-3xl border text-left transition-all min-h-[44px] flex flex-col justify-between hover:bg-emerald-100/70"
         >
           <div className="flex items-center justify-between gap-1">
-            <span className="text-[10px] font-black uppercase text-emerald-800 truncate">Automatically Rescheduled</span>
+            <span className="text-[10px] font-black uppercase leading-tight text-emerald-800">Automatically Rescheduled</span>
             <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
           </div>
           <div className="text-xl sm:text-2xl font-black text-emerald-700 mt-1">
@@ -633,7 +633,7 @@ export default function AdminDashboard() {
           className="bg-rose-50/70 border-rose-200 p-3.5 sm:p-4 rounded-3xl border text-left transition-all min-h-[44px] flex flex-col justify-between hover:bg-rose-100/70"
         >
           <div className="flex items-center justify-between gap-1">
-            <span className="text-[10px] font-black uppercase text-rose-800 truncate">Late Cancellations</span>
+            <span className="text-[10px] font-black uppercase leading-tight text-rose-800">Late Cancellations</span>
             <Clock className="w-4 h-4 text-rose-600 shrink-0" />
           </div>
           <div className="text-xl sm:text-2xl font-black text-rose-700 mt-1">
@@ -1678,7 +1678,7 @@ export default function AdminDashboard() {
       {/* MODAL: CONFIRM / REVIEW PAYMENT */}
       {confirmSub && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-[100] overflow-y-auto">
-          <div className="bg-white rounded-3xl p-5 sm:p-7 max-w-lg w-full border border-[#B0BE8C]/40 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto my-auto">
+          <div className="bg-white rounded-3xl p-5 sm:p-7 max-w-lg w-full border border-[#B0BE8C]/40 shadow-2xl space-y-4 max-h-[92dvh] overflow-y-auto overscroll-contain my-auto">
             {/* Header */}
             <div className="flex items-start justify-between gap-2 border-b border-[#B0BE8C]/25 pb-3">
               <div className="min-w-0">
@@ -1840,7 +1840,7 @@ export default function AdminDashboard() {
       {/* MODAL: EDIT CUSTOMER ADDRESS */}
       {editingCust && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-[100] overflow-y-auto">
-          <div className="bg-white rounded-3xl p-5 sm:p-8 max-w-md w-full border border-[#B0BE8C]/40 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto my-auto">
+          <div className="bg-white rounded-3xl p-5 sm:p-8 max-w-md w-full border border-[#B0BE8C]/40 shadow-2xl space-y-4 max-h-[90dvh] overflow-y-auto overscroll-contain my-auto">
             <h3 className="text-lg font-black text-[#22222B]">Update Customer Delivery Address</h3>
             <p className="text-xs text-slate-500">Customer: {editingCust.name} ({editingCust.phone})</p>
 
@@ -1877,7 +1877,7 @@ export default function AdminDashboard() {
       {/* MODAL: RESET CUSTOMER PASSWORD */}
       {resetCust && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-[100] overflow-y-auto">
-          <div className="bg-white rounded-3xl p-5 sm:p-8 max-w-md w-full border border-[#B0BE8C]/40 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto my-auto">
+          <div className="bg-white rounded-3xl p-5 sm:p-8 max-w-md w-full border border-[#B0BE8C]/40 shadow-2xl space-y-4 max-h-[90dvh] overflow-y-auto overscroll-contain my-auto">
             <h3 className="text-lg font-black text-[#22222B]">Set Temporary Password</h3>
             <p className="text-xs text-slate-500">
               Customer: {resetCust.name} ({resetCust.phone}). Customer must change it upon next login.
@@ -1918,7 +1918,7 @@ export default function AdminDashboard() {
       {/* MODAL: CREATE STAFF */}
       {showStaffModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-[100] overflow-y-auto">
-          <div className="bg-white rounded-3xl p-5 sm:p-8 max-w-md w-full border border-[#B0BE8C]/40 shadow-2xl space-y-3 text-xs max-h-[90vh] overflow-y-auto my-auto">
+          <div className="bg-white rounded-3xl p-5 sm:p-8 max-w-md w-full border border-[#B0BE8C]/40 shadow-2xl space-y-3 text-xs max-h-[90dvh] overflow-y-auto overscroll-contain my-auto">
             <h3 className="text-lg font-black text-[#22222B]">Create Staff Account</h3>
             <p className="text-slate-500">Private staff provisioning for Chef or Delivery Rider.</p>
 
@@ -1990,7 +1990,7 @@ export default function AdminDashboard() {
       {/* MODAL: RESET STAFF PASSWORD */}
       {resetStaffMember && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-[100] overflow-y-auto">
-          <div className="bg-white rounded-3xl p-5 sm:p-8 max-w-md w-full border border-[#B0BE8C]/40 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto my-auto">
+          <div className="bg-white rounded-3xl p-5 sm:p-8 max-w-md w-full border border-[#B0BE8C]/40 shadow-2xl space-y-4 max-h-[90dvh] overflow-y-auto overscroll-contain my-auto">
             <h3 className="text-lg font-black text-[#22222B]">Set Temporary Password</h3>
             <p className="text-xs text-slate-500">
               Staff Member: {resetStaffMember.name} ({resetStaffMember.phone}, {resetStaffMember.role}). They must change this password on next login.
@@ -2031,7 +2031,7 @@ export default function AdminDashboard() {
       {/* MODAL: CREATE / EDIT PLAN */}
       {showPlanModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-[100] overflow-y-auto">
-          <div className="bg-white rounded-3xl p-5 sm:p-8 max-w-md w-full border border-[#B0BE8C]/40 shadow-2xl space-y-3 text-xs max-h-[90vh] overflow-y-auto my-auto">
+          <div className="bg-white rounded-3xl p-5 sm:p-8 max-w-md w-full border border-[#B0BE8C]/40 shadow-2xl space-y-3 text-xs max-h-[90dvh] overflow-y-auto overscroll-contain my-auto">
             <h3 className="text-lg font-black text-[#22222B]">
               {editingPlanId ? 'Edit Subscription Plan' : 'Create New Subscription Plan'}
             </h3>
@@ -2120,3 +2120,4 @@ export default function AdminDashboard() {
     </div>
   );
 }
+

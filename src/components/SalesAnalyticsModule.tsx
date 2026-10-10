@@ -501,7 +501,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
 
         {analytics?.daily_sales && analytics.daily_sales.length > 0 ? (
           <div className="overflow-x-auto border border-[#B0BE8C]/30 rounded-2xl">
-            <table className="w-full text-left text-xs">
+            <table className="w-full min-w-[680px] text-left text-xs">
               <thead className="bg-[#F3F5F4] text-[#22222B] font-black border-b border-[#B0BE8C]/30 uppercase text-[10px]">
                 <tr>
                   <th className="py-3 px-4">Date (IST)</th>
@@ -613,7 +613,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
 
         {analytics?.customer_sales && analytics.customer_sales.length > 0 ? (
           <div className="overflow-x-auto border border-[#B0BE8C]/30 rounded-2xl">
-            <table className="w-full text-left text-xs">
+            <table className="w-full min-w-[720px] text-left text-xs">
               <thead className="bg-[#F3F5F4] text-[#22222B] font-black border-b border-[#B0BE8C]/30 uppercase text-[10px]">
                 <tr>
                   <th className="py-3 px-4">Customer</th>
@@ -684,8 +684,8 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
           </div>
 
           {/* Search and Customer Dropdown */}
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="relative min-w-[220px]">
+          <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
+            <div className="relative w-full sm:w-auto sm:min-w-[220px]">
               <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
@@ -797,7 +797,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
               </h4>
               {activeCustomer.subscriptions.length > 0 ? (
                 <div className="overflow-x-auto border border-[#B0BE8C]/30 rounded-2xl">
-                  <table className="w-full text-left text-xs">
+                  <table className="w-full min-w-[760px] text-left text-xs">
                     <thead className="bg-[#F3F5F4] text-[#22222B] font-black border-b border-[#B0BE8C]/30 uppercase text-[10px]">
                       <tr>
                         <th className="py-2.5 px-3">Plan Name</th>
@@ -858,7 +858,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
               </h4>
               {activeCustomer.payment_history.length > 0 ? (
                 <div className="overflow-x-auto border border-[#B0BE8C]/30 rounded-2xl">
-                  <table className="w-full text-left text-xs">
+                  <table className="w-full min-w-[760px] text-left text-xs">
                     <thead className="bg-[#F3F5F4] text-[#22222B] font-black border-b border-[#B0BE8C]/30 uppercase text-[10px]">
                       <tr>
                         <th className="py-2.5 px-3">Amount</th>
@@ -999,3 +999,4 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
     </div>
   );
 }
+
