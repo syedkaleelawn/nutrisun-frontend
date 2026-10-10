@@ -150,7 +150,7 @@ export default function CustomerInstructionsModal({
     >
       <div
         ref={modalRef}
-        className="w-[calc(100%-32px)] sm:w-full max-w-[440px] max-h-[85dvh] bg-white rounded-3xl shadow-2xl border border-[#B0BE8C]/50 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200"
+        className="w-full max-w-[440px] max-h-[calc(100dvh-2rem)] sm:max-h-[85dvh] bg-white rounded-3xl shadow-2xl border border-[#B0BE8C]/50 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200"
       >
         {/* Modal Header: Multi-row clean layout */}
         <div className="px-4 py-3.5 border-b border-[#B0BE8C]/30 bg-gradient-to-r from-[#F3F5F4] to-white shrink-0 space-y-2">
@@ -367,3 +367,4 @@ export default function CustomerInstructionsModal({
     document.body
   );
 }
+
