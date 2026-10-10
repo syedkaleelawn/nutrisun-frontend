@@ -56,34 +56,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const role = targetRole || user?.role;
     switch (role) {
       case 'admin':
-        router.push('/dashboard/admin');
+        router.replace('/dashboard/admin');
         break;
       case 'chef':
-        router.push('/dashboard/chef');
+        router.replace('/dashboard/chef');
         break;
       case 'delivery':
-        router.push('/dashboard/delivery');
+        router.replace('/dashboard/delivery');
         break;
       case 'customer':
       default:
-        router.push('/dashboard/customer');
+        router.replace('/dashboard/customer');
         break;
     }
   };
 
   const login = async (phone: string, password: string): Promise<User> => {
-    setLoading(true);
-    try {
-      const response = await authApi.login({ phone, password });
-      const { token: receivedToken, user: loggedUser } = response.data;
-      setToken(receivedToken);
-      setUser(loggedUser);
-      localStorage.setItem('nutrisun_token', receivedToken);
-      localStorage.setItem('nutrisun_user', JSON.stringify(loggedUser));
-      return loggedUser;
-    } finally {
-      setLoading(false);
-    }
+    const response = await authApi.login({ phone, password });
+    const { token: receivedToken, user: loggedUser } = response.data;
+    setToken(receivedToken);
+    setUser(loggedUser);
+    localStorage.setItem('nutrisun_token', receivedToken);
+    localStorage.setItem('nutrisun_user', JSON.stringify(loggedUser));
+    return loggedUser;
   };
 
   const register = async (
@@ -93,18 +88,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     password: string,
     email?: string
   ): Promise<User> => {
-    setLoading(true);
-    try {
-      const response = await authApi.register({ name, phone, delivery_address, password, email });
-      const { token: receivedToken, user: newUser } = response.data;
-      setToken(receivedToken);
-      setUser(newUser);
-      localStorage.setItem('nutrisun_token', receivedToken);
-      localStorage.setItem('nutrisun_user', JSON.stringify(newUser));
-      return newUser;
-    } finally {
-      setLoading(false);
-    }
+    const response = await authApi.register({ name, phone, delivery_address, password, email });
+    const { token: receivedToken, user: newUser } = response.data;
+    setToken(receivedToken);
+    setUser(newUser);
+    localStorage.setItem('nutrisun_token', receivedToken);
+    localStorage.setItem('nutrisun_user', JSON.stringify(newUser));
+    return newUser;
   };
 
   const changePassword = async (newPassword: string, currentPassword?: string, confirmPassword?: string): Promise<void> => {
