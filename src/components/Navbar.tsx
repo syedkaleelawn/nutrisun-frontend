@@ -21,6 +21,7 @@ import {
   ChevronRight,
   KeyRound,
   ChevronDown,
+  UsersRound,
 } from 'lucide-react';
 
 export default function Navbar() {
@@ -77,6 +78,7 @@ export default function Navbar() {
           { label: 'Monthly Menu', href: '/dashboard/menu', icon: Calendar },
           { label: 'Kitchen View', href: '/dashboard/chef', icon: ChefHat },
           { label: 'Logistics View', href: '/dashboard/delivery', icon: Truck },
+          { label: 'Customer View', href: '/dashboard/customer-view', icon: UsersRound },
         ];
       case 'customer':
       default:
@@ -431,4 +433,5 @@ export default function Navbar() {
     </>
   );
 }
+
 
