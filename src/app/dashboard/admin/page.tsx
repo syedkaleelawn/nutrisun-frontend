@@ -3,15 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import {
   adminApi,
-  menuApi,
   UserSubscription,
   SubscriptionPlan,
-  MenuItem,
-  MealSlot,
-  DietaryType,
   PendingCountsResponse,
   ServiceRequest,
   User,
@@ -21,14 +16,11 @@ import {
 import {
   CreditCard,
   Plus,
-  Trash2,
   CheckCircle2,
   Clock,
   RefreshCw,
   FileSpreadsheet,
   SkipForward,
-  ArrowLeftRight,
-  Upload,
   X,
   ExternalLink,
   Image as ImageIcon,
@@ -43,9 +35,9 @@ export default function AdminDashboard() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
 
-  // Tabs: 'pending' | 'subscriptions' | 'requests' | 'customers' | 'staff' | 'plans' | 'menu' | 'reallocate' | 'analytics'
+  // Admin workspace tabs. Menu management remains available in the Monthly Menu section.
   const [activeTab, setActiveTab] = useState<
-    'pending' | 'subscriptions' | 'requests' | 'customers' | 'staff' | 'plans' | 'menu' | 'reallocate' | 'analytics'
+    'pending' | 'subscriptions' | 'requests' | 'customers' | 'staff' | 'plans' | 'analytics'
   >('pending');
   const [showAdminChangePassword, setShowAdminChangePassword] = useState(false);
 
@@ -78,7 +70,6 @@ export default function AdminDashboard() {
   const [customers, setCustomers] = useState<User[]>([]);
   const [staff, setStaff] = useState<User[]>([]);
   const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
-  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [_analytics, setAnalytics] = useState<AnalyticsResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState<string | null>(null);
@@ -169,20 +160,6 @@ export default function AdminDashboard() {
   const [planCredits, setPlanCredits] = useState(7);
   const [savingPlan, setSavingPlan] = useState(false);
 
-  // Menu item state
-  const [menuDate, setMenuDate] = useState(() => new Date().toISOString().split('T')[0]);
-  const [menuSlot, setMenuSlot] = useState<MealSlot>('lunch');
-  const [menuItemName, setMenuItemName] = useState('');
-  const [menuDietType, setMenuDietType] = useState<DietaryType>('veg');
-  const [addingMenuItem, setAddingMenuItem] = useState(false);
-
-  // Reallocate state
-  const [reallocMealId, setReallocMealId] = useState('');
-  const [reallocNewDate, setReallocNewDate] = useState(() => new Date().toISOString().split('T')[0]);
-  const [reallocNewSlot, setReallocNewSlot] = useState<MealSlot>('dinner');
-  const [reallocReason, setReallocReason] = useState('');
-  const [submittingRealloc, setSubmittingRealloc] = useState(false);
-
   // Meal cancellation history filters
   const [reqFilterCustomer, setReqFilterCustomer] = useState('');
   const [reqFilterDate, setReqFilterDate] = useState('');
@@ -201,14 +178,13 @@ export default function AdminDashboard() {
   const loadAll = async () => {
     setLoading(true);
     try {
-      const [countsRes, subsRes, reqRes, custRes, staffRes, plansRes, menuRes, analyticsRes] = await Promise.allSettled([
+      const [countsRes, subsRes, reqRes, custRes, staffRes, plansRes, analyticsRes] = await Promise.allSettled([
         adminApi.getPendingCounts(),
         adminApi.getSubscriptions(),
         adminApi.getRequests(),
         adminApi.getCustomers(),
         adminApi.getStaff(),
         adminApi.getPlans(),
-        menuApi.getMenu(),
         adminApi.getAnalytics(),
       ]);
 
@@ -247,12 +223,6 @@ export default function AdminDashboard() {
         setPlans(plansRes.value.data.plans || []);
       } else {
         failed.push('Plans');
-      }
-
-      if (menuRes.status === 'fulfilled') {
-        setMenuItems(menuRes.value.data.menu || []);
-      } else {
-        failed.push('Monthly Menu');
       }
 
       if (analyticsRes.status === 'fulfilled') {
@@ -439,61 +409,6 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleCreateMenuItem = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setAddingMenuItem(true);
-    try {
-      const res = await adminApi.createMenuItem({
-        date: menuDate,
-        meal_slot: menuSlot,
-        item_name: menuItemName,
-        dietary_type: menuDietType,
-      });
-      setNotification(`Added "${res.data.item.item_name}" for ${menuDate} (${menuSlot}).`);
-      setMenuItemName('');
-      await loadAll();
-    } catch (err: any) {
-      alert(err.response?.data?.error || 'Failed to create menu item.');
-    } finally {
-      setAddingMenuItem(false);
-    }
-  };
-
-  const handleDeleteMenuItem = async (itemId: number) => {
-    if (!confirm('Are you sure you want to remove this dish?')) return;
-    try {
-      const res = await adminApi.deleteMenuItem(itemId);
-      setNotification(res.data.message);
-      await loadAll();
-    } catch (err: any) {
-      alert(err.response?.data?.error || 'Failed to delete dish.');
-    }
-  };
-
-  const handleReallocateMeal = async () => {
-    const mealIdNum = parseInt(reallocMealId, 10);
-    if (!mealIdNum) {
-      alert('Please enter a valid Meal Log ID.');
-      return;
-    }
-    setSubmittingRealloc(true);
-    try {
-      const res = await adminApi.reallocate({
-        original_meal_log_id: mealIdNum,
-        new_date: reallocNewDate,
-        new_slot: reallocNewSlot,
-        reason: reallocReason,
-      });
-      setNotification(`Meal #${res.data.original_meal_id} reallocated to ${res.data.new_date} (${res.data.new_slot}) as Meal #${res.data.new_meal_id}.`);
-      setReallocMealId('');
-      await loadAll();
-    } catch (err: any) {
-      alert(err.response?.data?.error || 'Failed to reallocate meal.');
-    } finally {
-      setSubmittingRealloc(false);
-    }
-  };
-
   if (authLoading || (loading && user?.role === 'admin')) {
     return (
       <div className="min-h-[70vh] flex items-center justify-center">
@@ -533,7 +448,7 @@ export default function AdminDashboard() {
             NutriSun Operations Management
           </h1>
           <p className="text-xs text-slate-600 mt-1">
-            Manual UPI payments, IST cut-off requests, meal reallocations, and staff control.
+            Manual UPI payments, meal cancellations, subscriptions, and staff control.
           </p>
         </div>
 
@@ -671,8 +586,6 @@ export default function AdminDashboard() {
           { id: 'customers', label: `Customers (${customers.length})` },
           { id: 'staff', label: `Staff Accounts (${staff.length})` },
           { id: 'plans', label: `Plans Catalog (${plans.length})` },
-          { id: 'menu', label: `Menu Planner (${menuItems.length})` },
-          { id: 'reallocate', label: 'Meal Reallocation' },
           { id: 'analytics', label: 'Sales & Delivery Analytics' },
         ].map((t) => (
           <button
@@ -1498,179 +1411,7 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      {/* TAB 7: MENU PLANNER */}
-      {activeTab === 'menu' && (
-        <div className="space-y-6">
-          {/* Monthly Excel Upload Card */}
-          <div className="p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-[#F7DE9D]/35 via-white to-white border border-[#F7DE9D] flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <FileSpreadsheet className="w-5 h-5 text-[#741B22]" />
-                <h3 className="text-base font-black text-[#22222B]">Monthly Excel Menu Upload</h3>
-              </div>
-              <p className="text-xs text-slate-600 max-w-xl">
-                Upload a complete monthly menu spreadsheet with date-wise Breakfast, Lunch, and Dinner. Includes automated file validation, template generation, and overwrite confirmation.
-              </p>
-            </div>
-            <Link
-              href="/dashboard/menu"
-              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-[#B92F25] hover:bg-[#741B22] text-white font-black text-xs shadow-md shadow-[#B92F25]/20 transition-all shrink-0 min-h-[44px]"
-            >
-              <Upload className="w-4 h-4" />
-              <span>Open Monthly Menu Tool</span>
-            </Link>
-          </div>
-
-          <div className="glass-card rounded-3xl p-4 sm:p-6 border border-[#B0BE8C]/35 shadow-sm">
-            <h3 className="text-sm font-black text-[#22222B] mb-3">Add Single Dish Entry for Date & Shift</h3>
-            <form onSubmit={handleCreateMenuItem} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
-              <div>
-                <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Date</label>
-                <input
-                  type="date"
-                  required
-                  value={menuDate}
-                  onChange={(e) => setMenuDate(e.target.value)}
-                  className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
-                />
-              </div>
-
-              <div>
-                <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Meal Shift</label>
-                <select
-                  value={menuSlot}
-                  onChange={(e) => setMenuSlot(e.target.value as any)}
-                  className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
-                >
-                  <option value="breakfast">Breakfast</option>
-                  <option value="lunch">Lunch</option>
-                  <option value="dinner">Dinner</option>
-                </select>
-              </div>
-
-              <div className="sm:col-span-2">
-                <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Dish Name</label>
-                <input
-                  type="text"
-                  required
-                  value={menuItemName}
-                  onChange={(e) => setMenuItemName(e.target.value)}
-                  placeholder="e.g. Herb Lemon Chicken Bowl"
-                  className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
-                />
-              </div>
-
-              <div className="flex items-end">
-                <button
-                  type="submit"
-                  disabled={addingMenuItem}
-                  className="w-full min-h-[44px] py-2.5 px-4 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white text-xs font-black shadow-sm transition-colors flex items-center justify-center"
-                >
-                  {addingMenuItem ? 'Adding...' : 'Add Dish'}
-                </button>
-              </div>
-            </form>
-          </div>
-
-          <div>
-            <h3 className="text-sm font-black text-[#22222B] mb-3">Current Planned Dishes</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-              {menuItems.map((item) => (
-                <div key={item.id} className="glass-card rounded-2xl p-4 border border-[#B0BE8C]/35 shadow-xs flex items-start justify-between gap-2">
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2 text-xs text-slate-500 font-bold mb-1">
-                      <span>{item.date}</span>
-                      <span className="capitalize text-[#22222B]">({item.meal_slot})</span>
-                    </div>
-                    <p className="text-xs font-black text-[#22222B] break-words">{item.item_name}</p>
-                    <span className="inline-block mt-2 px-2 py-0.5 rounded-md bg-[#B0BE8C]/20 border border-[#B0BE8C]/30 text-[10px] font-bold uppercase text-[#3F4D25]">
-                      {item.dietary_type}
-                    </span>
-                  </div>
-
-                  <button
-                    onClick={() => handleDeleteMenuItem(item.id)}
-                    className="min-h-[44px] min-w-[44px] text-slate-400 hover:text-rose-600 flex items-center justify-center transition-colors shrink-0"
-                    aria-label="Delete dish"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* TAB 8: MEAL REALLOCATION */}
-      {activeTab === 'reallocate' && (
-        <div className="max-w-xl mx-auto glass-card rounded-3xl p-5 sm:p-8 border border-[#B0BE8C]/35 shadow-md space-y-4">
-          <div className="flex items-center gap-2">
-            <ArrowLeftRight className="w-5 h-5 text-[#741B22] shrink-0" />
-            <h2 className="text-base font-black text-[#22222B]">Meal Reallocation Tool</h2>
-          </div>
-          <p className="text-xs text-slate-600">
-            Admin can move a meal entitlement to another date and/or meal shift for the same subscription. This preserves the schedule audit history and does not duplicate meals.
-          </p>
-
-          <div className="space-y-3 text-xs">
-            <div>
-              <label className="block font-bold text-slate-700 mb-1">Original Meal Log ID</label>
-              <input
-                type="number"
-                value={reallocMealId}
-                onChange={(e) => setReallocMealId(e.target.value)}
-                placeholder="Enter meal log ID from deliveries sheet"
-                className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
-              />
-            </div>
-
-            <div>
-              <label className="block font-bold text-slate-700 mb-1">New Target Date (YYYY-MM-DD)</label>
-              <input
-                type="date"
-                value={reallocNewDate}
-                onChange={(e) => setReallocNewDate(e.target.value)}
-                className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
-              />
-            </div>
-
-            <div>
-              <label className="block font-bold text-slate-700 mb-1">New Target Meal Shift</label>
-              <select
-                value={reallocNewSlot}
-                onChange={(e) => setReallocNewSlot(e.target.value as any)}
-                className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
-              >
-                <option value="breakfast">Breakfast</option>
-                <option value="lunch">Lunch</option>
-                <option value="dinner">Dinner</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block font-bold text-slate-700 mb-1">Reason for Reallocation</label>
-              <input
-                type="text"
-                value={reallocReason}
-                onChange={(e) => setReallocReason(e.target.value)}
-                placeholder="Reason note"
-                className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
-              />
-            </div>
-
-            <button
-              onClick={handleReallocateMeal}
-              disabled={submittingRealloc}
-              className="w-full min-h-[44px] py-3 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white font-black text-xs transition-all mt-2 shadow-md shadow-[#B92F25]/20 flex items-center justify-center"
-            >
-              {submittingRealloc ? 'Reallocating...' : 'Confirm Reallocation'}
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* TAB 9: ANALYTICS */}
+      {/* TAB 7: ANALYTICS */}
       {activeTab === 'analytics' && (
         <SalesAnalyticsModule onNotification={(msg) => setNotification(msg)} />
       )}
@@ -2120,4 +1861,5 @@ export default function AdminDashboard() {
     </div>
   );
 }
+
 
