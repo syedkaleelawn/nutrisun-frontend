@@ -651,6 +651,8 @@ export const adminApi = {
     api.post<{ message: string; remaining_credits: number }>('/admin/adjust-credits', data),
   getCustomers: () =>
     api.get<{ count: number; customers: User[] }>('/admin/customers'),
+  getCustomerMeals: (id: number, params?: { date?: string; month?: string; year?: string }) =>
+    api.get<{ count: number; customer: User; meals: DailyMealLog[] }>(`/admin/customers/${id}/meals`, { params }),
   updateCustomerAddress: (id: number, data: { delivery_address: string }) =>
     api.put<{ message: string; user: User }>(`/admin/customers/${id}/address`, data),
   resetCustomerPassword: (id: number, data: { temporary_password: string }) =>
@@ -688,3 +690,4 @@ export const adminApi = {
   },
   getExportExcelUrl: () => `${API_BASE_URL}/admin/export-excel`,
 };
+
