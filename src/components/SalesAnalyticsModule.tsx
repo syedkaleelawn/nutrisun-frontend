@@ -18,15 +18,12 @@ import {
   CreditCard,
   Users,
   Truck,
-  ChevronDown,
-  ChevronUp,
   RefreshCw,
   Coins,
   History,
   Phone,
   MapPin,
   Mail,
-  ArrowRight,
 } from 'lucide-react';
 
 interface SalesAnalyticsModuleProps {
@@ -61,7 +58,6 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
   // 4. Interactive Report States
   const [customerSearch, setCustomerSearch] = useState<string>('');
   const [selectedCustomerId, setSelectedCustomerId] = useState<number | null>(null);
-  const [expandedDateRow, setExpandedDateRow] = useState<string | null>(null);
 
   const customerReportRef = useRef<HTMLDivElement>(null);
 
@@ -263,12 +259,50 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
     return customers.find((c) => c.id === selectedCustomerId) || customers[0] || null;
   }, [customers, selectedCustomerId]);
 
-  const handleInspectCustomer = (custId: number) => {
-    setSelectedCustomerId(custId);
-    if (customerReportRef.current) {
-      customerReportRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const confirmedSalesBreakdown = useMemo(() => {
+    const seenPayments = new Set<number>();
+    const rows: Array<{
+      id: number;
+      timestamp: number;
+      date: string;
+      customer: string;
+      sales: number;
+    }> = [];
+
+    for (const day of analytics?.daily_sales || []) {
+      for (const payment of day.payments || []) {
+        const confirmedBy = payment.confirmed_by?.trim();
+        const hasAdminConfirmation = Boolean(
+          confirmedBy && !['n/a', 'not recorded', 'unknown'].includes(confirmedBy.toLowerCase())
+        );
+        if (payment.status !== 'CONFIRMED' || !payment.confirmed_at || !hasAdminConfirmation || seenPayments.has(payment.id)) {
+          continue;
+        }
+
+        seenPayments.add(payment.id);
+        const parsedTimestamp = Date.parse(payment.confirmed_at);
+        const timestamp = Number.isFinite(parsedTimestamp) ? parsedTimestamp : Date.parse(`${day.date}T00:00:00+05:30`);
+        const date = Number.isFinite(timestamp)
+          ? new Intl.DateTimeFormat('en-IN', {
+              day: '2-digit',
+              month: 'short',
+              year: 'numeric',
+              timeZone: 'Asia/Kolkata',
+            }).format(new Date(timestamp))
+          : day.date;
+
+        rows.push({
+          id: payment.id,
+          timestamp: Number.isFinite(timestamp) ? timestamp : 0,
+          date,
+          customer: payment.customer_name || 'Unnamed customer',
+          sales: payment.amount,
+        });
+      }
     }
-  };
+
+    return rows.sort((a, b) => b.timestamp - a.timestamp || b.id - a.id);
+  }, [analytics]);
 
   return (
     <div className="space-y-6 w-full max-w-full overflow-x-hidden">
@@ -483,175 +517,39 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
         </div>
       )}
 
-      {/* 3. Date-Wise Sales Breakdown Table */}
+      {/* 3. Confirmed Sales Breakdown Table */}
       <div className="glass-card rounded-3xl p-5 sm:p-6 border border-[#B0BE8C]/40 shadow-sm space-y-4">
         <div className="flex items-center justify-between gap-3">
           <div>
             <h3 className="text-sm sm:text-base font-black text-[#22222B]">
-              Date-wise Sales & Transactions Breakdown
+              Sales Breakdown
             </h3>
             <p className="text-xs text-slate-500 mt-0.5">
-              Daily revenue figures in Indian Standard Time (IST) for {analytics?.selected_month || selectedMonth}.
+              Payments confirmed by an administrator for {analytics?.selected_month || selectedMonth}, newest first.
             </p>
           </div>
           <span className="text-xs font-bold text-slate-400">
-            {analytics?.daily_sales?.length || 0} Active Days
+            {confirmedSalesBreakdown.length} Confirmed Sales
           </span>
         </div>
 
-        {analytics?.daily_sales && analytics.daily_sales.length > 0 ? (
+        {confirmedSalesBreakdown.length > 0 ? (
           <div className="overflow-x-auto border border-[#B0BE8C]/30 rounded-2xl">
-            <table className="w-full min-w-[680px] text-left text-xs">
+            <table className="w-full min-w-[520px] text-left text-xs">
               <thead className="bg-[#F3F5F4] text-[#22222B] font-black border-b border-[#B0BE8C]/30 uppercase text-[10px]">
                 <tr>
-                  <th className="py-3 px-4">Date (IST)</th>
-                  <th className="py-3 px-4">Confirmed Sales</th>
-                  <th className="py-3 px-4">Pending Amount</th>
-                  <th className="py-3 px-4">Payments</th>
-                  <th className="py-3 px-4 text-right">Details</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {analytics.daily_sales.map((day) => {
-                  const isExpanded = expandedDateRow === day.date;
-                  return (
-                    <React.Fragment key={day.date}>
-                      <tr className="hover:bg-slate-50 transition-colors font-medium">
-                        <td className="py-3 px-4 font-bold text-[#22222B]">
-                          {day.date}
-                        </td>
-                        <td className="py-3 px-4 font-bold text-[#741B22]">
-                          ₹{day.confirmed_amount.toFixed(2)}
-                        </td>
-                        <td className="py-3 px-4 font-bold text-amber-700">
-                          {day.pending_amount > 0 ? `₹${day.pending_amount.toFixed(2)}` : '—'}
-                        </td>
-                        <td className="py-3 px-4 text-slate-600">
-                          {day.payments_count} transactions
-                        </td>
-                        <td className="py-3 px-4 text-right">
-                          <button
-                            type="button"
-                            onClick={() => setExpandedDateRow(isExpanded ? null : day.date)}
-                            className="inline-flex items-center gap-1 text-[11px] font-bold text-[#741B22] hover:underline"
-                          >
-                            <span>{isExpanded ? 'Hide' : 'Inspect'}</span>
-                            {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
-                          </button>
-                        </td>
-                      </tr>
-
-                      {/* Expanded Day Details */}
-                      {isExpanded && (
-                        <tr className="bg-slate-50/80">
-                          <td colSpan={5} className="py-3 px-4">
-                            <div className="p-3 bg-white rounded-xl border border-[#B0BE8C]/30 space-y-2">
-                              <span className="text-[10px] font-black uppercase text-slate-400">
-                                Transactions on {day.date}:
-                              </span>
-                              <div className="space-y-1.5">
-                                {day.payments.map((p) => (
-                                  <div
-                                    key={p.id}
-                                    className="flex flex-col sm:flex-row sm:items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-200/60 text-xs gap-2"
-                                  >
-                                    <div className="flex items-center gap-2">
-                                      <span
-                                        className={`px-2 py-0.5 rounded-full font-black text-[10px] uppercase ${
-                                          p.status === 'CONFIRMED'
-                                            ? 'bg-emerald-100 text-emerald-800'
-                                            : p.status === 'PENDING'
-                                            ? 'bg-amber-100 text-amber-800'
-                                            : 'bg-red-100 text-red-800'
-                                        }`}
-                                      >
-                                        {p.status}
-                                      </span>
-                                      <strong className="text-[#22222B]">{p.customer_name}</strong>
-                                      <span className="text-slate-400">({p.customer_phone})</span>
-                                    </div>
-                                    <div className="flex items-center gap-4 text-slate-600">
-                                      <span>Ref: {p.transaction_ref || 'N/A'}</span>
-                                      <strong className="text-[#741B22]">₹{p.amount.toFixed(2)}</strong>
-                                      <span className="text-[11px] text-slate-400">By: {p.confirmed_by}</span>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          </td>
-                        </tr>
-                      )}
-                    </React.Fragment>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <div className="p-8 text-center text-xs text-slate-400 border border-dashed border-[#B0BE8C]/40 rounded-2xl">
-            No sales or payment records found for the selected period ({analytics?.selected_month || selectedMonth}).
-          </div>
-        )}
-      </div>
-
-      {/* 4. Customer-wise Sales Breakdown Table */}
-      <div className="glass-card rounded-3xl p-5 sm:p-6 border border-[#B0BE8C]/40 shadow-sm space-y-4">
-        <div className="flex items-center justify-between gap-3">
-          <div>
-            <h3 className="text-sm sm:text-base font-black text-[#22222B]">
-              Customer-wise Sales Breakdown
-            </h3>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Aggregated spend and pending payment amounts per customer for the selected period.
-            </p>
-          </div>
-          <span className="text-xs font-bold text-slate-400">
-            {analytics?.customer_sales?.length || 0} Customers
-          </span>
-        </div>
-
-        {analytics?.customer_sales && analytics.customer_sales.length > 0 ? (
-          <div className="overflow-x-auto border border-[#B0BE8C]/30 rounded-2xl">
-            <table className="w-full min-w-[720px] text-left text-xs">
-              <thead className="bg-[#F3F5F4] text-[#22222B] font-black border-b border-[#B0BE8C]/30 uppercase text-[10px]">
-                <tr>
+                  <th className="py-3 px-4">Date</th>
                   <th className="py-3 px-4">Customer</th>
-                  <th className="py-3 px-4">Active Plan</th>
-                  <th className="py-3 px-4">Confirmed Sales</th>
-                  <th className="py-3 px-4">Pending Amount</th>
-                  <th className="py-3 px-4">Transactions</th>
-                  <th className="py-3 px-4 text-right">Activity & Meals</th>
+                  <th className="py-3 px-4 text-right">Sales</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {analytics.customer_sales.map((cust) => (
-                  <tr key={cust.customer_id} className="hover:bg-slate-50 transition-colors font-medium">
-                    <td className="py-3 px-4">
-                      <div className="font-bold text-[#22222B]">{cust.customer_name}</div>
-                      <div className="text-[11px] text-slate-400">{cust.customer_phone}</div>
-                    </td>
-                    <td className="py-3 px-4 text-slate-700 font-bold">
-                      {cust.active_plans || 'Standard'}
-                    </td>
-                    <td className="py-3 px-4 font-bold text-[#741B22]">
-                      ₹{cust.confirmed_sales.toFixed(2)}
-                    </td>
-                    <td className="py-3 px-4 font-bold text-amber-700">
-                      {cust.pending_amount > 0 ? `₹${cust.pending_amount.toFixed(2)}` : '—'}
-                    </td>
-                    <td className="py-3 px-4 text-slate-600">
-                      {cust.payments_count}
-                    </td>
-                    <td className="py-3 px-4 text-right">
-                      <button
-                        type="button"
-                        onClick={() => handleInspectCustomer(cust.customer_id)}
-                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#DCE5CC] hover:bg-[#B0BE8C] text-[#22222B] font-bold text-[11px] transition-colors"
-                      >
-                        <span>Inspect Customer</span>
-                        <ArrowRight className="w-3 h-3 text-[#3F4D25]" />
-                      </button>
+                {confirmedSalesBreakdown.map((sale) => (
+                  <tr key={sale.id} className="hover:bg-slate-50 transition-colors font-medium">
+                    <td className="py-3 px-4 font-bold text-[#22222B] whitespace-nowrap">{sale.date}</td>
+                    <td className="py-3 px-4 font-bold text-slate-700">{sale.customer}</td>
+                    <td className="py-3 px-4 text-right font-black text-[#741B22] whitespace-nowrap">
+                      ₹{sale.sales.toFixed(2)}
                     </td>
                   </tr>
                 ))}
@@ -660,12 +558,12 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
           </div>
         ) : (
           <div className="p-8 text-center text-xs text-slate-400 border border-dashed border-[#B0BE8C]/40 rounded-2xl">
-            No customer-wise sales recorded for this period.
+            No administrator-confirmed sales found for the selected period ({analytics?.selected_month || selectedMonth}).
           </div>
         )}
       </div>
 
-      {/* 5. Customer Details & Chronological Activity History Report */}
+      {/* 4. Customer Details & Chronological Activity History Report */}
       <div ref={customerReportRef} className="glass-card rounded-3xl p-5 sm:p-7 border border-[#B0BE8C]/45 shadow-md space-y-6">
         {/* Header & Customer Search Toolbar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#B0BE8C]/30">
@@ -999,4 +897,5 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
     </div>
   );
 }
+
 
