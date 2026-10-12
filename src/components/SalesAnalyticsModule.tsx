@@ -5,6 +5,7 @@ import {
   adminApi,
   AnalyticsResponse,
   CustomerReportItem,
+  MonthlyMealAverage,
 } from '@/lib/api';
 import {
   FileSpreadsheet,
@@ -47,6 +48,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
 
   // 2. Data States
   const [analytics, setAnalytics] = useState<AnalyticsResponse | null>(null);
+  const [monthlyMealAverages, setMonthlyMealAverages] = useState<MonthlyMealAverage[]>([]);
   const [customers, setCustomers] = useState<CustomerReportItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -87,9 +89,10 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
         params.month = selectedMonth;
       }
 
-      const [analRes, custRes] = await Promise.allSettled([
+      const [analRes, custRes, averagesRes] = await Promise.allSettled([
         adminApi.getAnalytics(params),
         adminApi.getCustomerReports(params),
+        adminApi.getMonthlyMealAverages(),
       ]);
 
       if (analRes.status === 'fulfilled') {
@@ -178,6 +181,21 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
         if (custList.length > 0 && !selectedCustomerId) {
           setSelectedCustomerId(custList[0].id);
         }
+      }
+
+      if (averagesRes.status === 'fulfilled') {
+        const months = Array.isArray(averagesRes.value.data.months)
+          ? averagesRes.value.data.months.map((month) => ({
+              ...month,
+              average_total: toFiniteNumber(month.average_total),
+              average_breakfast: toFiniteNumber(month.average_breakfast),
+              average_lunch: toFiniteNumber(month.average_lunch),
+              average_dinner: toFiniteNumber(month.average_dinner),
+            }))
+          : [];
+        setMonthlyMealAverages(months);
+      } else {
+        setMonthlyMealAverages([]);
       }
     } catch (err: unknown) {
       console.error('Error fetching analytics:', err);
@@ -303,6 +321,61 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
 
     return rows.sort((a, b) => b.timestamp - a.timestamp || b.id - a.id);
   }, [analytics]);
+
+  const mealAverageChart = useMemo(() => {
+    const width = 920;
+    const height = 390;
+    const margin = { top: 42, right: 28, bottom: 92, left: 54 };
+    const plotWidth = width - margin.left - margin.right;
+    const plotHeight = height - margin.top - margin.bottom;
+    const values = monthlyMealAverages.map((month) => month.average_total);
+    const observedMax = Math.max(1, ...values);
+    const maxY = Math.max(4, Math.ceil(observedMax / 2) * 2);
+    const gridValues = Array.from({ length: 6 }, (_, index) => (maxY / 5) * index);
+    const xFor = (index: number) =>
+      margin.left + (monthlyMealAverages.length <= 1 ? plotWidth / 2 : (index / (monthlyMealAverages.length - 1)) * plotWidth);
+    const yFor = (value: number) => margin.top + plotHeight - (value / maxY) * plotHeight;
+    const points = monthlyMealAverages.map((month, index) => ({
+      x: xFor(index),
+      y: yFor(month.average_total),
+      value: month.average_total,
+      label: new Date(`${month.year_month}-01T00:00:00Z`).toLocaleDateString('en-GB', {
+        month: 'short',
+        year: '2-digit',
+        timeZone: 'UTC',
+      }).replace(' ', '-'),
+    }));
+
+    let trendStart = 0;
+    let trendEnd = 0;
+    if (values.length > 0) {
+      const n = values.length;
+      const sumX = ((n - 1) * n) / 2;
+      const sumY = values.reduce((sum, value) => sum + value, 0);
+      const sumXY = values.reduce((sum, value, index) => sum + index * value, 0);
+      const sumXX = values.reduce((sum, _value, index) => sum + index * index, 0);
+      const denominator = n * sumXX - sumX * sumX;
+      const slope = denominator === 0 ? 0 : (n * sumXY - sumX * sumY) / denominator;
+      const intercept = (sumY - slope * sumX) / n;
+      trendStart = intercept;
+      trendEnd = intercept + slope * (n - 1);
+    }
+
+    return {
+      width,
+      height,
+      margin,
+      plotWidth,
+      plotHeight,
+      maxY,
+      gridValues,
+      points,
+      linePath: points.map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`).join(' '),
+      trendPath: points.length > 1
+        ? `M ${points[0].x} ${yFor(trendStart)} L ${points[points.length - 1].x} ${yFor(trendEnd)}`
+        : '',
+    };
+  }, [monthlyMealAverages]);
 
   return (
     <div className="space-y-6 w-full max-w-full overflow-x-hidden">
@@ -517,7 +590,127 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
         </div>
       )}
 
-      {/* 3. Confirmed Sales Breakdown Table */}
+      {/* 3. Monthly Meal Averages */}
+      <div className="grid grid-cols-1 xl:grid-cols-[minmax(390px,0.9fr)_minmax(0,1.7fr)] gap-5 items-start">
+        <div className="glass-card rounded-3xl border border-[#B0BE8C]/40 shadow-sm overflow-hidden">
+          <div className="px-5 py-4 border-b border-[#B0BE8C]/30 bg-[#F8FAF7]">
+            <h3 className="text-sm sm:text-base font-black text-[#22222B]">Monthly Meal Averages</h3>
+            <p className="text-xs text-slate-500 mt-0.5">Average meals per calendar day. The latest month is month to date.</p>
+          </div>
+          <div className="max-h-[620px] overflow-auto">
+            <table className="w-full min-w-[560px] text-xs text-right">
+              <thead className="sticky top-0 z-10 bg-[#36551F] text-white font-black">
+                <tr>
+                  <th className="py-2.5 px-3 text-left">Y - M</th>
+                  <th className="py-2.5 px-3">Start</th>
+                  <th className="py-2.5 px-3">End</th>
+                  <th className="py-2.5 px-3">Total</th>
+                  <th className="py-2.5 px-3">B</th>
+                  <th className="py-2.5 px-3">L</th>
+                  <th className="py-2.5 px-3">D</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#B0BE8C]/25">
+                {monthlyMealAverages.map((month, index) => {
+                  const formatDate = (date: string) => date.split('-').reverse().join('-');
+                  const monthLabel = new Date(`${month.year_month}-01T00:00:00Z`).toLocaleDateString('en-GB', {
+                    month: 'short', year: '2-digit', timeZone: 'UTC',
+                  }).replace(' ', '-');
+                  const isCurrentMonth = index === monthlyMealAverages.length - 1;
+                  return (
+                    <tr key={month.year_month} className={isCurrentMonth ? 'bg-[#F7DE9D]/25 font-bold' : 'hover:bg-slate-50'}>
+                      <td className="py-2 px-3 text-left font-bold text-[#22222B] whitespace-nowrap">
+                        {monthLabel}
+                        {isCurrentMonth && <span className="ml-1.5 text-[9px] uppercase text-[#741B22]">MTD</span>}
+                      </td>
+                      <td className="py-2 px-3 whitespace-nowrap text-slate-600">{formatDate(month.start_date)}</td>
+                      <td className="py-2 px-3 whitespace-nowrap text-slate-600">{formatDate(month.end_date)}</td>
+                      <td className="py-2 px-3 font-black text-[#22222B]">{month.average_total.toFixed(1)}</td>
+                      <td className="py-2 px-3 text-amber-800 font-bold">{month.average_breakfast.toFixed(1)}</td>
+                      <td className="py-2 px-3 text-emerald-800 font-bold">{month.average_lunch.toFixed(1)}</td>
+                      <td className="py-2 px-3 text-indigo-800 font-bold">{month.average_dinner.toFixed(1)}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            {monthlyMealAverages.length === 0 && (
+              <div className="p-8 text-center text-xs text-slate-400">No meal history is available.</div>
+            )}
+          </div>
+        </div>
+
+        <div className="glass-card rounded-3xl border border-[#B0BE8C]/40 shadow-sm overflow-hidden">
+          <div className="px-5 pt-5 text-center">
+            <h3 className="text-base sm:text-lg font-black text-[#22222B]">Average #Meals Per Meal Type Per Day</h3>
+            <p className="text-xs text-slate-500 mt-1">Monthly averages through the current month (MTD)</p>
+          </div>
+          <div className="overflow-x-auto px-2 pb-3">
+            <svg
+              viewBox={`0 0 ${mealAverageChart.width} ${mealAverageChart.height}`}
+              className="w-full min-w-[760px] h-auto"
+              role="img"
+              aria-labelledby="meal-average-chart-title meal-average-chart-description"
+            >
+              <title id="meal-average-chart-title">Average meals per meal type per day</title>
+              <desc id="meal-average-chart-description">Monthly total-average trend with a linear trend line.</desc>
+              {mealAverageChart.gridValues.map((value) => {
+                const y = mealAverageChart.margin.top + mealAverageChart.plotHeight - (value / mealAverageChart.maxY) * mealAverageChart.plotHeight;
+                return (
+                  <g key={value}>
+                    <line
+                      x1={mealAverageChart.margin.left}
+                      x2={mealAverageChart.margin.left + mealAverageChart.plotWidth}
+                      y1={y}
+                      y2={y}
+                      stroke="#D7DDD2"
+                      strokeWidth="1"
+                    />
+                    <text x={mealAverageChart.margin.left - 12} y={y + 4} textAnchor="end" fontSize="11" fill="#64748B">
+                      {value.toFixed(1)}
+                    </text>
+                  </g>
+                );
+              })}
+
+              {mealAverageChart.trendPath && (
+                <path d={mealAverageChart.trendPath} fill="none" stroke="#3B82F6" strokeWidth="2" strokeDasharray="2 5" />
+              )}
+              {mealAverageChart.linePath && (
+                <path d={mealAverageChart.linePath} fill="none" stroke="#111111" strokeWidth="4" strokeLinejoin="round" strokeLinecap="round" />
+              )}
+
+              {mealAverageChart.points.map((point, index) => (
+                <g key={`${point.label}-${index}`}>
+                  <circle cx={point.x} cy={point.y} r="3.5" fill="#111111" />
+                  <text x={point.x} y={point.y - 11} textAnchor="middle" fontSize="10.5" fontWeight="700" fill="#334155">
+                    {point.value.toFixed(1)}
+                  </text>
+                  <text
+                    x={point.x}
+                    y={mealAverageChart.margin.top + mealAverageChart.plotHeight + 22}
+                    transform={`rotate(-48 ${point.x} ${mealAverageChart.margin.top + mealAverageChart.plotHeight + 22})`}
+                    textAnchor="end"
+                    fontSize="10.5"
+                    fill="#64748B"
+                  >
+                    {point.label}
+                  </text>
+                </g>
+              ))}
+
+              <g transform={`translate(${mealAverageChart.width / 2 - 105} ${mealAverageChart.height - 18})`}>
+                <line x1="0" x2="42" y1="0" y2="0" stroke="#111111" strokeWidth="4" strokeLinecap="round" />
+                <text x="50" y="4" fontSize="11" fill="#475569">Total</text>
+                <line x1="105" x2="147" y1="0" y2="0" stroke="#3B82F6" strokeWidth="2" strokeDasharray="2 5" />
+                <text x="155" y="4" fontSize="11" fill="#475569">Linear (Total)</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      {/* 4. Confirmed Sales Breakdown Table */}
       <div className="glass-card rounded-3xl p-5 sm:p-6 border border-[#B0BE8C]/40 shadow-sm space-y-4">
         <div className="flex items-center justify-between gap-3">
           <div>
@@ -563,7 +756,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
         )}
       </div>
 
-      {/* 4. Customer Details & Chronological Activity History Report */}
+      {/* 5. Customer Details & Chronological Activity History Report */}
       <div ref={customerReportRef} className="glass-card rounded-3xl p-5 sm:p-7 border border-[#B0BE8C]/45 shadow-md space-y-6">
         {/* Header & Customer Search Toolbar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#B0BE8C]/30">
