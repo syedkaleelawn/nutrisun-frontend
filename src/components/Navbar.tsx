@@ -125,10 +125,10 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="sticky top-2 sm:top-3 z-50 px-2.5 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full transition-all">
+      <header className="sticky top-2 sm:top-3 z-50 px-2.5 sm:px-6 lg:px-8 max-w-[1600px] mx-auto w-full transition-all">
         <div className="glass-panel rounded-2xl sm:rounded-full border border-[#B0BE8C]/35 shadow-lg shadow-black/5 px-3 sm:px-6 py-2 sm:py-2.5 flex items-center justify-between transition-all">
           {/* Logo & Brand */}
-          <Link href="/" className="flex items-center gap-2 sm:gap-3 group min-w-0">
+          <Link href="/" className="flex items-center gap-2 sm:gap-3 group min-w-0 xl:shrink-0">
             <div className="relative shrink-0">
               <Image
                 src="/nutrisun-logo.png"
@@ -155,7 +155,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden xl:flex items-center gap-1 xl:gap-2">
+          <nav className={`hidden xl:flex items-center min-w-0 ${user?.role === 'admin' ? 'gap-0.5' : 'gap-1 xl:gap-2'}`}>
             {navLinks.map((link) => {
               const Icon = link.icon;
               const isActive = pathname === link.href;
@@ -163,7 +163,9 @@ export default function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`relative px-4 py-2 rounded-full text-xs font-bold transition-all duration-200 flex items-center gap-1.5 min-h-[44px] ${
+                  className={`relative py-2 rounded-full text-xs font-bold transition-all duration-200 flex items-center gap-1.5 min-h-[44px] whitespace-nowrap ${
+                    user?.role === 'admin' ? 'px-2.5 2xl:px-3.5' : 'px-4'
+                  } ${
                     isActive
                       ? 'text-[#22222B] font-extrabold bg-[#B0BE8C] border border-[#B0BE8C] shadow-xs'
                       : 'text-[#22222B]/75 hover:text-[#B92F25] hover:bg-[#B0BE8C]/20'
@@ -184,7 +186,7 @@ export default function Navbar() {
           </nav>
 
           {/* Right Actions / User Profile Ring & Account Menu */}
-          <div className="hidden xl:flex items-center gap-2">
+          <div className="hidden xl:flex items-center gap-1 2xl:gap-2 shrink-0">
             {user ? (
               <div className="relative flex items-center gap-1 pl-2 border-l border-[#B0BE8C]/40" ref={accountMenuRef}>
                 {/* Account Trigger Button */}
@@ -196,7 +198,7 @@ export default function Navbar() {
                   className="flex items-center gap-2 p-1.5 rounded-2xl hover:bg-[#B0BE8C]/20 transition-all text-left focus:outline-none focus:ring-2 focus:ring-[#741B22]/30 group"
                   title="Account Options"
                 >
-                  <div className="text-right hidden lg:block">
+                  <div className="text-right hidden 2xl:block">
                     <div className="text-xs font-bold text-[#22222B] leading-tight flex items-center justify-end gap-1">
                       <span>{user.name}</span>
                     </div>
