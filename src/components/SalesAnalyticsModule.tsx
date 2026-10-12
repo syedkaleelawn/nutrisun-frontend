@@ -591,13 +591,13 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
       )}
 
       {/* 3. Monthly Meal Averages */}
-      <div className="grid grid-cols-1 xl:grid-cols-[minmax(390px,0.9fr)_minmax(0,1.7fr)] gap-5 items-start">
-        <div className="glass-card rounded-3xl border border-[#B0BE8C]/40 shadow-sm overflow-hidden">
+      <div className="grid grid-cols-1 xl:grid-cols-[minmax(390px,0.9fr)_minmax(0,1.7fr)] gap-5 items-stretch">
+        <div className="glass-card rounded-3xl border border-[#B0BE8C]/40 shadow-sm overflow-hidden flex flex-col xl:h-[500px]">
           <div className="px-5 py-4 border-b border-[#B0BE8C]/30 bg-[#F8FAF7]">
             <h3 className="text-sm sm:text-base font-black text-[#22222B]">Monthly Meal Averages</h3>
             <p className="text-xs text-slate-500 mt-0.5">Average meals per calendar day. The latest month is month to date.</p>
           </div>
-          <div className="max-h-[620px] overflow-auto">
+          <div className="overflow-auto flex-1 min-h-0">
             <table className="w-full min-w-[560px] text-xs text-right">
               <thead className="sticky top-0 z-10 bg-[#36551F] text-white font-black">
                 <tr>
@@ -640,12 +640,12 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
           </div>
         </div>
 
-        <div className="glass-card rounded-3xl border border-[#B0BE8C]/40 shadow-sm overflow-hidden">
+        <div className="glass-card rounded-3xl border border-[#B0BE8C]/40 shadow-sm overflow-hidden flex flex-col xl:h-[500px]">
           <div className="px-5 pt-5 text-center">
             <h3 className="text-base sm:text-lg font-black text-[#22222B]">Average #Meals Per Meal Type Per Day</h3>
             <p className="text-xs text-slate-500 mt-1">Monthly averages through the current month (MTD)</p>
           </div>
-          <div className="overflow-x-auto px-2 pb-3">
+          <div className="overflow-x-auto px-2 pb-3 flex-1 min-h-0 flex items-center">
             <svg
               viewBox={`0 0 ${mealAverageChart.width} ${mealAverageChart.height}`}
               className="w-full min-w-[760px] h-auto"
