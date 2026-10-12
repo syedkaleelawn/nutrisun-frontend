@@ -466,6 +466,16 @@ export interface AnalyticsResponse {
   recent_payments?: PaymentRecordDetail[];
 }
 
+export interface MonthlyMealAverage {
+  year_month: string;
+  start_date: string;
+  end_date: string;
+  average_total: number;
+  average_breakfast: number;
+  average_lunch: number;
+  average_dinner: number;
+}
+
 export interface CustomerSubscriptionDetail {
   id: number;
   plan_name: string;
@@ -679,6 +689,8 @@ export const adminApi = {
     api.delete<{ message: string; id: number }>(`/admin/menu/${id}`),
   getAnalytics: (params?: { month?: string; start_date?: string; end_date?: string }) =>
     api.get<AnalyticsResponse>('/admin/analytics', { params }),
+  getMonthlyMealAverages: () =>
+    api.get<{ months: MonthlyMealAverage[] }>('/admin/analytics/monthly-meal-averages'),
   getCustomerReports: (params?: { month?: string; start_date?: string; end_date?: string; search?: string; customer_id?: number }) =>
     api.get<{ count: number; customers: CustomerReportItem[] }>('/admin/analytics/customers', { params }),
   downloadExportExcel: (params?: { month?: string; report?: string; start_date?: string; end_date?: string }) => {
