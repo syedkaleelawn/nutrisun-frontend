@@ -16,7 +16,7 @@ export default function GlobalErrorComponent({ error, reset }: ErrorProps) {
   }, [error]);
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[#F3F5F4] flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xl text-center">
         <div className="w-14 h-14 bg-rose-100 rounded-2xl flex items-center justify-center mx-auto mb-4 text-[#B92F25]">
           <AlertTriangle className="w-7 h-7" />
@@ -47,3 +47,4 @@ export default function GlobalErrorComponent({ error, reset }: ErrorProps) {
     </div>
   );
 }
+
