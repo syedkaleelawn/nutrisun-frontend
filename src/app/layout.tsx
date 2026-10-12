@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Geist } from 'next/font/google';
 import Image from 'next/image';
 import './globals.css';
 import { AuthProvider } from '@/context/AuthContext';
@@ -9,11 +9,6 @@ import { Leaf, HeartPulse } from 'lucide-react';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
   subsets: ['latin'],
 });
 
@@ -80,7 +75,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+    <html lang="en" className={`${geistSans.variable} h-full antialiased`}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <script
@@ -117,7 +112,7 @@ export default function RootLayout({
               </div>
 
               <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-[#22222B]/75 font-semibold">
-                <span className="flex items-center gap-1 text-[#3F4D25]">
+                <span className="flex items-center gap-1 text-[#22222B]">
                   <Leaf className="w-3.5 h-3.5 text-[#B0BE8C]" />
                   Breakfast, Lunch & Dinner
                 </span>
@@ -125,7 +120,7 @@ export default function RootLayout({
                   <HeartPulse className="w-3.5 h-3.5 text-[#B92F25]" />
                   Flexible Meal Plans
                 </span>
-                <span className="flex items-center gap-1.5 text-[#3F4D25] font-bold bg-[#B0BE8C]/20 px-3 py-1 rounded-full border border-[#B0BE8C]">
+                <span className="flex items-center gap-1.5 text-[#22222B] font-bold bg-[#B0BE8C]/20 px-3 py-1 rounded-full border border-[#B0BE8C]">
                   <span className="w-2 h-2 rounded-full bg-[#B0BE8C] animate-pulse"></span>
                   Kitchen Schedule Live
                 </span>
@@ -138,3 +133,4 @@ export default function RootLayout({
     </html>
   );
 }
+
