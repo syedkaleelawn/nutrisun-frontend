@@ -1099,7 +1099,8 @@ export default function AdminDashboard() {
                   <span className="text-[10px] text-slate-400">#{c.id}</span>
                 </div>
                 <div className="text-xs space-y-1">
-                  <div>Phone: <strong className="text-[#22222B]">{c.phone}</strong></div>
+                  <div>Primary Number: <strong className="text-[#22222B]">{c.phone || 'None'}</strong></div>
+                  <div>Secondary Number: <strong className="text-[#22222B]">{c.secondary_phone || 'None'}</strong></div>
                   <div className="break-words">
                     Delivery Address: <strong className="text-slate-700">{c.delivery_address || 'None'}</strong>
                   </div>
@@ -1145,7 +1146,8 @@ export default function AdminDashboard() {
                 <tr>
                   <th className="p-3">ID</th>
                   <th className="p-3">Name</th>
-                  <th className="p-3">Phone</th>
+                  <th className="p-3">Primary Number</th>
+                  <th className="p-3">Secondary Number</th>
                   <th className="p-3">Delivery Address</th>
                   <th className="p-3">Temp Password Status</th>
                   <th className="p-3 text-right">Actions</th>
@@ -1157,6 +1159,7 @@ export default function AdminDashboard() {
                     <td className="p-3 font-bold">#{c.id}</td>
                     <td className="p-3 font-bold text-[#22222B]">{c.name}</td>
                     <td className="p-3">{c.phone}</td>
+                    <td className="p-3">{c.secondary_phone || 'None'}</td>
                     <td className="p-3 text-slate-700 max-w-xs truncate">{c.delivery_address || 'None'}</td>
                     <td className="p-3">
                       {c.must_change_password ? (
