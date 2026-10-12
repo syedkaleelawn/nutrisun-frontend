@@ -324,7 +324,7 @@ export default function PublicMenuPage() {
                     {/* Date Header */}
                     <div className="flex items-center justify-between gap-2 pb-2.5 mb-3 border-b border-[#B0BE8C]/30">
                       <div className="min-w-0">
-                        <span className="font-mono text-[11px] font-bold text-slate-400 block">
+                        <span className="text-[11px] font-bold text-slate-400 block">
                           {day.date}
                         </span>
 
@@ -424,3 +424,4 @@ export default function PublicMenuPage() {
     </main>
   );
 }
+

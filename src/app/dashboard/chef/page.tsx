@@ -212,7 +212,7 @@ export default function ChefDashboard() {
               </h2>
               <Link
                 href="/dashboard/menu"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#B0BE8C]/25 text-[#3F4D25] hover:bg-[#B0BE8C]/40 border border-[#B0BE8C]/40 text-xs font-black transition-all"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#B0BE8C]/25 text-[#22222B] hover:bg-[#B0BE8C]/40 border border-[#B0BE8C]/40 text-xs font-black transition-all"
               >
                 <span>View Full Monthly Menu</span>
                 <ChevronRight className="w-3.5 h-3.5" />
@@ -225,7 +225,7 @@ export default function ChefDashboard() {
                   <div key={item.id} className="p-4 rounded-2xl bg-[#F3F5F4] border border-[#B0BE8C]/30">
                     <div className="flex items-center justify-between mb-1 text-[10px] font-bold text-slate-400 uppercase">
                       <span>Dish #{item.id}</span>
-                      <span className="px-2 py-0.5 rounded-md bg-[#B0BE8C]/25 text-[#3F4D25] border border-[#B0BE8C]/40">
+                      <span className="px-2 py-0.5 rounded-md bg-[#B0BE8C]/25 text-[#22222B] border border-[#B0BE8C]/40">
                         {item.dietary_type}
                       </span>
                     </div>
@@ -244,3 +244,4 @@ export default function ChefDashboard() {
     </div>
   );
 }
+

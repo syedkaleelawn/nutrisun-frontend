@@ -114,7 +114,7 @@ export default function Navbar() {
       case 'customer':
       default:
         return {
-          badge: 'bg-[#B0BE8C]/30 text-[#3F4D25] border-[#B0BE8C]',
+          badge: 'bg-[#B0BE8C]/30 text-[#22222B] border-[#B0BE8C]',
           ring: 'ring-[#B0BE8C]',
           dot: 'bg-[#B0BE8C]',
         };
@@ -399,7 +399,7 @@ export default function Navbar() {
                   <Link
                     href="/login"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-center gap-1.5 px-3 py-3 text-xs font-bold text-[#22222B] bg-[#DCE5CC] hover:bg-[#B0BE8C] border border-[#B0BE8C] rounded-xl text-center transition-colors min-h-[44px]"
+                    className="flex items-center justify-center gap-1.5 px-3 py-3 text-xs font-bold text-[#22222B] bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] rounded-xl text-center transition-colors min-h-[44px]"
                   >
                     <LogIn className="w-3.5 h-3.5" />
                     Log In

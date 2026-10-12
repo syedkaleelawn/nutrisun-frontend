@@ -420,9 +420,9 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
               className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-[#B0BE8C]/20 border border-[#B0BE8C] text-[#22222B] font-bold text-xs shadow-2xs transition-all active:scale-95 disabled:opacity-50 min-h-[44px]"
             >
               {exportingFull ? (
-                <Loader2 className="w-4 h-4 animate-spin text-[#3F4D25]" />
+                <Loader2 className="w-4 h-4 animate-spin text-[#22222B]" />
               ) : (
-                <Download className="w-4 h-4 text-[#3F4D25]" />
+                <Download className="w-4 h-4 text-[#22222B]" />
               )}
               <span>{exportingFull ? 'Exporting...' : 'System DB Export (10 Sheets)'}</span>
             </button>
@@ -593,13 +593,13 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
       {/* 3. Monthly Meal Averages */}
       <div className="grid grid-cols-1 xl:grid-cols-[minmax(390px,0.9fr)_minmax(0,1.7fr)] gap-5 items-stretch">
         <div className="glass-card rounded-3xl border border-[#B0BE8C]/40 shadow-sm overflow-hidden flex flex-col xl:h-[500px]">
-          <div className="px-5 py-4 border-b border-[#B0BE8C]/30 bg-[#F8FAF7]">
+          <div className="px-5 py-4 border-b border-[#B0BE8C]/30 bg-[#F3F5F4]">
             <h3 className="text-sm sm:text-base font-black text-[#22222B]">Monthly Meal Averages</h3>
             <p className="text-xs text-slate-500 mt-0.5">Average meals per calendar day. The latest month is month to date.</p>
           </div>
           <div className="overflow-auto flex-1 min-h-0">
             <table className="w-full min-w-[560px] text-xs text-right">
-              <thead className="sticky top-0 z-10 bg-[#36551F] text-white font-black">
+              <thead className="sticky top-0 z-10 bg-[#22222B] text-white font-black">
                 <tr>
                   <th className="py-2.5 px-3 text-left">Y - M</th>
                   <th className="py-2.5 px-3">Start</th>
@@ -663,10 +663,10 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
                       x2={mealAverageChart.margin.left + mealAverageChart.plotWidth}
                       y1={y}
                       y2={y}
-                      stroke="#D7DDD2"
+                      stroke="#B0BE8C"
                       strokeWidth="1"
                     />
-                    <text x={mealAverageChart.margin.left - 12} y={y + 4} textAnchor="end" fontSize="11" fill="#64748B">
+                    <text x={mealAverageChart.margin.left - 12} y={y + 4} textAnchor="end" fontSize="11" fill="#22222B">
                       {value.toFixed(1)}
                     </text>
                   </g>
@@ -674,16 +674,16 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
               })}
 
               {mealAverageChart.trendPath && (
-                <path d={mealAverageChart.trendPath} fill="none" stroke="#3B82F6" strokeWidth="2" strokeDasharray="2 5" />
+                <path d={mealAverageChart.trendPath} fill="none" stroke="#B92F25" strokeWidth="2" strokeDasharray="2 5" />
               )}
               {mealAverageChart.linePath && (
-                <path d={mealAverageChart.linePath} fill="none" stroke="#111111" strokeWidth="4" strokeLinejoin="round" strokeLinecap="round" />
+                <path d={mealAverageChart.linePath} fill="none" stroke="#22222B" strokeWidth="4" strokeLinejoin="round" strokeLinecap="round" />
               )}
 
               {mealAverageChart.points.map((point, index) => (
                 <g key={`${point.label}-${index}`}>
-                  <circle cx={point.x} cy={point.y} r="3.5" fill="#111111" />
-                  <text x={point.x} y={point.y - 11} textAnchor="middle" fontSize="10.5" fontWeight="700" fill="#334155">
+                  <circle cx={point.x} cy={point.y} r="3.5" fill="#22222B" />
+                  <text x={point.x} y={point.y - 11} textAnchor="middle" fontSize="10.5" fontWeight="700" fill="#22222B">
                     {point.value.toFixed(1)}
                   </text>
                   <text
@@ -692,7 +692,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
                     transform={`rotate(-48 ${point.x} ${mealAverageChart.margin.top + mealAverageChart.plotHeight + 22})`}
                     textAnchor="end"
                     fontSize="10.5"
-                    fill="#64748B"
+                    fill="#22222B"
                   >
                     {point.label}
                   </text>
@@ -700,10 +700,10 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
               ))}
 
               <g transform={`translate(${mealAverageChart.width / 2 - 105} ${mealAverageChart.height - 18})`}>
-                <line x1="0" x2="42" y1="0" y2="0" stroke="#111111" strokeWidth="4" strokeLinecap="round" />
-                <text x="50" y="4" fontSize="11" fill="#475569">Total</text>
-                <line x1="105" x2="147" y1="0" y2="0" stroke="#3B82F6" strokeWidth="2" strokeDasharray="2 5" />
-                <text x="155" y="4" fontSize="11" fill="#475569">Linear (Total)</text>
+                <line x1="0" x2="42" y1="0" y2="0" stroke="#22222B" strokeWidth="4" strokeLinecap="round" />
+                <text x="50" y="4" fontSize="11" fill="#22222B">Total</text>
+                <line x1="105" x2="147" y1="0" y2="0" stroke="#B92F25" strokeWidth="2" strokeDasharray="2 5" />
+                <text x="155" y="4" fontSize="11" fill="#22222B">Linear (Total)</text>
               </g>
             </svg>
           </div>

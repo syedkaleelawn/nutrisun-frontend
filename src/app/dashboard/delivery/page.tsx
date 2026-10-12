@@ -225,7 +225,7 @@ export default function DeliveryDashboard() {
               <div className="space-y-1.5 flex-1 min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="text-sm font-black text-[#22222B] break-words">{item.customer_name}</span>
-                  <span className="px-2 py-0.5 rounded-md bg-[#B0BE8C]/20 border border-[#B0BE8C]/30 text-[10px] font-bold text-[#3F4D25] whitespace-nowrap">
+                  <span className="px-2 py-0.5 rounded-md bg-[#B0BE8C]/20 border border-[#B0BE8C]/30 text-[10px] font-bold text-[#22222B] whitespace-nowrap">
                     Quantity: {item.quantity} {item.quantity === 1 ? 'Portion' : 'Portions'}
                   </span>
                   <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${
@@ -250,3 +250,4 @@ export default function DeliveryDashboard() {
     </div>
   );
 }
+

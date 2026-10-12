@@ -380,7 +380,7 @@ export default function MonthlyMenuPage() {
                 <p className="text-[11px] text-slate-500">
                   Columns: <code>Date</code>, <code>Breakfast</code>, <code>Lunch</code>, <code>Dinner</code>
                 </p>
-                <div className="font-mono text-[10px] text-slate-600 bg-slate-50 p-2 rounded border border-slate-100">
+                <div className="text-[10px] text-slate-600 bg-slate-50 p-2 rounded border border-slate-100">
                   2026-09-01 | Multigrain Poha | Grilled Paneer & Rice | Soup & Salad
                 </div>
               </div>
@@ -394,7 +394,7 @@ export default function MonthlyMenuPage() {
                 <p className="text-[11px] text-slate-500">
                   Breakfast/Lunch/Dinner each with <code>Large</code>, <code>Small 1</code>, <code>Small 2</code>
                 </p>
-                <div className="font-mono text-[10px] text-slate-600 bg-slate-50 p-2 rounded border border-slate-100 truncate">
+                <div className="text-[10px] text-slate-600 bg-slate-50 p-2 rounded border border-slate-100 truncate">
                   1 | White Rice + Rasam + Chicken Gravy (Combined automatically)
                 </div>
               </div>
@@ -468,7 +468,7 @@ export default function MonthlyMenuPage() {
                 accept=".xlsx,.xls,.pdf"
                 onChange={handleFileChange}
                 disabled={uploading}
-                className="w-full min-h-[46px] px-3.5 py-2.5 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-bold text-[#22222B] file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-black file:bg-[#B0BE8C]/30 file:text-[#3F4D25] hover:file:bg-[#B0BE8C]/50 cursor-pointer bg-white"
+                className="w-full min-h-[46px] px-3.5 py-2.5 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-bold text-[#22222B] file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-black file:bg-[#B0BE8C]/30 file:text-[#22222B] hover:file:bg-[#B0BE8C]/50 cursor-pointer bg-white"
               />
             </div>
 
@@ -576,7 +576,7 @@ export default function MonthlyMenuPage() {
                       <tbody className="divide-y divide-slate-200 text-[11px] bg-white">
                         {conflictDetails.extractedPreview.slice(0, 45).map((item, idx) => (
                           <tr key={idx} className="hover:bg-slate-50">
-                            <td className="py-1.5 px-3 font-mono font-bold text-[#741B22]">
+                            <td className="py-1.5 px-3 font-bold text-[#741B22]">
                               {item.date}
                             </td>
                             <td className="py-1.5 px-3 capitalize font-semibold text-slate-700">
@@ -701,7 +701,7 @@ export default function MonthlyMenuPage() {
                     {/* Date Header with "Today" badge */}
                     <div className="flex items-center justify-between gap-2 pb-2.5 mb-3 border-b border-[#B0BE8C]/30">
                       <div className="min-w-0">
-                        <span className="font-mono text-[11px] font-bold text-slate-400 block">
+                        <span className="text-[11px] font-bold text-slate-400 block">
                           {day.date}
                         </span>
                         <h4 className="text-sm font-black text-[#22222B] truncate">
@@ -777,4 +777,5 @@ export default function MonthlyMenuPage() {
     </div>
   );
 }
+
 

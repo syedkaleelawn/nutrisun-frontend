@@ -197,7 +197,7 @@ export default function CustomerInstructionsModal({
 
         {/* Informative Sub-banner */}
         <div className="bg-[#B0BE8C]/15 px-4 py-1.5 border-b border-[#B0BE8C]/20 text-[11px] font-medium text-slate-700 flex items-center gap-1.5 shrink-0">
-          <CheckCircle2 className="w-3.5 h-3.5 text-[#3F4D25] shrink-0" />
+          <CheckCircle2 className="w-3.5 h-3.5 text-[#22222B] shrink-0" />
           <span>Please review these guidelines before using your dashboard.</span>
         </div>
 
@@ -367,4 +367,5 @@ export default function CustomerInstructionsModal({
     document.body
   );
 }
+
 

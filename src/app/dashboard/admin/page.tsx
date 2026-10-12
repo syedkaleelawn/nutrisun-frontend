@@ -466,12 +466,12 @@ export default function AdminDashboard() {
             type="button"
             onClick={handleDownloadFullExcel}
             disabled={exportingFullExcel}
-            className="w-full sm:w-auto min-h-[44px] px-5 py-3 rounded-2xl bg-[#DCE5CC] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] font-black text-xs shadow-sm transition-all active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50"
+            className="w-full sm:w-auto min-h-[44px] px-5 py-3 rounded-2xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] font-black text-xs shadow-sm transition-all active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50"
           >
             {exportingFullExcel ? (
-              <Loader2 className="w-4 h-4 text-[#3F4D25] animate-spin shrink-0" />
+              <Loader2 className="w-4 h-4 text-[#22222B] animate-spin shrink-0" />
             ) : (
-              <FileSpreadsheet className="w-4 h-4 text-[#3F4D25] shrink-0" />
+              <FileSpreadsheet className="w-4 h-4 text-[#22222B] shrink-0" />
             )}
             <span>{exportingFullExcel ? 'Downloading...' : 'Download Excel (.xlsx - 10 Sheets)'}</span>
           </button>
@@ -692,7 +692,7 @@ export default function AdminDashboard() {
                          REJECTED
                        </span>
                      ) : (
-                       <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#B0BE8C]/30 text-[#3F4D25] border border-[#B0BE8C]">
+                       <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#B0BE8C]/30 text-[#22222B] border border-[#B0BE8C]">
                          {s.status}
                        </span>
                      )}
@@ -783,7 +783,7 @@ export default function AdminDashboard() {
                           <span>View Proof</span>
                         </button>
                       ) : s.payment_record?.transaction_ref ? (
-                        <span className="font-mono text-[11px] text-slate-600">{s.payment_record.transaction_ref}</span>
+                        <span className="text-[11px] text-slate-600">{s.payment_record.transaction_ref}</span>
                       ) : (
                         <span className="text-slate-400 text-[10px] italic">None</span>
                       )}
@@ -801,7 +801,7 @@ export default function AdminDashboard() {
                          REJECTED
                        </span>
                      ) : (
-                       <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#B0BE8C]/30 text-[#3F4D25] border border-[#B0BE8C]">
+                       <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#B0BE8C]/30 text-[#22222B] border border-[#B0BE8C]">
                          {s.status}
                        </span>
                      )}
@@ -1031,14 +1031,14 @@ export default function AdminDashboard() {
                           <td className="p-3 font-bold">#{r.id}</td>
                           <td className="p-3">
                             <div className="font-bold text-[#22222B]">{r.user?.name}</div>
-                            <div className="text-[10px] text-slate-400 font-mono">{r.user?.phone}</div>
+                            <div className="text-[10px] text-slate-400">{r.user?.phone}</div>
                           </td>
                           <td className="p-3 font-medium">
                             <div>{r.subscription?.plan_snapshot_name || 'Active Plan'}</div>
                             <div className="text-[10px] text-slate-400">Sub #{r.subscription_id}</div>
                           </td>
                           <td className="p-3">
-                            <span className="px-2 py-0.5 rounded-md bg-[#B0BE8C]/25 text-[#3F4D25] border border-[#B0BE8C]/40 text-[10px] font-black">
+                            <span className="px-2 py-0.5 rounded-md bg-[#B0BE8C]/25 text-[#22222B] border border-[#B0BE8C]/40 text-[10px] font-black">
                               Meal Cancellation
                             </span>
                           </td>
@@ -1096,10 +1096,10 @@ export default function AdminDashboard() {
               <div key={c.id} className="glass-card rounded-2xl p-4 border border-[#B0BE8C]/35 shadow-xs space-y-2.5">
                 <div className="flex items-center justify-between">
                   <div className="font-black text-sm text-[#22222B]">{c.name}</div>
-                  <span className="text-[10px] text-slate-400 font-mono">#{c.id}</span>
+                  <span className="text-[10px] text-slate-400">#{c.id}</span>
                 </div>
                 <div className="text-xs space-y-1">
-                  <div>Phone: <strong className="font-mono text-[#22222B]">{c.phone}</strong></div>
+                  <div>Phone: <strong className="text-[#22222B]">{c.phone}</strong></div>
                   <div className="break-words">
                     Delivery Address: <strong className="text-slate-700">{c.delivery_address || 'None'}</strong>
                   </div>
@@ -1120,7 +1120,7 @@ export default function AdminDashboard() {
                       setEditingCust(c);
                       setNewCustAddress(c.delivery_address);
                     }}
-                    className="min-h-[44px] px-3 py-2 rounded-xl bg-[#DCE5CC] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center"
+                    className="min-h-[44px] px-3 py-2 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center"
                   >
                     Edit Address
                   </button>
@@ -1156,7 +1156,7 @@ export default function AdminDashboard() {
                   <tr key={c.id} className="hover:bg-[#B0BE8C]/10 transition-colors">
                     <td className="p-3 font-bold">#{c.id}</td>
                     <td className="p-3 font-bold text-[#22222B]">{c.name}</td>
-                    <td className="p-3 font-mono">{c.phone}</td>
+                    <td className="p-3">{c.phone}</td>
                     <td className="p-3 text-slate-700 max-w-xs truncate">{c.delivery_address || 'None'}</td>
                     <td className="p-3">
                       {c.must_change_password ? (
@@ -1173,7 +1173,7 @@ export default function AdminDashboard() {
                           setEditingCust(c);
                           setNewCustAddress(c.delivery_address);
                         }}
-                        className="px-2.5 py-1 rounded-lg bg-[#DCE5CC] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-[10px] font-bold transition-colors"
+                        className="px-2.5 py-1 rounded-lg bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-[10px] font-bold transition-colors"
                       >
                         Edit Address
                       </button>
@@ -1224,7 +1224,7 @@ export default function AdminDashboard() {
                 {staff.map((s) => (
                   <div key={s.id} className="glass-card rounded-2xl p-4 border border-[#B0BE8C]/35 shadow-xs space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#B0BE8C]/25 text-[#3F4D25] border border-[#B0BE8C]/40">
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#B0BE8C]/25 text-[#22222B] border border-[#B0BE8C]/40">
                         {s.role}
                       </span>
                       <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${
@@ -1237,7 +1237,7 @@ export default function AdminDashboard() {
                     </div>
                     <div>
                       <h3 className="text-sm font-black text-[#22222B] break-words">{s.name}</h3>
-                      <p className="text-xs text-slate-500 font-mono mt-0.5">Phone: {s.phone}</p>
+                      <p className="text-xs text-slate-500 mt-0.5">Phone: {s.phone}</p>
                       {s.must_change_password && (
                         <p className="text-[10px] text-amber-700 font-bold mt-1">Password Change Required</p>
                       )}
@@ -1288,7 +1288,7 @@ export default function AdminDashboard() {
                         <td className="p-3 font-bold">#{s.id}</td>
                         <td className="p-3 font-bold text-[#22222B]">{s.name}</td>
                         <td className="p-3 uppercase font-bold text-[#741B22]">{s.role}</td>
-                        <td className="p-3 font-mono">{s.phone}</td>
+                        <td className="p-3">{s.phone}</td>
                         <td className="p-3">
                           <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${
                             s.credential_locked
@@ -1394,7 +1394,7 @@ export default function AdminDashboard() {
                       setPlanCredits(p.meal_credits);
                       setShowPlanModal(true);
                     }}
-                    className="min-h-[44px] px-4 py-2 rounded-xl bg-[#DCE5CC] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-xs font-bold text-[#22222B] transition-colors flex items-center justify-center"
+                    className="min-h-[44px] px-4 py-2 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-xs font-bold text-[#22222B] transition-colors flex items-center justify-center"
                   >
                     Edit
                   </button>
@@ -1489,7 +1489,7 @@ export default function AdminDashboard() {
                   <div className="flex flex-wrap items-center justify-between gap-2 text-xs pt-1">
                     {confirmSub.payment_record.transaction_ref ? (
                       <span className="text-slate-600">
-                        Ref / UTR: <strong className="font-mono text-[#22222B]">{confirmSub.payment_record.transaction_ref}</strong>
+                        Ref / UTR: <strong className="text-[#22222B]">{confirmSub.payment_record.transaction_ref}</strong>
                       </span>
                     ) : (
                       <span className="text-slate-400 italic">No UTR specified</span>
@@ -1509,7 +1509,7 @@ export default function AdminDashboard() {
               ) : confirmSub.payment_record?.transaction_ref ? (
                 <div className="p-3 bg-blue-50 border border-blue-200 rounded-2xl text-xs space-y-1">
                   <div className="font-bold text-blue-900">Transaction Reference Provided:</div>
-                  <div className="font-mono font-bold text-blue-950 text-sm">{confirmSub.payment_record.transaction_ref}</div>
+                  <div className="font-bold text-blue-950 text-sm">{confirmSub.payment_record.transaction_ref}</div>
                 </div>
               ) : (
                 <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-2xl text-xs text-amber-900 flex items-center gap-2">
@@ -1551,7 +1551,7 @@ export default function AdminDashboard() {
               <button
                 type="button"
                 onClick={() => setConfirmSub(null)}
-                className="order-3 sm:order-1 flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#DCE5CC] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center"
+                className="order-3 sm:order-1 flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center"
               >
                 Cancel
               </button>
@@ -1599,7 +1599,7 @@ export default function AdminDashboard() {
             <div className="flex gap-2">
               <button
                 onClick={() => setEditingCust(null)}
-                className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#DCE5CC] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center"
+                className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center"
               >
                 Cancel
               </button>
@@ -1640,7 +1640,7 @@ export default function AdminDashboard() {
             <div className="flex gap-2">
               <button
                 onClick={() => setResetCust(null)}
-                className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#DCE5CC] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center"
+                className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center"
               >
                 Cancel
               </button>
@@ -1712,7 +1712,7 @@ export default function AdminDashboard() {
             <div className="flex gap-2 pt-2">
               <button
                 onClick={() => setShowStaffModal(false)}
-                className="flex-1 min-h-[44px] py-2 px-3 rounded-xl bg-[#DCE5CC] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-xs font-bold text-[#22222B] transition-colors flex items-center justify-center"
+                className="flex-1 min-h-[44px] py-2 px-3 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-xs font-bold text-[#22222B] transition-colors flex items-center justify-center"
               >
                 Cancel
               </button>
@@ -1753,7 +1753,7 @@ export default function AdminDashboard() {
             <div className="flex gap-2">
               <button
                 onClick={() => setResetStaffMember(null)}
-                className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#DCE5CC] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center"
+                className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center"
               >
                 Cancel
               </button>
@@ -1837,7 +1837,7 @@ export default function AdminDashboard() {
             <div className="flex gap-2 pt-2">
               <button
                 onClick={() => setShowPlanModal(false)}
-                className="flex-1 min-h-[44px] py-2 px-3 rounded-xl bg-[#DCE5CC] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-xs font-bold text-[#22222B] transition-colors flex items-center justify-center"
+                className="flex-1 min-h-[44px] py-2 px-3 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-xs font-bold text-[#22222B] transition-colors flex items-center justify-center"
               >
                 Cancel
               </button>
@@ -1861,5 +1861,6 @@ export default function AdminDashboard() {
     </div>
   );
 }
+
 
 

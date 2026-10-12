@@ -216,7 +216,7 @@ export default function AdminCustomerViewPage() {
                 <th colSpan={3} className="px-3 py-2 text-center font-black text-emerald-800 border-b border-r border-[#B0BE8C]/30">Delivered Meals</th>
                 <th colSpan={3} className="px-3 py-2 text-center font-black text-blue-800 border-b border-[#B0BE8C]/30">Scheduled Meals</th>
               </tr>
-              <tr className="bg-[#F8FAF7] text-[10px] uppercase tracking-wider text-slate-600">
+              <tr className="bg-[#F3F5F4] text-[10px] uppercase tracking-wider text-slate-600">
                 {SLOTS.map((slot) => <th key={`delivered-${slot}`} className="px-3 py-2 text-center capitalize border-b border-r border-[#B0BE8C]/25">{slot}</th>)}
                 {SLOTS.map((slot) => <th key={`scheduled-${slot}`} className="px-3 py-2 text-center capitalize border-b border-r last:border-r-0 border-[#B0BE8C]/25">{slot}</th>)}
               </tr>

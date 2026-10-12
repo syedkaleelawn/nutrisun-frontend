@@ -5,11 +5,11 @@
   --foreground: #22222B;
   --canvas: #F3F5F4;
   --sage-green: #B0BE8C;
-  --sage-green-pale: #DCE5CC;
-  --sage-green-dark: #3F4D25;
-  --sage-text: #3F4D25;
+  --sage-green-pale: #B0BE8C;
+  --sage-green-dark: #22222B;
+  --sage-text: #22222B;
   --warm-butter: #F7DE9D;
-  --warm-butter-light: #FCF1D3;
+  --warm-butter-light: #F7DE9D;
   --berry-crimson: #B92F25;
   --deep-maroon: #741B22;
   --charcoal-slate: #22222B;
@@ -20,13 +20,82 @@
   --color-foreground: var(--foreground);
   --color-offwhite: #F3F5F4;
   --color-sage: #B0BE8C;
-  --color-sage-pale: #DCE5CC;
+  --color-sage-pale: #B0BE8C;
   --color-butter: #F7DE9D;
   --color-berry: #B92F25;
   --color-burgundy: #741B22;
   --color-charcoal: #22222B;
+  --color-white: #F3F5F4;
+  --color-black: #22222B;
+
+  --color-slate-50: #F3F5F4;
+  --color-slate-100: #F3F5F4;
+  --color-slate-200: #B0BE8C;
+  --color-slate-300: #B0BE8C;
+  --color-slate-400: #B0BE8C;
+  --color-slate-500: #22222B;
+  --color-slate-600: #22222B;
+  --color-slate-700: #22222B;
+  --color-slate-800: #22222B;
+  --color-slate-900: #22222B;
+  --color-slate-950: #22222B;
+
+  --color-emerald-50: #B0BE8C;
+  --color-emerald-100: #B0BE8C;
+  --color-emerald-200: #B0BE8C;
+  --color-emerald-300: #B0BE8C;
+  --color-emerald-600: #22222B;
+  --color-emerald-700: #22222B;
+  --color-emerald-800: #22222B;
+  --color-emerald-900: #22222B;
+  --color-emerald-950: #22222B;
+
+  --color-amber-50: #F7DE9D;
+  --color-amber-100: #F7DE9D;
+  --color-amber-200: #F7DE9D;
+  --color-amber-300: #F7DE9D;
+  --color-amber-400: #F7DE9D;
+  --color-amber-500: #741B22;
+  --color-amber-600: #741B22;
+  --color-amber-700: #741B22;
+  --color-amber-800: #741B22;
+  --color-amber-900: #741B22;
+
+  --color-red-50: #F7DE9D;
+  --color-red-100: #F7DE9D;
+  --color-red-200: #B92F25;
+  --color-red-500: #B92F25;
+  --color-red-600: #B92F25;
+  --color-red-700: #741B22;
+  --color-red-800: #741B22;
+  --color-red-900: #741B22;
+  --color-rose-50: #F7DE9D;
+  --color-rose-100: #F7DE9D;
+  --color-rose-200: #B92F25;
+  --color-rose-300: #B92F25;
+  --color-rose-600: #B92F25;
+  --color-rose-700: #741B22;
+  --color-rose-800: #741B22;
+  --color-rose-900: #741B22;
+  --color-rose-950: #741B22;
+
+  --color-blue-50: #B0BE8C;
+  --color-blue-100: #B0BE8C;
+  --color-blue-200: #B0BE8C;
+  --color-blue-300: #B0BE8C;
+  --color-blue-500: #741B22;
+  --color-blue-600: #741B22;
+  --color-blue-700: #741B22;
+  --color-blue-800: #741B22;
+  --color-blue-900: #741B22;
+  --color-blue-950: #741B22;
+  --color-indigo-500: #741B22;
+  --color-indigo-700: #741B22;
+  --color-indigo-800: #741B22;
+  --color-purple-100: #B0BE8C;
+  --color-purple-800: #741B22;
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-mono: var(--font-geist-sans);
 }
 
 html, body {
@@ -53,6 +122,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+button,
+input,
+select,
+textarea,
+code,
+pre {
+  font-family: inherit;
+}
+
 /* Ensure mobile form fields never trigger iOS Safari auto-zoom */
 @media screen and (max-width: 640px) {
   input[type="text"],
@@ -69,14 +147,14 @@ body {
 
 /* Glassmorphic Luxury Utilities with Sage, Butter, Berry & Charcoal Brand Accents */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.90);
+  background: rgba(243, 245, 244, 0.90);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(176, 190, 140, 0.35);
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(243, 245, 244, 0.92);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(176, 190, 140, 0.35);
@@ -93,7 +171,7 @@ body {
 }
 
 .glass-pill {
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(243, 245, 244, 0.88);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(176, 190, 140, 0.45);
@@ -102,7 +180,7 @@ body {
 /* Brand Button & Badge Utility Classes */
 .btn-berry {
   background-color: #B92F25;
-  color: #ffffff;
+  color: #F3F5F4;
   box-shadow: 0 4px 14px 0 rgba(185, 47, 37, 0.28);
   border-radius: 0.75rem;
   transition: all 0.2s ease-in-out;
@@ -114,7 +192,7 @@ body {
 }
 
 .btn-secondary {
-  background-color: #DCE5CC;
+  background-color: #B0BE8C;
   color: #22222B;
   border: 1px solid #B0BE8C;
   border-radius: 0.75rem;
@@ -136,12 +214,12 @@ body {
   min-height: 44px;
 }
 .btn-butter:hover {
-  background-color: #FCF1D3;
+  background-color: #F7DE9D;
 }
 
 .badge-sage {
   background-color: rgba(176, 190, 140, 0.25);
-  color: #3F4D25;
+  color: #22222B;
   border: 1px solid #B0BE8C;
 }
 
@@ -198,14 +276,14 @@ body {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f5f4;
+  background: #F3F5F4;
 }
 ::-webkit-scrollbar-thumb {
   background: #B0BE8C;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3F4D25;
+  background: #22222B;
 }
 
 /* Hide scrollbar utility for touch scrollable tabs */
@@ -240,4 +318,5 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
 

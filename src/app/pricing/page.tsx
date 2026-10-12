@@ -175,7 +175,7 @@ export default function PublicPricingPage() {
   }, [plans, filter]);
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#F8F7F3] via-white to-[#EEF2EA] text-[#22222B]">
+    <main className="min-h-screen bg-gradient-to-br from-[#F3F5F4] via-white to-[#B0BE8C] text-[#22222B]">
       {/* Header */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 pt-8">
         <div className="glass-card rounded-3xl border border-[#B0BE8C]/35 shadow-lg p-5 sm:p-8">
@@ -442,3 +442,4 @@ export default function PublicPricingPage() {
     </main>
   );
 }
+
