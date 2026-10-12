@@ -111,7 +111,7 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-[#22222B] to-[#3a3a46] p-5 sm:p-6 text-white relative">
+        <div className="bg-gradient-to-r from-[#22222B] to-[#22222B] p-5 sm:p-6 text-white relative">
           <button
             type="button"
             onClick={handleClose}
@@ -248,7 +248,7 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
             <button
               type="submit"
               disabled={loading}
-              className="w-full sm:w-1/2 py-2.5 sm:py-3 px-4 rounded-2xl bg-[#741B22] hover:bg-[#5a141a] text-white font-bold text-xs shadow-md active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2 min-h-[44px]"
+              className="w-full sm:w-1/2 py-2.5 sm:py-3 px-4 rounded-2xl bg-[#741B22] hover:bg-[#741B22] text-white font-bold text-xs shadow-md active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2 min-h-[44px]"
             >
               {loading ? (
                 <>
@@ -268,4 +268,5 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
     </div>
   );
 }
+
 
