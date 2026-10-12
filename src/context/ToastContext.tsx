@@ -134,7 +134,7 @@ function ToastContainer({ toasts, onDismiss }: { toasts: Toast[]; onDismiss: (id
             bgClass = 'bg-white/95';
             textClass = 'text-[#22222B]';
             IconComponent = Info;
-            iconColor = 'text-[#3F4D25]';
+            iconColor = 'text-[#22222B]';
             break;
         }
 
@@ -162,4 +162,5 @@ function ToastContainer({ toasts, onDismiss }: { toasts: Toast[]; onDismiss: (id
     </div>
   );
 }
+
 
