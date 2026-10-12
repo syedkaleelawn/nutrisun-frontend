@@ -192,7 +192,7 @@ export default function DeliveryDashboard() {
             type="text"
             value={searchTerm}
             onChange={(event) => setSearchTerm(event.target.value)}
-            placeholder="Search customer name, phone, or address..."
+            placeholder="Search customer name, primary or secondary number, or address..."
             className="w-full min-h-[44px] pl-10 pr-4 py-2 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20"
           />
         </div>
