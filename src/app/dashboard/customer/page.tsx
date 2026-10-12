@@ -467,7 +467,7 @@ export default function CustomerDashboard() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="px-3 py-1 rounded-full bg-[#B0BE8C]/25 text-[#3F4D25] border border-[#B0BE8C]/40 font-bold text-[11px] uppercase tracking-wider">
+              <span className="px-3 py-1 rounded-full bg-[#B0BE8C]/25 text-[#22222B] border border-[#B0BE8C]/40 font-bold text-[11px] uppercase tracking-wider">
                 Customer Portal
               </span>
               <span className="text-xs text-slate-500">Subscription Meal Service</span>
@@ -608,7 +608,7 @@ export default function CustomerDashboard() {
                               </span>
                             )}
                             {isActive && (
-                              <span className="px-2.5 py-1 rounded-full bg-[#B0BE8C]/30 text-[#3F4D25] text-[10px] font-bold border border-[#B0BE8C] whitespace-nowrap">
+                              <span className="px-2.5 py-1 rounded-full bg-[#B0BE8C]/30 text-[#22222B] text-[10px] font-bold border border-[#B0BE8C] whitespace-nowrap">
                                 Active
                               </span>
                             )}
@@ -688,7 +688,7 @@ export default function CustomerDashboard() {
                         ) : isActive ? (
                           <button
                             onClick={() => setActiveTab('schedule')}
-                            className="w-full min-h-[44px] px-4 py-2 rounded-xl bg-[#DCE5CC] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-all flex items-center justify-center gap-1.5"
+                            className="w-full min-h-[44px] px-4 py-2 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-all flex items-center justify-center gap-1.5"
                           >
                             <SkipForward className="w-4 h-4 text-[#741B22] shrink-0" />
                             Cancel Meals from Schedule
@@ -774,7 +774,7 @@ export default function CustomerDashboard() {
                       Scheduled Meals
                     </th>
                   </tr>
-                  <tr className="bg-[#F8FAF7] text-[10px] uppercase tracking-wider text-slate-600">
+                  <tr className="bg-[#F3F5F4] text-[10px] uppercase tracking-wider text-slate-600">
                     {monthlyMealLedger.slots.map((slot) => (
                       <th key={`delivered-${slot}`} className="px-3 py-2 text-center border-b border-r border-[#B0BE8C]/25 capitalize">
                         {slot}
@@ -1182,7 +1182,7 @@ export default function CustomerDashboard() {
                 <div className="flex gap-2">
                   <button
                     onClick={handleClosePaymentModal}
-                    className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#DCE5CC] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center"
+                    className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center"
                   >
                     Cancel
                   </button>
@@ -1204,7 +1204,7 @@ export default function CustomerDashboard() {
                   <div className="space-y-4">
                     {/* Header */}
                     <div className="text-center space-y-1">
-                      <div className="w-10 h-10 rounded-full bg-[#B0BE8C]/30 text-[#3F4D25] border border-[#B0BE8C] flex items-center justify-center mx-auto">
+                      <div className="w-10 h-10 rounded-full bg-[#B0BE8C]/30 text-[#22222B] border border-[#B0BE8C] flex items-center justify-center mx-auto">
                         <CreditCard className="w-5 h-5 text-[#741B22]" />
                       </div>
                       <h3 className="text-lg font-black text-[#22222B]">Manual UPI Payment</h3>
@@ -1229,7 +1229,7 @@ export default function CustomerDashboard() {
                         </div>
                         <div className="flex items-center justify-between gap-2">
                           <span className="font-medium">UPI ID:</span>
-                          <code className="text-[#22222B] font-mono font-bold bg-white px-2 py-0.5 rounded border border-[#B0BE8C]/40 text-[11px] break-all">
+                          <code className="text-[#22222B] font-bold bg-white px-2 py-0.5 rounded border border-[#B0BE8C]/40 text-[11px] break-all">
                             {PAYMENT_CONFIG.upiId}
                           </code>
                         </div>
@@ -1343,7 +1343,7 @@ export default function CustomerDashboard() {
                           placeholder="e.g. 423589123456"
                           value={transactionRef}
                           onChange={(e) => setTransactionRef(e.target.value)}
-                          className="w-full min-h-[44px] px-3 py-2 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-mono font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C] bg-white"
+                          className="w-full min-h-[44px] px-3 py-2 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C] bg-white"
                         />
                       </div>
 
@@ -1370,7 +1370,7 @@ export default function CustomerDashboard() {
                     <button
                       type="button"
                       onClick={handleClosePaymentModal}
-                      className="w-full min-h-[44px] py-2.5 px-4 rounded-xl bg-[#DCE5CC] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center"
+                      className="w-full min-h-[44px] py-2.5 px-4 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center"
                     >
                       Done (View Order in Dashboard)
                     </button>
@@ -1421,7 +1421,7 @@ export default function CustomerDashboard() {
                 </div>
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-medium">UPI ID:</span>
-                  <code className="text-[#22222B] font-mono font-bold bg-white px-2 py-0.5 rounded border border-[#B0BE8C]/40 text-[11px] break-all">
+                  <code className="text-[#22222B] font-bold bg-white px-2 py-0.5 rounded border border-[#B0BE8C]/40 text-[11px] break-all">
                     {PAYMENT_CONFIG.upiId}
                   </code>
                 </div>
@@ -1507,7 +1507,7 @@ export default function CustomerDashboard() {
                 )}
                 {activePaymentModalSub.payment_record?.transaction_ref && (
                   <div className="text-[11px] text-slate-600">
-                    Ref / UTR: <strong className="font-mono">{activePaymentModalSub.payment_record.transaction_ref}</strong>
+                    Ref / UTR: <strong>{activePaymentModalSub.payment_record.transaction_ref}</strong>
                   </div>
                 )}
               </div>
@@ -1560,7 +1560,7 @@ export default function CustomerDashboard() {
                   placeholder="e.g. 423589123456"
                   value={transactionRef}
                   onChange={(e) => setTransactionRef(e.target.value)}
-                  className="w-full min-h-[44px] px-3 py-2 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-mono font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C] bg-white"
+                  className="w-full min-h-[44px] px-3 py-2 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C] bg-white"
                 />
               </div>
 
@@ -1587,7 +1587,7 @@ export default function CustomerDashboard() {
             <button
               type="button"
               onClick={handleClosePaymentModal}
-              className="w-full min-h-[44px] py-2.5 px-4 rounded-xl bg-[#DCE5CC] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center"
+              className="w-full min-h-[44px] py-2.5 px-4 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center"
             >
               Close
             </button>
@@ -1653,7 +1653,7 @@ export default function CustomerDashboard() {
                     setSkipQuantity(1);
                   }}
                   disabled={submittingSkip}
-                  className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#DCE5CC] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center disabled:opacity-60"
+                  className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center disabled:opacity-60"
                 >
                   Keep Meals
                 </button>
@@ -1680,4 +1680,5 @@ export default function CustomerDashboard() {
     </div>
   );
 }
+
 
