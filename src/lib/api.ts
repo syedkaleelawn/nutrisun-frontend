@@ -178,6 +178,7 @@ export interface User {
   id: number;
   name: string;
   phone: string;
+  secondary_phone?: string;
   delivery_address: string;
   email?: string;
   role: Role;
@@ -315,6 +316,7 @@ export interface DeliveryItem {
   customer_id: number;
   customer_name: string;
   customer_phone: string;
+  customer_secondary_phone?: string;
   delivery_address: string;
   meal_slot: MealSlot;
   quantity: number;
