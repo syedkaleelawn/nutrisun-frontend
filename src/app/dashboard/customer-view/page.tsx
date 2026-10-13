@@ -224,8 +224,16 @@ export default function AdminCustomerViewPage() {
                 {SLOTS.map((slot) => <td key={`total-meal-${slot}`} className="px-3 py-3 text-center text-[#22222B] border-r last:border-r-0 border-[#B0BE8C]/25">{ledger.deliveredTotals[slot] + ledger.scheduledTotals[slot]}</td>)}
               </tr>
               {ledger.rows.map((row) => (
-                <tr key={row.date} className="hover:bg-[#B0BE8C]/10 transition-colors">
-                  <td className="px-3 py-3 font-bold text-[#22222B] whitespace-nowrap border-r border-[#B0BE8C]/20">{row.dateLabel}</td>
+                <tr
+                  key={row.date}
+                  className={`transition-colors ${row.date === currentISTDate ? 'bg-[#F7DE9D]/55' : 'hover:bg-[#B0BE8C]/10'}`}
+                >
+                  <td className={`px-3 py-3 font-bold text-[#22222B] whitespace-nowrap border-r border-[#B0BE8C]/20 ${row.date === currentISTDate ? 'border-l-4 border-l-[#B92F25]' : ''}`}>
+                    {row.dateLabel}
+                    {row.date === currentISTDate && (
+                      <span className="ml-2 rounded-full bg-[#B92F25] px-2 py-0.5 text-[9px] font-black uppercase tracking-wide text-white">Today</span>
+                    )}
+                  </td>
                   <td className="px-3 py-3 text-slate-600 font-bold border-r border-[#B0BE8C]/20">{row.dayLabel}</td>
                   {SLOTS.map((slot) => <td key={`${row.date}-meal-${slot}`} className="px-3 py-3 text-center text-[#22222B] font-black border-r last:border-r-0 border-[#B0BE8C]/20">{row.delivered[slot] + row.scheduled[slot]}</td>)}
                 </tr>
