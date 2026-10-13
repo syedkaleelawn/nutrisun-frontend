@@ -356,13 +356,9 @@ export default function CustomerDashboard() {
   }, [subscriptionMealSummaries]);
 
   const scheduleYearOptions = useMemo(() => {
-    const years = new Set<number>([scheduleYear, Number(currentISTDate.slice(0, 4))]);
-    meals.forEach((meal) => {
-      const year = Number(meal.date.slice(0, 4));
-      if (Number.isFinite(year)) years.add(year);
-    });
-    return Array.from(years).sort((a, b) => b - a);
-  }, [meals, scheduleYear, currentISTDate]);
+    const currentYear = Number(currentISTDate.slice(0, 4));
+    return Array.from({ length: currentYear - 2024 + 1 }, (_, index) => currentYear - index);
+  }, [currentISTDate]);
 
   const monthlyMealLedger = useMemo(() => {
     type MealSlot = 'breakfast' | 'lunch' | 'dinner';
