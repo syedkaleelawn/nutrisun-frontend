@@ -144,9 +144,6 @@ export default function Navbar() {
                 <span className="font-black text-base sm:text-xl md:text-2xl tracking-wider text-[#22222B] uppercase truncate">
                   NUTRISUN
                 </span>
-                <span className="hidden min-[380px]:inline-block px-1.5 sm:px-2 py-0.5 text-[8px] sm:text-[9px] font-black uppercase tracking-widest bg-[#F7DE9D] text-[#22222B] rounded-full border border-[#F7DE9D]/80 shadow-2xs shrink-0">
-                  Fresh
-                </span>
               </div>
               <p className="text-[10px] sm:text-[11px] text-[#741B22] font-bold tracking-wider -mt-0.5 italic hidden sm:block">
                 Healthy Tasty Daily
