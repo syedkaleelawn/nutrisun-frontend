@@ -504,7 +504,7 @@ export default function AdminDashboard() {
           }`}
         >
           <div className="flex items-center justify-between gap-1">
-            <span className="text-[10px] font-black uppercase leading-tight text-[#22222B] px-2 py-0.5 rounded-full bg-[#F7DE9D]">Payment Pending</span>
+            <span className="text-[10px] font-black uppercase leading-tight text-[#22222B] px-2 py-0.5 rounded-full bg-[#F7DE9D]">Payment Approvals</span>
             <CreditCard className="w-4 h-4 text-[#741B22] shrink-0" />
           </div>
           <div className="text-xl sm:text-2xl font-black text-[#22222B] mt-1">{counts.payment_pending}</div>
@@ -605,7 +605,7 @@ export default function AdminDashboard() {
       {/* TAB 1: PENDING APPROVALS */}
       {activeTab === 'pending' && (
         <div className="space-y-6">
-          {/* Payment Pending Section */}
+          {/* Payment Approvals Section */}
           <div>
             <h2 className="text-base font-black text-[#22222B] mb-3 flex items-center gap-2">
               <CreditCard className="w-4 h-4 text-[#741B22] shrink-0" />
