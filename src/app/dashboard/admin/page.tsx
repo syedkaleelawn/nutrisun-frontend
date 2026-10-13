@@ -216,7 +216,7 @@ export default function AdminDashboard() {
       if (staffRes.status === 'fulfilled') {
         setStaff(staffRes.value.data.staff || []);
       } else {
-        failed.push('Staff Accounts');
+        failed.push('Staff');
       }
 
       if (plansRes.status === 'fulfilled') {
@@ -531,7 +531,7 @@ export default function AdminDashboard() {
           className="bg-emerald-50/70 border-emerald-200 p-3.5 sm:p-4 rounded-3xl border text-left transition-all min-h-[44px] flex flex-col justify-between hover:bg-emerald-100/70"
         >
           <div className="flex items-center justify-between gap-1">
-            <span className="text-[10px] font-black uppercase leading-tight text-emerald-800">Automatically Rescheduled</span>
+            <span className="text-[10px] font-black uppercase leading-tight text-emerald-800">Rescheduled Cancellations</span>
             <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
           </div>
           <div className="text-xl sm:text-2xl font-black text-emerald-700 mt-1">
@@ -581,12 +581,12 @@ export default function AdminDashboard() {
       <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar pb-1 border-b border-[#B0BE8C]/30 -mx-3 px-3 sm:mx-0 sm:px-0">
         {[
           { id: 'pending', label: `Payment Approvals (${pendingPayments.length})` },
-          { id: 'subscriptions', label: `All Subscriptions (${subscriptions.length})` },
-          { id: 'requests', label: `Meal Cancellation History (${requests.length})` },
+          { id: 'subscriptions', label: `Subscriptions (${subscriptions.length})` },
+          { id: 'requests', label: `Meal Cancellations (${requests.length})` },
           { id: 'customers', label: `Customers (${customers.length})` },
-          { id: 'staff', label: `Staff Accounts (${staff.length})` },
-          { id: 'plans', label: `Plans Catalog (${plans.length})` },
-          { id: 'analytics', label: 'Sales & Delivery Analytics' },
+          { id: 'staff', label: `Staff (${staff.length})` },
+          { id: 'plans', label: `Plans (${plans.length})` },
+          { id: 'analytics', label: 'Analytics' },
         ].map((t) => (
           <button
             key={t.id}
@@ -859,7 +859,7 @@ export default function AdminDashboard() {
           <div className="space-y-4">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
               <div>
-                <h2 className="text-base font-black text-[#22222B]">Meal Cancellation History</h2>
+                <h2 className="text-base font-black text-[#22222B]">Meal Cancellations</h2>
                 <p className="text-xs text-slate-500">
                   Automatically processed customer meal cancellations.
                 </p>
@@ -1347,7 +1347,7 @@ export default function AdminDashboard() {
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="text-base font-black text-[#22222B]">Subscription Plans Catalogue</h2>
+              <h2 className="text-base font-black text-[#22222B]">Plans</h2>
               <p className="text-xs text-slate-500">
                 Support 1 meal, 2-meal combos, and 3 meals. Referenced plans are archived instead of deleted.
               </p>
