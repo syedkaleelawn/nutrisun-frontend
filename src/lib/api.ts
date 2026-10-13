@@ -570,6 +570,19 @@ export const authApi = {
 export const customerApi = {
   getPlans: () =>
     api.get<{ plans: SubscriptionPlan[] }>('/plans'),
+  checkPlanAvailability: (plan_id: number, selected_shifts?: string, quantity = 1) =>
+    api.post<{
+      available: boolean;
+      selected_shifts: string;
+      quantity: number;
+      availability: Array<{
+        meal_type: string;
+        average_scheduled: number;
+        available_limit: number;
+        requested_quantity: number;
+        available: boolean;
+      }>;
+    }>('/customer/check-plan-availability', { plan_id, selected_shifts, quantity }),
   buyPlan: (plan_id: number, selected_shifts?: string, quantity = 1) =>
     api.post<{
       message: string;

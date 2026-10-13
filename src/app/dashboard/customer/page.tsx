@@ -83,6 +83,8 @@ export default function CustomerDashboard() {
   const [selectedPlanToBuy, setSelectedPlanToBuy] = useState<SubscriptionPlan | null>(null);
   const [purchaseQuantity, setPurchaseQuantity] = useState(1);
   const [buying, setBuying] = useState(false);
+  const [availabilityStatus, setAvailabilityStatus] = useState<'unchecked' | 'checking' | 'available' | 'unavailable'>('unchecked');
+  const [availabilityMessage, setAvailabilityMessage] = useState('');
   const [purchaseSuccessData, setPurchaseSuccessData] = useState<{
     subscription_id: number;
     plan_name: string;
@@ -219,6 +221,10 @@ export default function CustomerDashboard() {
 
   const handleBuyPlan = async () => {
     if (!selectedPlanToBuy) return;
+    if (availabilityStatus !== 'available') {
+      alert('Please confirm meal availability before proceeding.');
+      return;
+    }
     const planType = getPlanMealType(selectedPlanToBuy.name);
     if ((planType === 'OR_LUNCH' || planType === 'OR_SIMPLE') && !chosenMealOption) {
       alert('Please select your preferred meal combination before proceeding to payment.');
@@ -238,9 +244,37 @@ export default function CustomerDashboard() {
       setTransactionRef('');
       await loadData(true);
     } catch (err: any) {
+      if (err.response?.status === 409) {
+        setAvailabilityStatus('unavailable');
+        setAvailabilityMessage(err.response?.data?.error || 'The selected quantity is no longer available.');
+      }
       alert(err.response?.data?.error || 'Failed to initiate plan purchase.');
     } finally {
       setBuying(false);
+    }
+  };
+
+  const handleCheckPlanAvailability = async () => {
+    if (!selectedPlanToBuy) return;
+    const planType = getPlanMealType(selectedPlanToBuy.name);
+    if ((planType === 'OR_LUNCH' || planType === 'OR_SIMPLE') && !chosenMealOption) {
+      alert('Please select your preferred meal combination before checking availability.');
+      return;
+    }
+
+    setAvailabilityStatus('checking');
+    setAvailabilityMessage('');
+    try {
+      await customerApi.checkPlanAvailability(
+        selectedPlanToBuy.id,
+        chosenMealOption || undefined,
+        purchaseQuantity
+      );
+      setAvailabilityStatus('available');
+      setAvailabilityMessage('Available for all included meal types.');
+    } catch (err: any) {
+      setAvailabilityStatus('unavailable');
+      setAvailabilityMessage(err.response?.data?.error || 'The selected quantity is not available.');
     }
   };
 
@@ -301,6 +335,8 @@ export default function CustomerDashboard() {
     setReceiptPreviewUrl(null);
     setTransactionRef('');
     setPurchaseQuantity(1);
+    setAvailabilityStatus('unchecked');
+    setAvailabilityMessage('');
   };
 
   const handleConfirmSkip = async () => {
@@ -949,6 +985,8 @@ export default function CustomerDashboard() {
                         setSelectedPlanToBuy(plan);
                         setPurchaseQuantity(1);
                         setPurchaseSuccessData(null);
+                        setAvailabilityStatus('unchecked');
+                        setAvailabilityMessage('');
                         const pType = getPlanMealType(plan.name);
                         if (pType === 'OR_LUNCH') {
                           setChosenMealOption('breakfast,lunch');
@@ -1072,6 +1110,8 @@ export default function CustomerDashboard() {
                       onChange={(event) => {
                         const nextQuantity = Number.parseInt(event.target.value, 10);
                         setPurchaseQuantity(Number.isFinite(nextQuantity) ? Math.min(5, Math.max(1, nextQuantity)) : 1);
+                        setAvailabilityStatus('unchecked');
+                        setAvailabilityMessage('');
                       }}
                       className="min-h-[44px] w-full rounded-xl border border-[#B0BE8C]/50 bg-white px-3 text-sm font-black text-[#22222B] outline-none focus:border-[#741B22] focus:ring-2 focus:ring-[#741B22]/15"
                     />
@@ -1093,7 +1133,11 @@ export default function CustomerDashboard() {
                     <div className="grid grid-cols-1 gap-2">
                       <button
                         type="button"
-                        onClick={() => setChosenMealOption('breakfast,lunch')}
+                        onClick={() => {
+                          setChosenMealOption('breakfast,lunch');
+                          setAvailabilityStatus('unchecked');
+                          setAvailabilityMessage('');
+                        }}
                         className={`p-3 rounded-xl border text-left text-xs transition-all flex items-center justify-between ${
                           chosenMealOption === 'breakfast,lunch'
                             ? 'border-[#741B22] bg-white ring-2 ring-[#741B22]/20 font-black text-[#22222B] shadow-xs'
@@ -1111,7 +1155,11 @@ export default function CustomerDashboard() {
 
                       <button
                         type="button"
-                        onClick={() => setChosenMealOption('lunch,dinner')}
+                        onClick={() => {
+                          setChosenMealOption('lunch,dinner');
+                          setAvailabilityStatus('unchecked');
+                          setAvailabilityMessage('');
+                        }}
                         className={`p-3 rounded-xl border text-left text-xs transition-all flex items-center justify-between ${
                           chosenMealOption === 'lunch,dinner'
                             ? 'border-[#741B22] bg-white ring-2 ring-[#741B22]/20 font-black text-[#22222B] shadow-xs'
@@ -1138,7 +1186,11 @@ export default function CustomerDashboard() {
                     <div className="grid grid-cols-1 gap-2">
                       <button
                         type="button"
-                        onClick={() => setChosenMealOption('breakfast')}
+                        onClick={() => {
+                          setChosenMealOption('breakfast');
+                          setAvailabilityStatus('unchecked');
+                          setAvailabilityMessage('');
+                        }}
                         className={`p-3 rounded-xl border text-left text-xs transition-all flex items-center justify-between ${
                           chosenMealOption === 'breakfast'
                             ? 'border-[#741B22] bg-white ring-2 ring-[#741B22]/20 font-black text-[#22222B] shadow-xs'
@@ -1156,7 +1208,11 @@ export default function CustomerDashboard() {
 
                       <button
                         type="button"
-                        onClick={() => setChosenMealOption('dinner')}
+                        onClick={() => {
+                          setChosenMealOption('dinner');
+                          setAvailabilityStatus('unchecked');
+                          setAvailabilityMessage('');
+                        }}
                         className={`p-3 rounded-xl border text-left text-xs transition-all flex items-center justify-between ${
                           chosenMealOption === 'dinner'
                             ? 'border-[#741B22] bg-white ring-2 ring-[#741B22]/20 font-black text-[#22222B] shadow-xs'
@@ -1183,12 +1239,33 @@ export default function CustomerDashboard() {
                 )}
 
                 <div className="p-3.5 rounded-2xl bg-[#F7DE9D]/30 border border-[#F7DE9D] text-[#22222B] text-xs font-medium space-y-1">
-                  <p>• Availability is checked for every included meal type using the next 7 days of scheduled meals, excluding today.</p>
+                  <p>• Confirm availability for every included meal type using the next 7 days of scheduled meals, excluding today.</p>
                   <p>• Your quantity must be below the available daily capacity for every included meal type.</p>
-                  <p>• Clicking &quot;Proceed&quot; will create a pending purchase record.</p>
+                  <p>• Purchase submission stays disabled until availability is confirmed.</p>
                   <p>• Pay via UPI and send the screenshot to our business WhatsApp.</p>
                   <p>• Admin will verify payment and schedule deliveries strictly for your selected shifts.</p>
                 </div>
+
+                {availabilityStatus !== 'unchecked' && (
+                  <div className={`rounded-xl border px-3 py-2 text-xs font-bold ${
+                    availabilityStatus === 'available'
+                      ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
+                      : availabilityStatus === 'unavailable'
+                        ? 'border-[#B92F25]/25 bg-[#B92F25]/5 text-[#741B22]'
+                        : 'border-[#B0BE8C]/40 bg-[#F3F5F4] text-[#22222B]'
+                  }`}>
+                    {availabilityStatus === 'checking' ? 'Checking availability...' : availabilityMessage}
+                  </div>
+                )}
+
+                <button
+                  type="button"
+                  onClick={handleCheckPlanAvailability}
+                  disabled={availabilityStatus === 'checking'}
+                  className="w-full min-h-[44px] py-2.5 px-3 rounded-xl bg-[#F7DE9D] text-[#22222B] text-xs font-black border border-[#F7DE9D] hover:bg-[#B0BE8C] disabled:opacity-50 transition-colors"
+                >
+                  {availabilityStatus === 'checking' ? 'Checking...' : availabilityStatus === 'available' ? 'Recheck Availability' : 'Check Availability'}
+                </button>
 
                 <div className="flex gap-2">
                   <button
@@ -1199,8 +1276,8 @@ export default function CustomerDashboard() {
                   </button>
                   <button
                     onClick={handleBuyPlan}
-                    disabled={buying}
-                    className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B92F25] text-white text-xs font-black shadow-md hover:bg-[#741B22] transition-colors flex items-center justify-center"
+                    disabled={buying || availabilityStatus !== 'available'}
+                    className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B92F25] text-white text-xs font-black shadow-md hover:bg-[#741B22] disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
                   >
                     {buying ? 'Processing...' : 'Proceed to Payment'}
                   </button>
@@ -1292,7 +1369,6 @@ export default function CustomerDashboard() {
                         <span>Instructions:</span>
                       </div>
                       <p className="leading-relaxed text-slate-800">{PAYMENT_CONFIG.instruction}</p>
-                      <p className="leading-relaxed text-slate-800">Meal availability is rechecked when you submit payment proof.</p>
                     </div>
 
                     {/* Submission / Verification Status */}
