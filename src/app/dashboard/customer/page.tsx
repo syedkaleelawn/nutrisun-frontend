@@ -1183,7 +1183,7 @@ export default function CustomerDashboard() {
                 )}
 
                 <div className="p-3.5 rounded-2xl bg-[#F7DE9D]/30 border border-[#F7DE9D] text-[#22222B] text-xs font-medium space-y-1">
-                  <p>• Availability is checked for every included meal type using the next 7 days of scheduled meals.</p>
+                  <p>• Availability is checked for every included meal type using the next 7 days of scheduled meals, excluding today.</p>
                   <p>• Your quantity must be below the available daily capacity for every included meal type.</p>
                   <p>• Clicking &quot;Proceed&quot; will create a pending purchase record.</p>
                   <p>• Pay via UPI and send the screenshot to our business WhatsApp.</p>
