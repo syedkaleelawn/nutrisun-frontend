@@ -29,9 +29,9 @@ export const metadata: Metadata = {
   applicationName: 'NutriSun',
   manifest: '/manifest.webmanifest',
   icons: {
-    icon: [{ url: '/nutrisun-logo.png', type: 'image/png', sizes: '1080x1080' }],
-    shortcut: '/nutrisun-logo.png',
-    apple: [{ url: '/nutrisun-logo.png', type: 'image/png', sizes: '1080x1080' }],
+    icon: [{ url: '/icon.png?v=20261013', type: 'image/png', sizes: '1080x1080' }],
+    shortcut: '/icon.png?v=20261013',
+    apple: [{ url: '/apple-icon.png?v=20261013', type: 'image/png', sizes: '1080x1080' }],
   },
   alternates: { canonical: '/' },
   openGraph: {
