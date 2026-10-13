@@ -641,7 +641,7 @@ export default function AdminDashboard() {
                           )}
                         </div>
                         <p className="text-xs text-slate-600 mt-0.5 break-words">
-                          Plan: <strong className="text-[#22222B]">{sub.plan_snapshot_name || sub.plan?.name}</strong> • Amount: <strong className="text-[#741B22]">₹{sub.plan_snapshot_price?.toFixed(2)}</strong> • Meals: <strong className="text-[#741B22]">{formatShiftName(sub.selected_shifts || sub.plan_snapshot_shifts)}</strong>
+                          Plan: <strong className="text-[#22222B]">{sub.plan_snapshot_name || sub.plan?.name}</strong> × <strong>{sub.quantity || 1}</strong> • Amount: <strong className="text-[#741B22]">₹{sub.plan_snapshot_price?.toFixed(2)}</strong> • Meals: <strong className="text-[#741B22]">{formatShiftName(sub.selected_shifts || sub.plan_snapshot_shifts)}</strong>
                         </p>
                         <p className="text-[11px] text-slate-500 mt-0.5 break-words">Delivery Address: {sub.user?.delivery_address}</p>
                       </div>
@@ -701,7 +701,7 @@ export default function AdminDashboard() {
 
                 <div className="text-xs space-y-0.5">
                   <div className="font-bold text-[#22222B]">{s.user?.name} <span className="font-normal text-slate-400">({s.user?.phone})</span></div>
-                  <div>Plan: <strong>{s.plan_snapshot_name || s.plan?.name}</strong> (<span className="text-[#741B22] font-bold">{formatShiftName(s.selected_shifts || s.plan_snapshot_shifts)}</span>)</div>
+                  <div>Plan: <strong>{s.plan_snapshot_name || s.plan?.name}</strong> × <strong>{s.quantity || 1}</strong> (<span className="text-[#741B22] font-bold">{formatShiftName(s.selected_shifts || s.plan_snapshot_shifts)}</span>)</div>
                   <div>Meals: <strong className="text-emerald-700">{s.remaining_credits}</strong> remaining of {s.total_credits}</div>
                   <div className="text-[11px] text-slate-500">Dates: {s.start_date || 'Pending'} → {s.end_date || 'Pending'}</div>
                   {s.payment_record?.proof_image_url && (
@@ -1454,6 +1454,7 @@ export default function AdminDashboard() {
                 <span className="text-slate-500 font-medium">Payable Amount:</span>
                 <strong className="text-base font-black text-[#741B22]">
                   ₹{(confirmSub.plan_snapshot_price || confirmSub.plan?.price || 0).toFixed(2)}
+                  <span className="ml-2 text-xs font-bold text-slate-500">({confirmSub.quantity || 1} plan{(confirmSub.quantity || 1) === 1 ? '' : 's'})</span>
                 </strong>
               </div>
               <div className="flex items-center justify-between">
