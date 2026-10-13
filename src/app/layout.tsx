@@ -120,10 +120,6 @@ export default function RootLayout({
                   <HeartPulse className="w-3.5 h-3.5 text-[#B92F25]" />
                   Flexible Meal Plans
                 </span>
-                <span className="flex items-center gap-1.5 text-[#22222B] font-bold bg-[#B0BE8C]/20 px-3 py-1 rounded-full border border-[#B0BE8C]">
-                  <span className="w-2 h-2 rounded-full bg-[#B0BE8C] animate-pulse"></span>
-                  Kitchen Schedule Live
-                </span>
               </div>
             </div>
           </footer>
