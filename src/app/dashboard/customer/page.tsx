@@ -1066,12 +1066,12 @@ export default function CustomerDashboard() {
                     <input
                       type="number"
                       min={1}
-                      max={99}
+                      max={5}
                       inputMode="numeric"
                       value={purchaseQuantity}
                       onChange={(event) => {
                         const nextQuantity = Number.parseInt(event.target.value, 10);
-                        setPurchaseQuantity(Number.isFinite(nextQuantity) ? Math.min(99, Math.max(1, nextQuantity)) : 1);
+                        setPurchaseQuantity(Number.isFinite(nextQuantity) ? Math.min(5, Math.max(1, nextQuantity)) : 1);
                       }}
                       className="min-h-[44px] w-full rounded-xl border border-[#B0BE8C]/50 bg-white px-3 text-sm font-black text-[#22222B] outline-none focus:border-[#741B22] focus:ring-2 focus:ring-[#741B22]/15"
                     />
