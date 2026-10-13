@@ -750,38 +750,23 @@ export default function CustomerDashboard() {
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-2 text-[11px] font-bold">
-              <div className="flex-1 p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800">
-                Delivered: service time has passed — Breakfast 9:00 AM, Lunch 3:00 PM, Dinner 9:00 PM IST.
-              </div>
-              <div className="flex-1 p-2.5 rounded-xl bg-blue-50 border border-blue-200 text-blue-800">
-                Scheduled: service time is still ahead. Each scheduled meal can be cancelled below.
-              </div>
-            </div>
+            <p className="text-[11px] font-bold text-slate-600">
+              Future meals can be cancelled using the action shown below their meal count.
+            </p>
           </div>
 
           <div className="glass-card rounded-3xl border border-[#B0BE8C]/35 shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[940px] border-collapse text-xs">
+              <table className="w-full min-w-[620px] border-collapse text-xs">
                 <thead>
                   <tr className="bg-[#F3F5F4] text-[#22222B]">
                     <th rowSpan={2} className="px-3 py-3 text-left font-black border-b border-r border-[#B0BE8C]/30">Date</th>
                     <th rowSpan={2} className="px-3 py-3 text-left font-black border-b border-r border-[#B0BE8C]/30">Day</th>
-                    <th colSpan={3} className="px-3 py-2 text-center font-black text-emerald-800 border-b border-r border-[#B0BE8C]/30">
-                      Delivered Meals
-                    </th>
-                    <th colSpan={3} className="px-3 py-2 text-center font-black text-blue-800 border-b border-[#B0BE8C]/30">
-                      Scheduled Meals
-                    </th>
+                    <th colSpan={3} className="px-3 py-2 text-center font-black text-[#22222B] border-b border-[#B0BE8C]/30">Meals</th>
                   </tr>
                   <tr className="bg-[#F3F5F4] text-[10px] uppercase tracking-wider text-slate-600">
                     {monthlyMealLedger.slots.map((slot) => (
-                      <th key={`delivered-${slot}`} className="px-3 py-2 text-center border-b border-r border-[#B0BE8C]/25 capitalize">
-                        {slot}
-                      </th>
-                    ))}
-                    {monthlyMealLedger.slots.map((slot) => (
-                      <th key={`scheduled-${slot}`} className="px-3 py-2 text-center border-b border-r last:border-r-0 border-[#B0BE8C]/25 capitalize">
+                      <th key={`meal-${slot}`} className="px-3 py-2 text-center border-b border-r last:border-r-0 border-[#B0BE8C]/25 capitalize">
                         {slot}
                       </th>
                     ))}
@@ -792,13 +777,8 @@ export default function CustomerDashboard() {
                     <td className="px-3 py-3 border-r border-[#B0BE8C]/25">Monthly Total</td>
                     <td className="px-3 py-3 border-r border-[#B0BE8C]/25">—</td>
                     {monthlyMealLedger.slots.map((slot) => (
-                      <td key={`total-delivered-${slot}`} className="px-3 py-3 text-center text-emerald-800 border-r border-[#B0BE8C]/25">
-                        {monthlyMealLedger.deliveredTotals[slot]}
-                      </td>
-                    ))}
-                    {monthlyMealLedger.slots.map((slot) => (
-                      <td key={`total-scheduled-${slot}`} className="px-3 py-3 text-center text-blue-800 border-r last:border-r-0 border-[#B0BE8C]/25">
-                        {monthlyMealLedger.scheduledTotals[slot]}
+                      <td key={`total-meal-${slot}`} className="px-3 py-3 text-center text-[#22222B] border-r last:border-r-0 border-[#B0BE8C]/25">
+                        {monthlyMealLedger.deliveredTotals[slot] + monthlyMealLedger.scheduledTotals[slot]}
                       </td>
                     ))}
                   </tr>
@@ -810,14 +790,9 @@ export default function CustomerDashboard() {
                       </td>
                       <td className="px-3 py-3 text-slate-600 font-bold border-r border-[#B0BE8C]/20">{row.dayLabel}</td>
                       {monthlyMealLedger.slots.map((slot) => (
-                        <td key={`${row.date}-delivered-${slot}`} className="px-3 py-3 text-center text-emerald-800 font-black border-r border-[#B0BE8C]/20">
-                          {row.delivered[slot]}
-                        </td>
-                      ))}
-                      {monthlyMealLedger.slots.map((slot) => (
-                        <td key={`${row.date}-scheduled-${slot}`} className="px-2 py-2 text-center border-r last:border-r-0 border-[#B0BE8C]/20">
+                        <td key={`${row.date}-meal-${slot}`} className="px-2 py-2 text-center border-r last:border-r-0 border-[#B0BE8C]/20">
                           <div className="flex flex-col items-center gap-1.5">
-                            <span className="font-black text-blue-800">{row.scheduled[slot]}</span>
+                            <span className="font-black text-[#22222B]">{row.delivered[slot] + row.scheduled[slot]}</span>
                             {row.scheduledMeals[slot].length > 0 && (
                               <button
                                 type="button"
