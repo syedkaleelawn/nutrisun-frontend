@@ -105,10 +105,8 @@ export default function AdminCustomerViewPage() {
   }, [scheduleMonth, scheduleYear, selectedCustomerId, user]);
 
   const yearOptions = useMemo(() => {
-    const years = new Set<number>([scheduleYear]);
-    for (let year = currentYear - 3; year <= currentYear + 3; year += 1) years.add(year);
-    return Array.from(years).sort((a, b) => b - a);
-  }, [currentYear, scheduleYear]);
+    return Array.from({ length: currentYear - 2024 + 1 }, (_, index) => currentYear - index);
+  }, [currentYear]);
 
   const ledger = useMemo(() => {
     const createCounts = (): SlotCounts => ({ breakfast: 0, lunch: 0, dinner: 0 });
