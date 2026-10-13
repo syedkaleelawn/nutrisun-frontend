@@ -206,6 +206,7 @@ export interface UserSubscription {
   id: number;
   user_id: number;
   plan_id: number;
+  quantity: number;
   start_date: string;
   end_date: string;
   payment_status: PaymentStatus;
@@ -569,11 +570,12 @@ export const authApi = {
 export const customerApi = {
   getPlans: () =>
     api.get<{ plans: SubscriptionPlan[] }>('/plans'),
-  buyPlan: (plan_id: number, selected_shifts?: string) =>
+  buyPlan: (plan_id: number, selected_shifts?: string, quantity = 1) =>
     api.post<{
       message: string;
       subscription_id: number;
       plan_name: string;
+      quantity: number;
       selected_shifts?: string;
       amount: number;
       upi_id: string;
@@ -583,7 +585,7 @@ export const customerApi = {
       instruction: string;
       upi_url: string;
       status: string;
-    }>('/customer/buy-plan', { plan_id, selected_shifts }),
+    }>('/customer/buy-plan', { plan_id, selected_shifts, quantity }),
   submitPaymentProof: (subscriptionId: number, formData: FormData) =>
     api.post<{
       message: string;
