@@ -208,32 +208,28 @@ export default function AdminCustomerViewPage() {
           </div>
         )}
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[760px] border-collapse text-xs">
+          <table className="w-full min-w-[620px] border-collapse text-xs">
             <thead>
               <tr className="bg-[#F3F5F4] text-[#22222B]">
                 <th rowSpan={2} className="px-3 py-3 text-left font-black border-b border-r border-[#B0BE8C]/30">Date</th>
                 <th rowSpan={2} className="px-3 py-3 text-left font-black border-b border-r border-[#B0BE8C]/30">Day</th>
-                <th colSpan={3} className="px-3 py-2 text-center font-black text-emerald-800 border-b border-r border-[#B0BE8C]/30">Delivered Meals</th>
-                <th colSpan={3} className="px-3 py-2 text-center font-black text-blue-800 border-b border-[#B0BE8C]/30">Scheduled Meals</th>
+                <th colSpan={3} className="px-3 py-2 text-center font-black text-[#22222B] border-b border-[#B0BE8C]/30">Meals</th>
               </tr>
               <tr className="bg-[#F3F5F4] text-[10px] uppercase tracking-wider text-slate-600">
-                {SLOTS.map((slot) => <th key={`delivered-${slot}`} className="px-3 py-2 text-center capitalize border-b border-r border-[#B0BE8C]/25">{slot}</th>)}
-                {SLOTS.map((slot) => <th key={`scheduled-${slot}`} className="px-3 py-2 text-center capitalize border-b border-r last:border-r-0 border-[#B0BE8C]/25">{slot}</th>)}
+                {SLOTS.map((slot) => <th key={`meal-${slot}`} className="px-3 py-2 text-center capitalize border-b border-r last:border-r-0 border-[#B0BE8C]/25">{slot}</th>)}
               </tr>
             </thead>
             <tbody className="divide-y divide-[#B0BE8C]/20">
               <tr className="bg-[#F7DE9D]/25 font-black text-[#22222B]">
                 <td className="px-3 py-3 border-r border-[#B0BE8C]/25">Monthly Total</td>
                 <td className="px-3 py-3 border-r border-[#B0BE8C]/25">—</td>
-                {SLOTS.map((slot) => <td key={`total-delivered-${slot}`} className="px-3 py-3 text-center text-emerald-800 border-r border-[#B0BE8C]/25">{ledger.deliveredTotals[slot]}</td>)}
-                {SLOTS.map((slot) => <td key={`total-scheduled-${slot}`} className="px-3 py-3 text-center text-blue-800 border-r last:border-r-0 border-[#B0BE8C]/25">{ledger.scheduledTotals[slot]}</td>)}
+                {SLOTS.map((slot) => <td key={`total-meal-${slot}`} className="px-3 py-3 text-center text-[#22222B] border-r last:border-r-0 border-[#B0BE8C]/25">{ledger.deliveredTotals[slot] + ledger.scheduledTotals[slot]}</td>)}
               </tr>
               {ledger.rows.map((row) => (
                 <tr key={row.date} className="hover:bg-[#B0BE8C]/10 transition-colors">
                   <td className="px-3 py-3 font-bold text-[#22222B] whitespace-nowrap border-r border-[#B0BE8C]/20">{row.dateLabel}</td>
                   <td className="px-3 py-3 text-slate-600 font-bold border-r border-[#B0BE8C]/20">{row.dayLabel}</td>
-                  {SLOTS.map((slot) => <td key={`${row.date}-delivered-${slot}`} className="px-3 py-3 text-center text-emerald-800 font-black border-r border-[#B0BE8C]/20">{row.delivered[slot]}</td>)}
-                  {SLOTS.map((slot) => <td key={`${row.date}-scheduled-${slot}`} className="px-3 py-3 text-center text-blue-800 font-black border-r last:border-r-0 border-[#B0BE8C]/20">{row.scheduled[slot]}</td>)}
+                  {SLOTS.map((slot) => <td key={`${row.date}-meal-${slot}`} className="px-3 py-3 text-center text-[#22222B] font-black border-r last:border-r-0 border-[#B0BE8C]/20">{row.delivered[slot] + row.scheduled[slot]}</td>)}
                 </tr>
               ))}
             </tbody>
