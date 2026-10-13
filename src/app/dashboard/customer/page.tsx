@@ -81,10 +81,12 @@ export default function CustomerDashboard() {
 
   // "Buy Plan" & Payment Modal state
   const [selectedPlanToBuy, setSelectedPlanToBuy] = useState<SubscriptionPlan | null>(null);
+  const [purchaseQuantity, setPurchaseQuantity] = useState(1);
   const [buying, setBuying] = useState(false);
   const [purchaseSuccessData, setPurchaseSuccessData] = useState<{
     subscription_id: number;
     plan_name: string;
+    quantity: number;
     amount: number;
     upi_id: string;
     payee_name: string;
@@ -225,7 +227,11 @@ export default function CustomerDashboard() {
 
     setBuying(true);
     try {
-      const res = await customerApi.buyPlan(selectedPlanToBuy.id, chosenMealOption || undefined);
+      const res = await customerApi.buyPlan(
+        selectedPlanToBuy.id,
+        chosenMealOption || undefined,
+        purchaseQuantity
+      );
       setPurchaseSuccessData(res.data);
       setReceiptFile(null);
       setReceiptPreviewUrl(null);
@@ -294,6 +300,7 @@ export default function CustomerDashboard() {
     setReceiptFile(null);
     setReceiptPreviewUrl(null);
     setTransactionRef('');
+    setPurchaseQuantity(1);
   };
 
   const handleConfirmSkip = async () => {
@@ -622,7 +629,7 @@ export default function CustomerDashboard() {
                             <span className="text-[#741B22] font-black">{formatShiftName(sub.selected_shifts || sub.plan_snapshot_shifts)}</span>
                           </div>
                           <p className="text-xs text-slate-500 font-medium">
-                            Duration: <strong className="text-[#22222B]">{sub.plan_snapshot_days || 7} Days</strong> • Price: <strong className="text-[#22222B]">₹{sub.plan_snapshot_price?.toFixed(2)}</strong>
+                            Duration: <strong className="text-[#22222B]">{sub.plan_snapshot_days || 7} Days</strong> • Quantity: <strong className="text-[#22222B]">{sub.quantity || 1}</strong> • Total Price: <strong className="text-[#22222B]">₹{sub.plan_snapshot_price?.toFixed(2)}</strong>
                           </p>
                         </div>
 
@@ -940,6 +947,7 @@ export default function CustomerDashboard() {
                     <button
                       onClick={() => {
                         setSelectedPlanToBuy(plan);
+                        setPurchaseQuantity(1);
                         setPurchaseSuccessData(null);
                         const pType = getPlanMealType(plan.name);
                         if (pType === 'OR_LUNCH') {
@@ -1045,11 +1053,35 @@ export default function CustomerDashboard() {
 
                 <div className="space-y-1">
                   <p className="text-xs text-slate-600">
-                    You are subscribing to <strong className="text-[#22222B]">{selectedPlanToBuy.name}</strong> for <strong className="text-[#741B22] font-black">₹{selectedPlanToBuy.price.toFixed(2)}</strong>.
+                    You are subscribing to <strong className="text-[#22222B]">{selectedPlanToBuy.name}</strong> at <strong className="text-[#741B22] font-black">₹{selectedPlanToBuy.price.toFixed(2)}</strong> per plan.
                   </p>
                   <p className="text-[11px] text-slate-500">
-                    Duration: {selectedPlanToBuy.days_count === 7 ? '1 Week (7 Days)' : `1 Month (${selectedPlanToBuy.days_count} Days)`} • Total Servings: {selectedPlanToBuy.meal_credits} meals
+                    Duration: {selectedPlanToBuy.days_count === 7 ? '1 Week (7 Days)' : `1 Month (${selectedPlanToBuy.days_count} Days)`} • Total Servings: {selectedPlanToBuy.meal_credits * purchaseQuantity} meals
                   </p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 rounded-2xl border border-[#B0BE8C]/40 bg-[#F3F5F4] p-3.5">
+                  <label className="space-y-1">
+                    <span className="block text-[11px] font-black uppercase tracking-wide text-[#22222B]">Quantity</span>
+                    <input
+                      type="number"
+                      min={1}
+                      max={99}
+                      inputMode="numeric"
+                      value={purchaseQuantity}
+                      onChange={(event) => {
+                        const nextQuantity = Number.parseInt(event.target.value, 10);
+                        setPurchaseQuantity(Number.isFinite(nextQuantity) ? Math.min(99, Math.max(1, nextQuantity)) : 1);
+                      }}
+                      className="min-h-[44px] w-full rounded-xl border border-[#B0BE8C]/50 bg-white px-3 text-sm font-black text-[#22222B] outline-none focus:border-[#741B22] focus:ring-2 focus:ring-[#741B22]/15"
+                    />
+                  </label>
+                  <div className="space-y-1 text-right">
+                    <span className="block text-[11px] font-black uppercase tracking-wide text-[#22222B]">Total Amount</span>
+                    <div className="flex min-h-[44px] items-center justify-end text-xl font-black text-[#741B22]">
+                      ₹{(selectedPlanToBuy.price * purchaseQuantity).toFixed(2)}
+                    </div>
+                  </div>
                 </div>
 
                 {/* Meal Combination Selection for "OR" Plans */}
@@ -1186,7 +1218,7 @@ export default function CustomerDashboard() {
                       </div>
                       <h3 className="text-lg font-black text-[#22222B]">Manual UPI Payment</h3>
                       <p className="text-xs text-slate-500">
-                        Order #{subId} • Plan: <strong className="text-[#22222B]">{purchaseSuccessData.plan_name}</strong>
+                        Order #{subId} • Plan: <strong className="text-[#22222B]">{purchaseSuccessData.plan_name}</strong> × {purchaseSuccessData.quantity}
                       </p>
                       <div className="inline-block px-3 py-0.5 rounded-full bg-[#B0BE8C]/20 border border-[#B0BE8C]/40 text-xs font-black text-[#741B22]">
                         {formatShiftName(chosenMealOption || selectedPlanToBuy?.shifts)}
@@ -1369,7 +1401,7 @@ export default function CustomerDashboard() {
                 <span className="text-[10px] font-bold text-slate-400 uppercase">Order #{activePaymentModalSub.id}</span>
                 <h3 className="text-lg font-black text-[#22222B]">Manual UPI Payment</h3>
                 <p className="text-xs text-slate-500">
-                  Plan: <strong className="text-[#22222B]">{activePaymentModalSub.plan_snapshot_name || activePaymentModalSub.plan?.name}</strong>
+                  Plan: <strong className="text-[#22222B]">{activePaymentModalSub.plan_snapshot_name || activePaymentModalSub.plan?.name}</strong> × {activePaymentModalSub.quantity || 1}
                 </p>
                 <div className="inline-block mt-1 px-2.5 py-0.5 rounded-full bg-[#B0BE8C]/20 border border-[#B0BE8C]/40 text-xs font-black text-[#741B22]">
                   {formatShiftName(activePaymentModalSub.selected_shifts || activePaymentModalSub.plan_snapshot_shifts)}
