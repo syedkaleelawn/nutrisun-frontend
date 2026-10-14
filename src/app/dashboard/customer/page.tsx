@@ -506,7 +506,7 @@ export default function CustomerDashboard() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="px-3 py-1 rounded-full bg-[#B0BE8C]/25 text-[#22222B] border border-[#B0BE8C]/40 font-medium text-[11px] uppercase tracking-wider">
+              <span className="px-3 py-1 rounded-full bg-[#B0BE8C]/25 text-[#22222B] border border-[#B0BE8C]/40 font-medium text-[11px] tracking-wider">
                 Customer Portal
               </span>
               <span className="text-xs text-slate-500">Subscription Meal Service</span>
@@ -525,7 +525,7 @@ export default function CustomerDashboard() {
 
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 w-full md:w-auto">
             <div className="p-3 rounded-2xl bg-white/90 border border-[#B0BE8C]/35 shadow-xs text-center flex-1 sm:min-w-[110px]">
-              <span className="text-[10px] font-semibold uppercase text-slate-400">Scheduled Meals</span>
+              <span className="text-[10px] font-semibold text-slate-400">Scheduled Meals</span>
               <div className="text-xl sm:text-2xl font-semibold text-[#741B22]">{customerMealTotals.scheduled}</div>
             </div>
             <button
@@ -635,7 +635,7 @@ export default function CustomerDashboard() {
                       <div>
                         <div className="flex flex-wrap items-start justify-between gap-2 mb-2">
                           <div className="min-w-0">
-                            <span className="text-[10px] font-medium text-slate-400 uppercase">Sub #{sub.id}</span>
+                            <span className="text-[10px] font-medium text-slate-400">Sub #{sub.id}</span>
                             <h3 className="text-base font-semibold text-[#22222B] break-words">
                               {sub.plan_snapshot_name || sub.plan?.name || 'Meal Plan'}
                             </h3>
@@ -759,7 +759,7 @@ export default function CustomerDashboard() {
 
               <div className="flex flex-wrap items-end gap-3">
                 <label className="space-y-1">
-                  <span className="block text-[10px] font-semibold uppercase tracking-wider text-slate-500">Month</span>
+                  <span className="block text-[10px] font-semibold tracking-wider text-slate-500">Month</span>
                   <select
                     value={scheduleMonth}
                     onChange={(event) => setScheduleMonth(Number(event.target.value))}
@@ -775,7 +775,7 @@ export default function CustomerDashboard() {
                 </label>
 
                 <label className="space-y-1">
-                  <span className="block text-[10px] font-semibold uppercase tracking-wider text-slate-500">Year</span>
+                  <span className="block text-[10px] font-semibold tracking-wider text-slate-500">Year</span>
                   <select
                     value={scheduleYear}
                     onChange={(event) => setScheduleYear(Number(event.target.value))}
@@ -803,7 +803,7 @@ export default function CustomerDashboard() {
                     <th rowSpan={2} className="px-3 py-3 text-left font-semibold border-b border-r border-[#B0BE8C]/30">Day</th>
                     <th colSpan={3} className="px-3 py-2 text-center font-semibold text-[#22222B] border-b border-[#B0BE8C]/30">Meals</th>
                   </tr>
-                  <tr className="bg-[#F3F5F4] text-[10px] uppercase tracking-wider text-slate-600">
+                  <tr className="bg-[#F3F5F4] text-[10px] tracking-wider text-slate-600">
                     {monthlyMealLedger.slots.map((slot) => (
                       <th key={`meal-${slot}`} className="px-3 py-2 text-center border-b border-r last:border-r-0 border-[#B0BE8C]/25 capitalize">
                         {slot}
@@ -830,7 +830,7 @@ export default function CustomerDashboard() {
                       <td className={`px-3 py-3 font-medium text-[#22222B] whitespace-nowrap border-r border-[#B0BE8C]/20 ${row.date === currentISTDate ? 'border-l-4 border-l-[#B92F25]' : ''}`}>
                         {row.dateLabel}
                         {row.date === currentISTDate && (
-                          <span className="ml-2 rounded-full bg-[#B92F25] px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-white">Today</span>
+                          <span className="ml-2 rounded-full bg-[#B92F25] px-2 py-0.5 text-[9px] font-semibold tracking-wide text-white">Today</span>
                         )}
                       </td>
                       <td className="px-3 py-3 text-slate-600 font-medium border-r border-[#B0BE8C]/20">{row.dayLabel}</td>
@@ -936,7 +936,7 @@ export default function CustomerDashboard() {
                   >
                     {isFeatured && (
                       <div className="absolute -top-3 right-5 sm:right-6">
-                        <span className="px-3 py-1 rounded-full bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80 text-[10px] font-semibold uppercase tracking-wider shadow-xs">
+                        <span className="px-3 py-1 rounded-full bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80 text-[10px] font-semibold tracking-wider shadow-xs">
                           Complete All-Meals Plan
                         </span>
                       </div>
@@ -959,7 +959,7 @@ export default function CustomerDashboard() {
                       <div className="text-xs text-slate-600 space-y-1.5 mb-4">
                         {isOrPlan ? (
                           <div className="p-2.5 rounded-xl bg-[#F7DE9D]/30 border border-[#F7DE9D] space-y-1">
-                            <span className="inline-block px-2 py-0.5 rounded-md bg-[#F7DE9D] text-[#741B22] text-[10px] font-semibold uppercase tracking-wider">
+                            <span className="inline-block px-2 py-0.5 rounded-md bg-[#F7DE9D] text-[#741B22] text-[10px] font-semibold tracking-wider">
                               Meal Choice Required
                             </span>
                             <p className="text-xs text-[#22222B] font-medium">
@@ -1100,7 +1100,7 @@ export default function CustomerDashboard() {
 
                 <div className="grid grid-cols-2 gap-3 rounded-2xl border border-[#B0BE8C]/40 bg-[#F3F5F4] p-3.5">
                   <label className="space-y-1">
-                    <span className="block text-[11px] font-semibold uppercase tracking-wide text-[#22222B]">Quantity</span>
+                    <span className="block text-[11px] font-semibold tracking-wide text-[#22222B]">Quantity</span>
                     <input
                       type="number"
                       min={1}
@@ -1117,7 +1117,7 @@ export default function CustomerDashboard() {
                     />
                   </label>
                   <div className="space-y-1 text-right">
-                    <span className="block text-[11px] font-semibold uppercase tracking-wide text-[#22222B]">Total Amount</span>
+                    <span className="block text-[11px] font-semibold tracking-wide text-[#22222B]">Total Amount</span>
                     <div className="flex min-h-[44px] items-center justify-end text-xl font-semibold text-[#741B22]">
                       ₹{(selectedPlanToBuy.price * purchaseQuantity).toFixed(2)}
                     </div>
@@ -1477,7 +1477,7 @@ export default function CustomerDashboard() {
             {/* Header */}
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
-                <span className="text-[10px] font-medium text-slate-400 uppercase">Order #{activePaymentModalSub.id}</span>
+                <span className="text-[10px] font-medium text-slate-400">Order #{activePaymentModalSub.id}</span>
                 <h3 className="text-lg font-semibold text-[#22222B]">Manual UPI Payment</h3>
                 <p className="text-xs text-slate-500">
                   Plan: <strong className="text-[#22222B]">{activePaymentModalSub.plan_snapshot_name || activePaymentModalSub.plan?.name}</strong> × {activePaymentModalSub.quantity || 1}
