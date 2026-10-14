@@ -11,6 +11,8 @@ import {
   ServiceRequest,
   User,
   AnalyticsResponse,
+  BusinessHoliday,
+  MealSlot,
   fetchReceiptBlobUrl,
 } from '@/lib/api';
 import {
@@ -27,6 +29,7 @@ import {
   AlertTriangle,
   Loader2,
   KeyRound,
+  CalendarOff,
 } from 'lucide-react';
 import SalesAnalyticsModule from '@/components/SalesAnalyticsModule';
 import ChangePasswordModal from '@/components/ChangePasswordModal';
@@ -37,7 +40,7 @@ export default function AdminDashboard() {
 
   // Admin workspace tabs. Menu management remains available in the Monthly Menu section.
   const [activeTab, setActiveTab] = useState<
-    'pending' | 'subscriptions' | 'requests' | 'customers' | 'staff' | 'plans' | 'analytics'
+    'pending' | 'subscriptions' | 'requests' | 'customers' | 'staff' | 'plans' | 'holidays' | 'analytics'
   >('pending');
   const [showAdminChangePassword, setShowAdminChangePassword] = useState(false);
 
@@ -70,6 +73,10 @@ export default function AdminDashboard() {
   const [customers, setCustomers] = useState<User[]>([]);
   const [staff, setStaff] = useState<User[]>([]);
   const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
+  const [holidays, setHolidays] = useState<BusinessHoliday[]>([]);
+  const [holidayDate, setHolidayDate] = useState(() => new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }));
+  const [holidayMealSlot, setHolidayMealSlot] = useState<MealSlot>('breakfast');
+  const [declaringHoliday, setDeclaringHoliday] = useState(false);
   const [_analytics, setAnalytics] = useState<AnalyticsResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState<string | null>(null);
@@ -178,13 +185,14 @@ export default function AdminDashboard() {
   const loadAll = async () => {
     setLoading(true);
     try {
-      const [countsRes, subsRes, reqRes, custRes, staffRes, plansRes, analyticsRes] = await Promise.allSettled([
+      const [countsRes, subsRes, reqRes, custRes, staffRes, plansRes, holidaysRes, analyticsRes] = await Promise.allSettled([
         adminApi.getPendingCounts(),
         adminApi.getSubscriptions(),
         adminApi.getRequests(),
         adminApi.getCustomers(),
         adminApi.getStaff(),
         adminApi.getPlans(),
+        adminApi.getHolidays(),
         adminApi.getAnalytics(),
       ]);
 
@@ -225,6 +233,12 @@ export default function AdminDashboard() {
         failed.push('Plans');
       }
 
+      if (holidaysRes.status === 'fulfilled') {
+        setHolidays(holidaysRes.value.data.holidays || []);
+      } else {
+        failed.push('Holidays');
+      }
+
       if (analyticsRes.status === 'fulfilled') {
         setAnalytics(analyticsRes.value.data);
       } else {
@@ -253,6 +267,22 @@ export default function AdminDashboard() {
   }, [user?.id, user?.role]);
 
   // Handlers
+  const handleDeclareHoliday = async () => {
+    const mealLabel = holidayMealSlot.charAt(0).toUpperCase() + holidayMealSlot.slice(1);
+    if (!confirm(`Declare ${holidayDate} ${mealLabel} as a business holiday? Every scheduled portion will be cancelled and moved to the next available ${mealLabel.toLowerCase()} slot. This cannot be automatically undone.`)) return;
+
+    setDeclaringHoliday(true);
+    try {
+      const res = await adminApi.declareHoliday({ date: holidayDate, meal_slot: holidayMealSlot });
+      setNotification(res.data.message);
+      await loadAll();
+    } catch (err: any) {
+      alert(err.response?.data?.error || 'Failed to declare business holiday.');
+    } finally {
+      setDeclaringHoliday(false);
+    }
+  };
+
   const handleConfirmPayment = async () => {
     if (!confirmSub) return;
     setConfirmingPayment(true);
@@ -586,6 +616,7 @@ export default function AdminDashboard() {
           { id: 'customers', label: `Customers (${customers.length})` },
           { id: 'staff', label: `Staff (${staff.length})` },
           { id: 'plans', label: `Plans (${plans.length})` },
+          { id: 'holidays', label: `Holidays (${holidays.length})` },
           { id: 'analytics', label: 'Analytics' },
         ].map((t) => (
           <button
@@ -1414,7 +1445,102 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      {/* TAB 7: ANALYTICS */}
+      {/* TAB 7: BUSINESS HOLIDAYS */}
+      {activeTab === 'holidays' && (
+        <div className="space-y-4">
+          <div className="glass-card rounded-3xl border border-[#B0BE8C]/35 p-4 sm:p-5">
+            <div className="flex items-start gap-3">
+              <div className="rounded-2xl bg-[#F7DE9D]/60 p-2.5 text-[#741B22]">
+                <CalendarOff className="h-5 w-5" />
+              </div>
+              <div>
+                <h2 className="text-base font-semibold text-[#22222B]">Declare a Business Holiday</h2>
+                <p className="mt-1 max-w-3xl text-xs leading-5 text-slate-600">
+                  Select one date and meal type. All scheduled customer portions for that combination will be cancelled and automatically moved to each customer&apos;s next available slot of the same meal type. Customer cut-off times do not apply.
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] sm:items-end">
+              <label className="space-y-1.5">
+                <span className="block text-[11px] font-medium text-slate-600">Holiday date</span>
+                <input
+                  type="date"
+                  min={new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' })}
+                  value={holidayDate}
+                  onChange={(event) => setHolidayDate(event.target.value)}
+                  className="min-h-[44px] w-full rounded-xl border border-[#B0BE8C]/50 bg-white px-3 text-sm text-[#22222B] outline-none focus:border-[#741B22] focus:ring-2 focus:ring-[#741B22]/15"
+                />
+              </label>
+              <label className="space-y-1.5">
+                <span className="block text-[11px] font-medium text-slate-600">Meal type</span>
+                <select
+                  value={holidayMealSlot}
+                  onChange={(event) => setHolidayMealSlot(event.target.value as MealSlot)}
+                  className="min-h-[44px] w-full rounded-xl border border-[#B0BE8C]/50 bg-white px-3 text-sm text-[#22222B] outline-none focus:border-[#741B22] focus:ring-2 focus:ring-[#741B22]/15"
+                >
+                  <option value="breakfast">Breakfast</option>
+                  <option value="lunch">Lunch</option>
+                  <option value="dinner">Dinner</option>
+                </select>
+              </label>
+              <button
+                type="button"
+                onClick={handleDeclareHoliday}
+                disabled={declaringHoliday || !holidayDate}
+                className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-[#B92F25] px-4 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-[#741B22] disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {declaringHoliday ? <Loader2 className="h-4 w-4 animate-spin" /> : <CalendarOff className="h-4 w-4" />}
+                {declaringHoliday ? 'Declaring…' : 'Declare Holiday'}
+              </button>
+            </div>
+
+            <div className="mt-3 rounded-2xl border border-amber-200 bg-amber-50 px-3.5 py-3 text-[11px] leading-5 text-amber-900">
+              This action reschedules meals immediately and is not affected by late-cancellation rules. Review the date and meal type carefully before confirming.
+            </div>
+          </div>
+
+          <div className="overflow-hidden rounded-3xl border border-[#B0BE8C]/35 bg-white">
+            <div className="border-b border-[#B0BE8C]/25 px-4 py-3">
+              <h3 className="text-sm font-semibold text-[#22222B]">Declared Holidays</h3>
+            </div>
+            {holidays.length === 0 ? (
+              <div className="p-8 text-center text-xs text-slate-500">No business holidays have been declared.</div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[620px] text-left text-xs">
+                  <thead className="bg-[#F3F5F4] text-[#22222B]">
+                    <tr>
+                      <th className="px-4 py-3 font-medium">Date</th>
+                      <th className="px-4 py-3 font-medium">Meal type</th>
+                      <th className="px-4 py-3 font-medium">Meals rescheduled</th>
+                      <th className="px-4 py-3 font-medium">Declared at</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#B0BE8C]/20">
+                    {holidays.map((holiday) => (
+                      <tr key={holiday.id} className="hover:bg-[#B0BE8C]/10">
+                        <td className="px-4 py-3 font-medium text-[#22222B]">
+                          {new Date(`${holiday.date}T00:00:00`).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                        </td>
+                        <td className="px-4 py-3 text-[#741B22]">
+                          {holiday.meal_slot.charAt(0).toUpperCase() + holiday.meal_slot.slice(1)}
+                        </td>
+                        <td className="px-4 py-3 text-slate-700">{holiday.affected_meals}</td>
+                        <td className="px-4 py-3 text-slate-500">
+                          {new Date(holiday.created_at).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'medium', timeStyle: 'short' })}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* TAB 8: ANALYTICS */}
       {activeTab === 'analytics' && (
         <SalesAnalyticsModule onNotification={(msg) => setNotification(msg)} />
       )}
