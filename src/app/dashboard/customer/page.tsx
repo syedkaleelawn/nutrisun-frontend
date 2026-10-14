@@ -314,7 +314,7 @@ export default function CustomerDashboard() {
       }
 
       await customerApi.submitPaymentProof(subId, formData);
-      setNotification('Payment submitted — awaiting admin verification.');
+      setNotification('Payment proof submitted. The admin will review and approve your request within a few hours.');
       setSubmittedProofSubIds((prev) => [...prev, subId]);
       setReceiptFile(null);
       setReceiptPreviewUrl(null);
@@ -701,7 +701,7 @@ export default function CustomerDashboard() {
                                 {hasProof ? (
                                   <div className="text-[11px] text-emerald-900 bg-emerald-50 p-2.5 rounded-xl border border-emerald-200 font-bold flex items-center gap-1.5">
                                     <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                                    <span>Payment submitted — awaiting admin verification.</span>
+                                    <span>Payment proof submitted. The admin will review and approve your request within a few hours.</span>
                                   </div>
                                 ) : (
                                   <div className="text-[11px] text-[#22222B] bg-[#F7DE9D]/40 p-2.5 rounded-xl border border-[#F7DE9D] font-bold flex items-center gap-1.5">
@@ -1376,10 +1376,10 @@ export default function CustomerDashboard() {
                       <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-950 text-xs space-y-1.5">
                         <div className="font-black text-emerald-800 flex items-center gap-1.5">
                           <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                          <span>Payment submitted — awaiting admin verification.</span>
+                          <span>Payment proof submitted.</span>
                         </div>
                         <p className="text-emerald-900 leading-relaxed text-[11px]">
-                          Uploading a screenshot does not automatically mark payment as successful or activate meal meals. The Admin will verify your payment and activate your subscription.
+                          The admin will review and approve your request within a few hours.
                         </p>
                       </div>
                     ) : null}
@@ -1568,10 +1568,10 @@ export default function CustomerDashboard() {
               <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-950 text-xs space-y-1.5">
                 <div className="font-black text-emerald-800 flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>Payment submitted — awaiting admin verification.</span>
+                  <span>Payment proof submitted.</span>
                 </div>
                 <p className="text-emerald-900 leading-relaxed text-[11px]">
-                  Uploading a screenshot does not automatically mark payment as successful or activate meal meals. The Admin will verify your payment and activate your subscription.
+                  The admin will review and approve your request within a few hours.
                 </p>
                 {activePaymentModalSub.payment_record?.proof_image_url && (
                   <div className="pt-1">
