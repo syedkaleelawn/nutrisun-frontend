@@ -158,12 +158,12 @@ export default function AdminCustomerViewPage() {
       <div className="glass-card rounded-3xl p-4 sm:p-5 border border-[#B0BE8C]/35 shadow-sm">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
           <label className="space-y-1 flex-1">
-            <span className="block text-[10px] font-black uppercase tracking-wider text-slate-500">Customer</span>
+            <span className="block text-[10px] font-semibold uppercase tracking-wider text-slate-500">Customer</span>
             <select
               value={selectedCustomerId ?? ''}
               onChange={(event) => setSelectedCustomerId(Number(event.target.value))}
               disabled={customers.length === 0}
-              className="w-full min-h-[44px] rounded-xl border border-[#B0BE8C]/50 bg-white px-3 text-xs font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#741B22]/20 disabled:opacity-60"
+              className="w-full min-h-[44px] rounded-xl border border-[#B0BE8C]/50 bg-white px-3 text-xs font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#741B22]/20 disabled:opacity-60"
             >
               {customers.length === 0 && <option value="">No customers found</option>}
               {customers.map((customer) => (
@@ -174,21 +174,21 @@ export default function AdminCustomerViewPage() {
 
           <div className="flex flex-wrap items-end gap-3">
             <label className="space-y-1 flex-1 sm:flex-none">
-              <span className="block text-[10px] font-black uppercase tracking-wider text-slate-500">Month</span>
+              <span className="block text-[10px] font-semibold uppercase tracking-wider text-slate-500">Month</span>
               <select
                 value={scheduleMonth}
                 onChange={(event) => setScheduleMonth(Number(event.target.value))}
-                className="w-full min-h-[44px] rounded-xl border border-[#B0BE8C]/50 bg-white px-3 text-xs font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#741B22]/20"
+                className="w-full min-h-[44px] rounded-xl border border-[#B0BE8C]/50 bg-white px-3 text-xs font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#741B22]/20"
               >
                 {MONTHS.map((month, index) => <option key={month} value={index + 1}>{month}</option>)}
               </select>
             </label>
             <label className="space-y-1 flex-1 sm:flex-none">
-              <span className="block text-[10px] font-black uppercase tracking-wider text-slate-500">Year</span>
+              <span className="block text-[10px] font-semibold uppercase tracking-wider text-slate-500">Year</span>
               <select
                 value={scheduleYear}
                 onChange={(event) => setScheduleYear(Number(event.target.value))}
-                className="w-full min-h-[44px] rounded-xl border border-[#B0BE8C]/50 bg-white px-3 text-xs font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#741B22]/20"
+                className="w-full min-h-[44px] rounded-xl border border-[#B0BE8C]/50 bg-white px-3 text-xs font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#741B22]/20"
               >
                 {yearOptions.map((year) => <option key={year} value={year}>{year}</option>)}
               </select>
@@ -197,7 +197,7 @@ export default function AdminCustomerViewPage() {
         </div>
       </div>
 
-      {error && <div className="rounded-2xl border border-rose-200 bg-rose-50 p-3.5 text-xs font-bold text-rose-800">{error}</div>}
+      {error && <div className="rounded-2xl border border-rose-200 bg-rose-50 p-3.5 text-xs font-medium text-rose-800">{error}</div>}
 
       <div className="glass-card rounded-3xl border border-[#B0BE8C]/35 shadow-sm overflow-hidden relative">
         {loadingMeals && (
@@ -209,16 +209,16 @@ export default function AdminCustomerViewPage() {
           <table className="w-full min-w-[620px] border-collapse text-xs">
             <thead>
               <tr className="bg-[#F3F5F4] text-[#22222B]">
-                <th rowSpan={2} className="px-3 py-3 text-left font-black border-b border-r border-[#B0BE8C]/30">Date</th>
-                <th rowSpan={2} className="px-3 py-3 text-left font-black border-b border-r border-[#B0BE8C]/30">Day</th>
-                <th colSpan={3} className="px-3 py-2 text-center font-black text-[#22222B] border-b border-[#B0BE8C]/30">Meals</th>
+                <th rowSpan={2} className="px-3 py-3 text-left font-semibold border-b border-r border-[#B0BE8C]/30">Date</th>
+                <th rowSpan={2} className="px-3 py-3 text-left font-semibold border-b border-r border-[#B0BE8C]/30">Day</th>
+                <th colSpan={3} className="px-3 py-2 text-center font-semibold text-[#22222B] border-b border-[#B0BE8C]/30">Meals</th>
               </tr>
               <tr className="bg-[#F3F5F4] text-[10px] uppercase tracking-wider text-slate-600">
                 {SLOTS.map((slot) => <th key={`meal-${slot}`} className="px-3 py-2 text-center capitalize border-b border-r last:border-r-0 border-[#B0BE8C]/25">{slot}</th>)}
               </tr>
             </thead>
             <tbody className="divide-y divide-[#B0BE8C]/20">
-              <tr className="bg-[#F7DE9D]/25 font-black text-[#22222B]">
+              <tr className="bg-[#F7DE9D]/25 font-semibold text-[#22222B]">
                 <td className="px-3 py-3 border-r border-[#B0BE8C]/25">Monthly Total</td>
                 <td className="px-3 py-3 border-r border-[#B0BE8C]/25">—</td>
                 {SLOTS.map((slot) => <td key={`total-meal-${slot}`} className="px-3 py-3 text-center text-[#22222B] border-r last:border-r-0 border-[#B0BE8C]/25">{ledger.deliveredTotals[slot] + ledger.scheduledTotals[slot]}</td>)}
@@ -228,14 +228,14 @@ export default function AdminCustomerViewPage() {
                   key={row.date}
                   className={`transition-colors ${row.date === currentISTDate ? 'bg-[#F7DE9D]/55' : 'hover:bg-[#B0BE8C]/10'}`}
                 >
-                  <td className={`px-3 py-3 font-bold text-[#22222B] whitespace-nowrap border-r border-[#B0BE8C]/20 ${row.date === currentISTDate ? 'border-l-4 border-l-[#B92F25]' : ''}`}>
+                  <td className={`px-3 py-3 font-medium text-[#22222B] whitespace-nowrap border-r border-[#B0BE8C]/20 ${row.date === currentISTDate ? 'border-l-4 border-l-[#B92F25]' : ''}`}>
                     {row.dateLabel}
                     {row.date === currentISTDate && (
-                      <span className="ml-2 rounded-full bg-[#B92F25] px-2 py-0.5 text-[9px] font-black uppercase tracking-wide text-white">Today</span>
+                      <span className="ml-2 rounded-full bg-[#B92F25] px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-white">Today</span>
                     )}
                   </td>
-                  <td className="px-3 py-3 text-slate-600 font-bold border-r border-[#B0BE8C]/20">{row.dayLabel}</td>
-                  {SLOTS.map((slot) => <td key={`${row.date}-meal-${slot}`} className="px-3 py-3 text-center text-[#22222B] font-black border-r last:border-r-0 border-[#B0BE8C]/20">{row.delivered[slot] + row.scheduled[slot]}</td>)}
+                  <td className="px-3 py-3 text-slate-600 font-medium border-r border-[#B0BE8C]/20">{row.dayLabel}</td>
+                  {SLOTS.map((slot) => <td key={`${row.date}-meal-${slot}`} className="px-3 py-3 text-center text-[#22222B] font-semibold border-r last:border-r-0 border-[#B0BE8C]/20">{row.delivered[slot] + row.scheduled[slot]}</td>)}
                 </tr>
               ))}
             </tbody>

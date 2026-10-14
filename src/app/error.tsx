@@ -21,7 +21,7 @@ export default function GlobalErrorComponent({ error, reset }: ErrorProps) {
         <div className="w-14 h-14 bg-rose-100 rounded-2xl flex items-center justify-center mx-auto mb-4 text-[#B92F25]">
           <AlertTriangle className="w-7 h-7" />
         </div>
-        <h2 className="text-xl font-bold text-[#22222B]">Something went wrong</h2>
+        <h2 className="text-xl font-medium text-[#22222B]">Something went wrong</h2>
         <p className="text-xs sm:text-sm text-slate-500 mt-2 mb-6">
           We encountered an unexpected interface error. Our engineering team has been notified.
         </p>
@@ -30,14 +30,14 @@ export default function GlobalErrorComponent({ error, reset }: ErrorProps) {
           <button
             type="button"
             onClick={() => reset()}
-            className="flex-1 py-3 px-4 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-md shadow-[#B92F25]/20 active:scale-95"
+            className="flex-1 py-3 px-4 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white font-medium text-xs flex items-center justify-center gap-2 transition-all shadow-md shadow-[#B92F25]/20 active:scale-95"
           >
             <RotateCcw className="w-4 h-4" />
             <span>Try Again</span>
           </button>
           <Link
             href="/"
-            className="flex-1 py-3 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center justify-center gap-2 transition-all active:scale-95"
+            className="flex-1 py-3 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-xs flex items-center justify-center gap-2 transition-all active:scale-95"
           >
             <Home className="w-4 h-4" />
             <span>Return Home</span>

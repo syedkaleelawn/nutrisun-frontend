@@ -506,12 +506,12 @@ export default function CustomerDashboard() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="px-3 py-1 rounded-full bg-[#B0BE8C]/25 text-[#22222B] border border-[#B0BE8C]/40 font-bold text-[11px] uppercase tracking-wider">
+              <span className="px-3 py-1 rounded-full bg-[#B0BE8C]/25 text-[#22222B] border border-[#B0BE8C]/40 font-medium text-[11px] uppercase tracking-wider">
                 Customer Portal
               </span>
               <span className="text-xs text-slate-500">Subscription Meal Service</span>
             </div>
-            <h1 className="text-xl sm:text-3xl font-black text-[#22222B] mt-2 break-words">
+            <h1 className="text-xl sm:text-3xl font-semibold text-[#22222B] mt-2 break-words">
               Welcome back, {user?.name}!
             </h1>
             <div className="flex flex-wrap items-center gap-1.5 text-xs text-slate-600 mt-1.5">
@@ -525,12 +525,12 @@ export default function CustomerDashboard() {
 
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 w-full md:w-auto">
             <div className="p-3 rounded-2xl bg-white/90 border border-[#B0BE8C]/35 shadow-xs text-center flex-1 sm:min-w-[110px]">
-              <span className="text-[10px] font-black uppercase text-slate-400">Scheduled Meals</span>
-              <div className="text-xl sm:text-2xl font-black text-[#741B22]">{customerMealTotals.scheduled}</div>
+              <span className="text-[10px] font-semibold uppercase text-slate-400">Scheduled Meals</span>
+              <div className="text-xl sm:text-2xl font-semibold text-[#741B22]">{customerMealTotals.scheduled}</div>
             </div>
             <button
               onClick={() => setActiveTab('plans')}
-              className="min-h-[44px] px-5 py-3 rounded-2xl bg-[#B92F25] hover:bg-[#741B22] text-white font-black text-xs shadow-md shadow-[#B92F25]/20 transition-all active:scale-95 flex items-center justify-center gap-2 w-full sm:w-auto"
+              className="min-h-[44px] px-5 py-3 rounded-2xl bg-[#B92F25] hover:bg-[#741B22] text-white font-semibold text-xs shadow-md shadow-[#B92F25]/20 transition-all active:scale-95 flex items-center justify-center gap-2 w-full sm:w-auto"
             >
               <CreditCard className="w-4 h-4 shrink-0" />
               Buy / Add Plan
@@ -541,13 +541,13 @@ export default function CustomerDashboard() {
 
       {notification && (
         <div className="p-3.5 sm:p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div className="flex items-center gap-2 font-bold break-words min-w-0">
+          <div className="flex items-center gap-2 font-medium break-words min-w-0">
             <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
             <span>{notification}</span>
           </div>
           <button
             onClick={() => setNotification(null)}
-            className="min-h-[44px] px-2 py-1 text-emerald-700 hover:underline text-[11px] font-bold self-end sm:self-auto flex items-center"
+            className="min-h-[44px] px-2 py-1 text-emerald-700 hover:underline text-[11px] font-medium self-end sm:self-auto flex items-center"
           >
             Dismiss
           </button>
@@ -556,7 +556,7 @@ export default function CustomerDashboard() {
 
       {loadErrors.length > 0 && (
         <div className="p-3.5 sm:p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
-          <div className="flex items-center gap-2 font-bold break-words min-w-0">
+          <div className="flex items-center gap-2 font-medium break-words min-w-0">
             <AlertCircle className="w-5 h-5 text-amber-600 shrink-0" />
             <span>
               Could not sync latest {loadErrors.join(', ')} due to a network delay. Data shown below may be partial.
@@ -565,7 +565,7 @@ export default function CustomerDashboard() {
           <button
             type="button"
             onClick={() => loadData()}
-            className="min-h-[40px] px-3.5 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-black text-xs shrink-0 flex items-center gap-1.5 transition-all self-end sm:self-auto"
+            className="min-h-[40px] px-3.5 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs shrink-0 flex items-center gap-1.5 transition-all self-end sm:self-auto"
           >
             <RefreshCw className="w-3.5 h-3.5" />
             Retry Sync
@@ -584,7 +584,7 @@ export default function CustomerDashboard() {
           <button
             key={t.id}
             onClick={() => setActiveTab(t.id as any)}
-            className={`min-h-[44px] px-3.5 sm:px-4 py-2.5 rounded-2xl text-xs font-black whitespace-nowrap transition-all shrink-0 flex items-center justify-center ${
+            className={`min-h-[44px] px-3.5 sm:px-4 py-2.5 rounded-2xl text-xs font-semibold whitespace-nowrap transition-all shrink-0 flex items-center justify-center ${
               activeTab === t.id
                 ? 'bg-[#B0BE8C] text-[#22222B] shadow-xs border border-[#B0BE8C]'
                 : 'text-[#22222B]/75 hover:bg-[#B0BE8C]/20 hover:text-[#22222B]'
@@ -600,18 +600,18 @@ export default function CustomerDashboard() {
         <div className="space-y-6">
           {/* Active / Pending Subscriptions */}
           <div>
-            <h2 className="text-base font-black text-[#22222B] mb-3 flex items-center gap-2">
+            <h2 className="text-base font-semibold text-[#22222B] mb-3 flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-[#741B22] shrink-0" />
               My Plans & Subscriptions
             </h2>
 
             {subscriptions.length === 0 ? (
               <div className="glass-card rounded-2xl p-6 sm:p-8 text-center text-slate-500 border border-[#B0BE8C]/35">
-                <p className="font-bold text-sm text-[#22222B]">No subscriptions found.</p>
+                <p className="font-medium text-sm text-[#22222B]">No subscriptions found.</p>
                 <p className="text-xs mt-1">Browse our chef-crafted meal packages and subscribe today!</p>
                 <button
                   onClick={() => setActiveTab('plans')}
-                  className="mt-4 min-h-[44px] px-5 py-2.5 bg-[#B92F25] hover:bg-[#741B22] text-white rounded-xl text-xs font-bold transition-colors inline-flex items-center justify-center"
+                  className="mt-4 min-h-[44px] px-5 py-2.5 bg-[#B92F25] hover:bg-[#741B22] text-white rounded-xl text-xs font-medium transition-colors inline-flex items-center justify-center"
                 >
                   Explore Plans
                 </button>
@@ -635,24 +635,24 @@ export default function CustomerDashboard() {
                       <div>
                         <div className="flex flex-wrap items-start justify-between gap-2 mb-2">
                           <div className="min-w-0">
-                            <span className="text-[10px] font-bold text-slate-400 uppercase">Sub #{sub.id}</span>
-                            <h3 className="text-base font-black text-[#22222B] break-words">
+                            <span className="text-[10px] font-medium text-slate-400 uppercase">Sub #{sub.id}</span>
+                            <h3 className="text-base font-semibold text-[#22222B] break-words">
                               {sub.plan_snapshot_name || sub.plan?.name || 'Meal Plan'}
                             </h3>
                           </div>
                           <div>
                             {isPending && (
-                              <span className="px-2.5 py-1 rounded-full bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80 text-[10px] font-bold shadow-2xs whitespace-nowrap">
+                              <span className="px-2.5 py-1 rounded-full bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80 text-[10px] font-medium shadow-2xs whitespace-nowrap">
                                 Payment Pending
                               </span>
                             )}
                             {isActive && (
-                              <span className="px-2.5 py-1 rounded-full bg-[#B0BE8C]/30 text-[#22222B] text-[10px] font-bold border border-[#B0BE8C] whitespace-nowrap">
+                              <span className="px-2.5 py-1 rounded-full bg-[#B0BE8C]/30 text-[#22222B] text-[10px] font-medium border border-[#B0BE8C] whitespace-nowrap">
                                 Active
                               </span>
                             )}
                             {sub.status === 'COMPLETED' && (
-                              <span className="px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 text-[10px] font-bold border border-slate-200 whitespace-nowrap">
+                              <span className="px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 text-[10px] font-medium border border-slate-200 whitespace-nowrap">
                                 Completed
                               </span>
                             )}
@@ -660,9 +660,9 @@ export default function CustomerDashboard() {
                         </div>
 
                         <div className="mb-3 space-y-1">
-                          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#B0BE8C]/20 border border-[#B0BE8C]/35 text-xs font-bold text-[#22222B]">
+                          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#B0BE8C]/20 border border-[#B0BE8C]/35 text-xs font-medium text-[#22222B]">
                             <span>Meals:</span>
-                            <span className="text-[#741B22] font-black">{formatShiftName(sub.selected_shifts || sub.plan_snapshot_shifts)}</span>
+                            <span className="text-[#741B22] font-semibold">{formatShiftName(sub.selected_shifts || sub.plan_snapshot_shifts)}</span>
                           </div>
                           <p className="text-xs text-slate-500 font-medium">
                             Duration: <strong className="text-[#22222B]">{sub.plan_snapshot_days || 7} Days</strong> • Quantity: <strong className="text-[#22222B]">{sub.quantity || 1}</strong> • Total Price: <strong className="text-[#22222B]">₹{sub.plan_snapshot_price?.toFixed(2)}</strong>
@@ -672,16 +672,16 @@ export default function CustomerDashboard() {
                         {/* Live meal-log summary */}
                         <div className="grid grid-cols-3 gap-1.5 sm:gap-2 p-2.5 sm:p-3 rounded-2xl bg-[#F3F5F4] border border-[#B0BE8C]/30 text-center mb-3">
                           <div>
-                            <div className="text-[10px] font-bold text-slate-400">Total Meals</div>
-                            <div className="text-sm font-black text-[#22222B]">{mealSummary.total}</div>
+                            <div className="text-[10px] font-medium text-slate-400">Total Meals</div>
+                            <div className="text-sm font-semibold text-[#22222B]">{mealSummary.total}</div>
                           </div>
                           <div>
-                            <div className="text-[10px] font-bold text-slate-400">Delivered Meals</div>
-                            <div className="text-sm font-black text-emerald-700">{mealSummary.delivered}</div>
+                            <div className="text-[10px] font-medium text-slate-400">Delivered Meals</div>
+                            <div className="text-sm font-semibold text-emerald-700">{mealSummary.delivered}</div>
                           </div>
                           <div>
-                            <div className="text-[10px] font-bold text-slate-400">Scheduled Meals</div>
-                            <div className="text-sm font-black text-blue-700">{mealSummary.scheduled}</div>
+                            <div className="text-[10px] font-medium text-slate-400">Scheduled Meals</div>
+                            <div className="text-sm font-semibold text-blue-700">{mealSummary.scheduled}</div>
                           </div>
                         </div>
 
@@ -699,12 +699,12 @@ export default function CustomerDashboard() {
                             return (
                               <div className="w-full space-y-2">
                                 {hasProof ? (
-                                  <div className="text-[11px] text-emerald-900 bg-emerald-50 p-2.5 rounded-xl border border-emerald-200 font-bold flex items-center gap-1.5">
+                                  <div className="text-[11px] text-emerald-900 bg-emerald-50 p-2.5 rounded-xl border border-emerald-200 font-medium flex items-center gap-1.5">
                                     <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                                     <span>Payment proof submitted. The admin will review and approve your request within a few hours.</span>
                                   </div>
                                 ) : (
-                                  <div className="text-[11px] text-[#22222B] bg-[#F7DE9D]/40 p-2.5 rounded-xl border border-[#F7DE9D] font-bold flex items-center gap-1.5">
+                                  <div className="text-[11px] text-[#22222B] bg-[#F7DE9D]/40 p-2.5 rounded-xl border border-[#F7DE9D] font-medium flex items-center gap-1.5">
                                     <Clock className="w-4 h-4 text-[#741B22] shrink-0" />
                                     <span>Payment Pending — Scan QR & upload payment screenshot</span>
                                   </div>
@@ -716,7 +716,7 @@ export default function CustomerDashboard() {
                                     setReceiptPreviewUrl(null);
                                     setTransactionRef('');
                                   }}
-                                  className="w-full min-h-[44px] px-4 py-2.5 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white text-xs font-black transition-all flex items-center justify-center gap-1.5 shadow-xs"
+                                  className="w-full min-h-[44px] px-4 py-2.5 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white text-xs font-semibold transition-all flex items-center justify-center gap-1.5 shadow-xs"
                                 >
                                   <CreditCard className="w-4 h-4 shrink-0" />
                                   <span>{hasProof ? 'View Payment Details / Re-upload' : 'View QR & Submit Payment Proof'}</span>
@@ -727,7 +727,7 @@ export default function CustomerDashboard() {
                         ) : isActive ? (
                           <button
                             onClick={() => setActiveTab('schedule')}
-                            className="w-full min-h-[44px] px-4 py-2 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-all flex items-center justify-center gap-1.5"
+                            className="w-full min-h-[44px] px-4 py-2 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-medium transition-all flex items-center justify-center gap-1.5"
                           >
                             <SkipForward className="w-4 h-4 text-[#741B22] shrink-0" />
                             Cancel Meals from Schedule
@@ -751,7 +751,7 @@ export default function CustomerDashboard() {
           <div className="glass-card rounded-3xl p-4 sm:p-5 border border-[#B0BE8C]/35 shadow-sm space-y-4">
             <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
               <div>
-                <h2 className="text-base font-black text-[#22222B]">Meal Schedule & Cancellations</h2>
+                <h2 className="text-base font-semibold text-[#22222B]">Meal Schedule & Cancellations</h2>
                 <p className="text-xs text-slate-500 mt-1">
                   Every active meal is classified by its service time as delivered or scheduled. Cancelled source entries are excluded.
                 </p>
@@ -759,11 +759,11 @@ export default function CustomerDashboard() {
 
               <div className="flex flex-wrap items-end gap-3">
                 <label className="space-y-1">
-                  <span className="block text-[10px] font-black uppercase tracking-wider text-slate-500">Month</span>
+                  <span className="block text-[10px] font-semibold uppercase tracking-wider text-slate-500">Month</span>
                   <select
                     value={scheduleMonth}
                     onChange={(event) => setScheduleMonth(Number(event.target.value))}
-                    className="min-h-[44px] rounded-xl border border-[#B0BE8C]/50 bg-white px-3 text-xs font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#741B22]/20"
+                    className="min-h-[44px] rounded-xl border border-[#B0BE8C]/50 bg-white px-3 text-xs font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#741B22]/20"
                   >
                     {[
                       'January', 'February', 'March', 'April', 'May', 'June',
@@ -775,11 +775,11 @@ export default function CustomerDashboard() {
                 </label>
 
                 <label className="space-y-1">
-                  <span className="block text-[10px] font-black uppercase tracking-wider text-slate-500">Year</span>
+                  <span className="block text-[10px] font-semibold uppercase tracking-wider text-slate-500">Year</span>
                   <select
                     value={scheduleYear}
                     onChange={(event) => setScheduleYear(Number(event.target.value))}
-                    className="min-h-[44px] rounded-xl border border-[#B0BE8C]/50 bg-white px-3 text-xs font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#741B22]/20"
+                    className="min-h-[44px] rounded-xl border border-[#B0BE8C]/50 bg-white px-3 text-xs font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#741B22]/20"
                   >
                     {scheduleYearOptions.map((year) => (
                       <option key={year} value={year}>{year}</option>
@@ -789,7 +789,7 @@ export default function CustomerDashboard() {
               </div>
             </div>
 
-            <p className="text-[11px] font-bold text-slate-600">
+            <p className="text-[11px] font-medium text-slate-600">
               Future meals can be cancelled using the action shown below their meal count.
             </p>
           </div>
@@ -799,9 +799,9 @@ export default function CustomerDashboard() {
               <table className="w-full min-w-[620px] border-collapse text-xs">
                 <thead>
                   <tr className="bg-[#F3F5F4] text-[#22222B]">
-                    <th rowSpan={2} className="px-3 py-3 text-left font-black border-b border-r border-[#B0BE8C]/30">Date</th>
-                    <th rowSpan={2} className="px-3 py-3 text-left font-black border-b border-r border-[#B0BE8C]/30">Day</th>
-                    <th colSpan={3} className="px-3 py-2 text-center font-black text-[#22222B] border-b border-[#B0BE8C]/30">Meals</th>
+                    <th rowSpan={2} className="px-3 py-3 text-left font-semibold border-b border-r border-[#B0BE8C]/30">Date</th>
+                    <th rowSpan={2} className="px-3 py-3 text-left font-semibold border-b border-r border-[#B0BE8C]/30">Day</th>
+                    <th colSpan={3} className="px-3 py-2 text-center font-semibold text-[#22222B] border-b border-[#B0BE8C]/30">Meals</th>
                   </tr>
                   <tr className="bg-[#F3F5F4] text-[10px] uppercase tracking-wider text-slate-600">
                     {monthlyMealLedger.slots.map((slot) => (
@@ -812,7 +812,7 @@ export default function CustomerDashboard() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#B0BE8C]/20">
-                  <tr className="bg-[#F7DE9D]/25 font-black text-[#22222B]">
+                  <tr className="bg-[#F7DE9D]/25 font-semibold text-[#22222B]">
                     <td className="px-3 py-3 border-r border-[#B0BE8C]/25">Monthly Total</td>
                     <td className="px-3 py-3 border-r border-[#B0BE8C]/25">—</td>
                     {monthlyMealLedger.slots.map((slot) => (
@@ -827,17 +827,17 @@ export default function CustomerDashboard() {
                       key={row.date}
                       className={`align-top transition-colors ${row.date === currentISTDate ? 'bg-[#F7DE9D]/55' : 'hover:bg-[#B0BE8C]/10'}`}
                     >
-                      <td className={`px-3 py-3 font-bold text-[#22222B] whitespace-nowrap border-r border-[#B0BE8C]/20 ${row.date === currentISTDate ? 'border-l-4 border-l-[#B92F25]' : ''}`}>
+                      <td className={`px-3 py-3 font-medium text-[#22222B] whitespace-nowrap border-r border-[#B0BE8C]/20 ${row.date === currentISTDate ? 'border-l-4 border-l-[#B92F25]' : ''}`}>
                         {row.dateLabel}
                         {row.date === currentISTDate && (
-                          <span className="ml-2 rounded-full bg-[#B92F25] px-2 py-0.5 text-[9px] font-black uppercase tracking-wide text-white">Today</span>
+                          <span className="ml-2 rounded-full bg-[#B92F25] px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-white">Today</span>
                         )}
                       </td>
-                      <td className="px-3 py-3 text-slate-600 font-bold border-r border-[#B0BE8C]/20">{row.dayLabel}</td>
+                      <td className="px-3 py-3 text-slate-600 font-medium border-r border-[#B0BE8C]/20">{row.dayLabel}</td>
                       {monthlyMealLedger.slots.map((slot) => (
                         <td key={`${row.date}-meal-${slot}`} className="px-2 py-2 text-center border-r last:border-r-0 border-[#B0BE8C]/20">
                           <div className="flex flex-col items-center gap-1.5">
-                            <span className="font-black text-[#22222B]">{row.delivered[slot] + row.scheduled[slot]}</span>
+                            <span className="font-semibold text-[#22222B]">{row.delivered[slot] + row.scheduled[slot]}</span>
                             {row.scheduledMeals[slot].length > 0 && (
                               <button
                                 type="button"
@@ -845,7 +845,7 @@ export default function CustomerDashboard() {
                                   setMealsToSkip(row.scheduledMeals[slot]);
                                   setSkipQuantity(1);
                                 }}
-                                className="min-h-[32px] px-2.5 py-1 rounded-lg border border-[#B92F25]/40 bg-white hover:bg-[#B92F25]/10 text-[#B92F25] text-[10px] font-black transition-colors whitespace-nowrap"
+                                className="min-h-[32px] px-2.5 py-1 rounded-lg border border-[#B92F25]/40 bg-white hover:bg-[#B92F25]/10 text-[#B92F25] text-[10px] font-semibold transition-colors whitespace-nowrap"
                                 aria-label={`Cancel ${slot} meals on ${row.date}`}
                               >
                                 Cancel
@@ -868,7 +868,7 @@ export default function CustomerDashboard() {
         <div className="space-y-5">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
-              <h2 className="text-base font-black text-[#22222B]">Available Subscription Packages</h2>
+              <h2 className="text-base font-semibold text-[#22222B]">Available Subscription Packages</h2>
               <p className="text-xs text-slate-500">
                 Each subscription is for one person. Sunday deliveries included.
               </p>
@@ -879,7 +879,7 @@ export default function CustomerDashboard() {
               <button
                 type="button"
                 onClick={() => setPlanFilter('all')}
-                className={`min-h-[40px] px-3.5 py-1.5 rounded-xl text-xs font-black transition-all ${
+                className={`min-h-[40px] px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
                   planFilter === 'all'
                     ? 'bg-[#B0BE8C] text-[#22222B] shadow-2xs'
                     : 'text-slate-600 hover:text-[#22222B]'
@@ -890,7 +890,7 @@ export default function CustomerDashboard() {
               <button
                 type="button"
                 onClick={() => setPlanFilter('weekly')}
-                className={`min-h-[40px] px-3.5 py-1.5 rounded-xl text-xs font-black transition-all ${
+                className={`min-h-[40px] px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
                   planFilter === 'weekly'
                     ? 'bg-[#B0BE8C] text-[#22222B] shadow-2xs'
                     : 'text-slate-600 hover:text-[#22222B]'
@@ -901,7 +901,7 @@ export default function CustomerDashboard() {
               <button
                 type="button"
                 onClick={() => setPlanFilter('monthly')}
-                className={`min-h-[40px] px-3.5 py-1.5 rounded-xl text-xs font-black transition-all ${
+                className={`min-h-[40px] px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
                   planFilter === 'monthly'
                     ? 'bg-[#B0BE8C] text-[#22222B] shadow-2xs'
                     : 'text-slate-600 hover:text-[#22222B]'
@@ -936,22 +936,22 @@ export default function CustomerDashboard() {
                   >
                     {isFeatured && (
                       <div className="absolute -top-3 right-5 sm:right-6">
-                        <span className="px-3 py-1 rounded-full bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80 text-[10px] font-black uppercase tracking-wider shadow-xs">
+                        <span className="px-3 py-1 rounded-full bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80 text-[10px] font-semibold uppercase tracking-wider shadow-xs">
                           Complete All-Meals Plan
                         </span>
                       </div>
                     )}
                     <div>
-                      <div className="flex items-center justify-between text-xs text-slate-400 font-bold mb-1">
+                      <div className="flex items-center justify-between text-xs text-slate-400 font-medium mb-1">
                         <span className="px-2 py-0.5 rounded-md bg-[#F3F5F4] border border-[#B0BE8C]/30 text-[#22222B]">
                           {isWeekly ? '1 Week (7 Days)' : `1 Month (${plan.days_count} Days)`}
                         </span>
-                        <span className="font-bold text-slate-600">{plan.meal_credits} Servings</span>
+                        <span className="font-medium text-slate-600">{plan.meal_credits} Servings</span>
                       </div>
 
-                      <h3 className="text-lg font-black text-[#22222B] mt-2 break-words">{plan.name}</h3>
+                      <h3 className="text-lg font-semibold text-[#22222B] mt-2 break-words">{plan.name}</h3>
 
-                      <div className="text-2xl font-black text-[#741B22] my-3">
+                      <div className="text-2xl font-semibold text-[#741B22] my-3">
                         ₹{plan.price.toFixed(2)}
                       </div>
 
@@ -959,10 +959,10 @@ export default function CustomerDashboard() {
                       <div className="text-xs text-slate-600 space-y-1.5 mb-4">
                         {isOrPlan ? (
                           <div className="p-2.5 rounded-xl bg-[#F7DE9D]/30 border border-[#F7DE9D] space-y-1">
-                            <span className="inline-block px-2 py-0.5 rounded-md bg-[#F7DE9D] text-[#741B22] text-[10px] font-black uppercase tracking-wider">
+                            <span className="inline-block px-2 py-0.5 rounded-md bg-[#F7DE9D] text-[#741B22] text-[10px] font-semibold uppercase tracking-wider">
                               Meal Choice Required
                             </span>
-                            <p className="text-xs text-[#22222B] font-bold">
+                            <p className="text-xs text-[#22222B] font-medium">
                               {planType === 'OR_LUNCH'
                                 ? 'Choose: Breakfast + Lunch OR Lunch + Dinner (2 meals/day)'
                                 : 'Choose: Breakfast OR Dinner (1 meal/day)'}
@@ -996,7 +996,7 @@ export default function CustomerDashboard() {
                           setChosenMealOption('');
                         }
                       }}
-                      className="w-full min-h-[44px] py-3 px-4 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white font-black text-xs shadow-md shadow-[#B92F25]/20 transition-all active:scale-95 flex items-center justify-center"
+                      className="w-full min-h-[44px] py-3 px-4 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white font-semibold text-xs shadow-md shadow-[#B92F25]/20 transition-all active:scale-95 flex items-center justify-center"
                     >
                       {isOrPlan ? 'Select Option & Buy' : 'Buy Plan'}
                     </button>
@@ -1010,7 +1010,7 @@ export default function CustomerDashboard() {
       {/* TAB 4: SERVICE REQUESTS & HISTORY */}
       {activeTab === 'requests' && (
         <div className="space-y-4">
-          <h2 className="text-base font-black text-[#22222B]">Meal Cancellation History</h2>
+          <h2 className="text-base font-semibold text-[#22222B]">Meal Cancellation History</h2>
 
           {requests.length === 0 ? (
             <div className="glass-card rounded-2xl p-6 sm:p-8 text-center text-slate-500 border border-[#B0BE8C]/35">
@@ -1022,18 +1022,18 @@ export default function CustomerDashboard() {
                 <div key={r.id} className="glass-card rounded-2xl p-4 border border-[#B0BE8C]/35 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-1">
-                      <span className="px-2 py-0.5 rounded-md bg-[#B0BE8C]/20 border border-[#B0BE8C]/35 text-[#22222B] font-bold text-xs">
+                      <span className="px-2 py-0.5 rounded-md bg-[#B0BE8C]/20 border border-[#B0BE8C]/35 text-[#22222B] font-medium text-xs">
                         {r.request_type}
                       </span>
-                      <span className="text-xs font-bold text-slate-600">
+                      <span className="text-xs font-medium text-slate-600">
                         Effective: {r.effective_date} {r.meal_slot && `(${r.meal_slot})`}
                       </span>
                       {r.is_on_time ? (
-                        <span className="px-2 py-0.5 rounded-md bg-emerald-50 border border-emerald-200 text-emerald-700 text-[10px] font-bold">
+                        <span className="px-2 py-0.5 rounded-md bg-emerald-50 border border-emerald-200 text-emerald-700 text-[10px] font-medium">
                           Submitted On-Time
                         </span>
                       ) : (
-                        <span className="px-2 py-0.5 rounded-md bg-[#F7DE9D]/40 border border-[#F7DE9D] text-[#22222B] text-[10px] font-bold">
+                        <span className="px-2 py-0.5 rounded-md bg-[#F7DE9D]/40 border border-[#F7DE9D] text-[#22222B] text-[10px] font-medium">
                           Late Request
                         </span>
                       )}
@@ -1050,17 +1050,17 @@ export default function CustomerDashboard() {
 
                   <div className="shrink-0 self-start sm:self-auto">
                     {r.status === 'PENDING' && (
-                      <span className="px-3 py-1 rounded-full bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80 text-xs font-bold shadow-2xs inline-block">
+                      <span className="px-3 py-1 rounded-full bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80 text-xs font-medium shadow-2xs inline-block">
                         Pending Admin Approval
                       </span>
                     )}
                     {r.status === 'APPROVED' && (
-                      <span className="px-3 py-1 rounded-full bg-emerald-100 border border-emerald-200 text-emerald-800 text-xs font-bold inline-block">
+                      <span className="px-3 py-1 rounded-full bg-emerald-100 border border-emerald-200 text-emerald-800 text-xs font-medium inline-block">
                         Approved
                       </span>
                     )}
                     {r.status === 'REJECTED' && (
-                      <span className="px-3 py-1 rounded-full bg-rose-100 border border-rose-200 text-rose-800 text-xs font-bold inline-block">
+                      <span className="px-3 py-1 rounded-full bg-rose-100 border border-rose-200 text-rose-800 text-xs font-medium inline-block">
                         Rejected
                       </span>
                     )}
@@ -1079,7 +1079,7 @@ export default function CustomerDashboard() {
             {!purchaseSuccessData ? (
               <>
                 <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-black text-[#22222B]">Confirm Plan Purchase</h3>
+                  <h3 className="text-lg font-semibold text-[#22222B]">Confirm Plan Purchase</h3>
                   <button
                     onClick={() => setSelectedPlanToBuy(null)}
                     className="min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 hover:text-slate-600 text-base"
@@ -1091,7 +1091,7 @@ export default function CustomerDashboard() {
 
                 <div className="space-y-1">
                   <p className="text-xs text-slate-600">
-                    You are subscribing to <strong className="text-[#22222B]">{selectedPlanToBuy.name}</strong> at <strong className="text-[#741B22] font-black">₹{selectedPlanToBuy.price.toFixed(2)}</strong> per plan.
+                    You are subscribing to <strong className="text-[#22222B]">{selectedPlanToBuy.name}</strong> at <strong className="text-[#741B22] font-semibold">₹{selectedPlanToBuy.price.toFixed(2)}</strong> per plan.
                   </p>
                   <p className="text-[11px] text-slate-500">
                     Duration: {selectedPlanToBuy.days_count === 7 ? '1 Week (7 Days)' : `1 Month (${selectedPlanToBuy.days_count} Days)`} • Total Servings: {selectedPlanToBuy.meal_credits * purchaseQuantity} meals
@@ -1100,7 +1100,7 @@ export default function CustomerDashboard() {
 
                 <div className="grid grid-cols-2 gap-3 rounded-2xl border border-[#B0BE8C]/40 bg-[#F3F5F4] p-3.5">
                   <label className="space-y-1">
-                    <span className="block text-[11px] font-black uppercase tracking-wide text-[#22222B]">Quantity</span>
+                    <span className="block text-[11px] font-semibold uppercase tracking-wide text-[#22222B]">Quantity</span>
                     <input
                       type="number"
                       min={1}
@@ -1113,12 +1113,12 @@ export default function CustomerDashboard() {
                         setAvailabilityStatus('unchecked');
                         setAvailabilityMessage('');
                       }}
-                      className="min-h-[44px] w-full rounded-xl border border-[#B0BE8C]/50 bg-white px-3 text-sm font-black text-[#22222B] outline-none focus:border-[#741B22] focus:ring-2 focus:ring-[#741B22]/15"
+                      className="min-h-[44px] w-full rounded-xl border border-[#B0BE8C]/50 bg-white px-3 text-sm font-semibold text-[#22222B] outline-none focus:border-[#741B22] focus:ring-2 focus:ring-[#741B22]/15"
                     />
                   </label>
                   <div className="space-y-1 text-right">
-                    <span className="block text-[11px] font-black uppercase tracking-wide text-[#22222B]">Total Amount</span>
-                    <div className="flex min-h-[44px] items-center justify-end text-xl font-black text-[#741B22]">
+                    <span className="block text-[11px] font-semibold uppercase tracking-wide text-[#22222B]">Total Amount</span>
+                    <div className="flex min-h-[44px] items-center justify-end text-xl font-semibold text-[#741B22]">
                       ₹{(selectedPlanToBuy.price * purchaseQuantity).toFixed(2)}
                     </div>
                   </div>
@@ -1127,7 +1127,7 @@ export default function CustomerDashboard() {
                 {/* Meal Combination Selection for "OR" Plans */}
                 {getPlanMealType(selectedPlanToBuy.name) === 'OR_LUNCH' && (
                   <div className="space-y-2 p-3.5 bg-[#F3F5F4] rounded-2xl border border-[#B0BE8C]/40">
-                    <label className="text-xs font-black text-[#22222B] block">
+                    <label className="text-xs font-semibold text-[#22222B] block">
                       Choose Your Daily Meal Combination (2 meals/day) <span className="text-[#B92F25]">*</span>
                     </label>
                     <div className="grid grid-cols-1 gap-2">
@@ -1140,12 +1140,12 @@ export default function CustomerDashboard() {
                         }}
                         className={`p-3 rounded-xl border text-left text-xs transition-all flex items-center justify-between ${
                           chosenMealOption === 'breakfast,lunch'
-                            ? 'border-[#741B22] bg-white ring-2 ring-[#741B22]/20 font-black text-[#22222B] shadow-xs'
+                            ? 'border-[#741B22] bg-white ring-2 ring-[#741B22]/20 font-semibold text-[#22222B] shadow-xs'
                             : 'border-[#B0BE8C]/40 bg-white hover:bg-[#F3F5F4] text-slate-700'
                         }`}
                       >
                         <div>
-                          <div className="font-bold text-[#22222B]">Option A: Breakfast + Lunch</div>
+                          <div className="font-medium text-[#22222B]">Option A: Breakfast + Lunch</div>
                           <div className="text-[11px] text-slate-500 mt-0.5">Morning & Afternoon deliveries</div>
                         </div>
                         <div className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${chosenMealOption === 'breakfast,lunch' ? 'border-[#741B22] bg-[#741B22]' : 'border-slate-300'}`}>
@@ -1162,12 +1162,12 @@ export default function CustomerDashboard() {
                         }}
                         className={`p-3 rounded-xl border text-left text-xs transition-all flex items-center justify-between ${
                           chosenMealOption === 'lunch,dinner'
-                            ? 'border-[#741B22] bg-white ring-2 ring-[#741B22]/20 font-black text-[#22222B] shadow-xs'
+                            ? 'border-[#741B22] bg-white ring-2 ring-[#741B22]/20 font-semibold text-[#22222B] shadow-xs'
                             : 'border-[#B0BE8C]/40 bg-white hover:bg-[#F3F5F4] text-slate-700'
                         }`}
                       >
                         <div>
-                          <div className="font-bold text-[#22222B]">Option B: Lunch + Dinner</div>
+                          <div className="font-medium text-[#22222B]">Option B: Lunch + Dinner</div>
                           <div className="text-[11px] text-slate-500 mt-0.5">Afternoon & Evening deliveries</div>
                         </div>
                         <div className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${chosenMealOption === 'lunch,dinner' ? 'border-[#741B22] bg-[#741B22]' : 'border-slate-300'}`}>
@@ -1180,7 +1180,7 @@ export default function CustomerDashboard() {
 
                 {getPlanMealType(selectedPlanToBuy.name) === 'OR_SIMPLE' && (
                   <div className="space-y-2 p-3.5 bg-[#F3F5F4] rounded-2xl border border-[#B0BE8C]/40">
-                    <label className="text-xs font-black text-[#22222B] block">
+                    <label className="text-xs font-semibold text-[#22222B] block">
                       Choose Your Daily Meal Slot (1 meal/day) <span className="text-[#B92F25]">*</span>
                     </label>
                     <div className="grid grid-cols-1 gap-2">
@@ -1193,12 +1193,12 @@ export default function CustomerDashboard() {
                         }}
                         className={`p-3 rounded-xl border text-left text-xs transition-all flex items-center justify-between ${
                           chosenMealOption === 'breakfast'
-                            ? 'border-[#741B22] bg-white ring-2 ring-[#741B22]/20 font-black text-[#22222B] shadow-xs'
+                            ? 'border-[#741B22] bg-white ring-2 ring-[#741B22]/20 font-semibold text-[#22222B] shadow-xs'
                             : 'border-[#B0BE8C]/40 bg-white hover:bg-[#F3F5F4] text-slate-700'
                         }`}
                       >
                         <div>
-                          <div className="font-bold text-[#22222B]">Option A: Breakfast Only</div>
+                          <div className="font-medium text-[#22222B]">Option A: Breakfast Only</div>
                           <div className="text-[11px] text-slate-500 mt-0.5">Morning delivery every scheduled day</div>
                         </div>
                         <div className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${chosenMealOption === 'breakfast' ? 'border-[#741B22] bg-[#741B22]' : 'border-slate-300'}`}>
@@ -1215,12 +1215,12 @@ export default function CustomerDashboard() {
                         }}
                         className={`p-3 rounded-xl border text-left text-xs transition-all flex items-center justify-between ${
                           chosenMealOption === 'dinner'
-                            ? 'border-[#741B22] bg-white ring-2 ring-[#741B22]/20 font-black text-[#22222B] shadow-xs'
+                            ? 'border-[#741B22] bg-white ring-2 ring-[#741B22]/20 font-semibold text-[#22222B] shadow-xs'
                             : 'border-[#B0BE8C]/40 bg-white hover:bg-[#F3F5F4] text-slate-700'
                         }`}
                       >
                         <div>
-                          <div className="font-bold text-[#22222B]">Option B: Dinner Only</div>
+                          <div className="font-medium text-[#22222B]">Option B: Dinner Only</div>
                           <div className="text-[11px] text-slate-500 mt-0.5">Evening delivery every scheduled day</div>
                         </div>
                         <div className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${chosenMealOption === 'dinner' ? 'border-[#741B22] bg-[#741B22]' : 'border-slate-300'}`}>
@@ -1247,7 +1247,7 @@ export default function CustomerDashboard() {
                 </div>
 
                 {availabilityStatus !== 'unchecked' && (
-                  <div className={`rounded-xl border px-3 py-2 text-xs font-bold ${
+                  <div className={`rounded-xl border px-3 py-2 text-xs font-medium ${
                     availabilityStatus === 'available'
                       ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
                       : availabilityStatus === 'unavailable'
@@ -1262,7 +1262,7 @@ export default function CustomerDashboard() {
                   type="button"
                   onClick={handleCheckPlanAvailability}
                   disabled={availabilityStatus === 'checking'}
-                  className="w-full min-h-[44px] py-2.5 px-3 rounded-xl bg-[#F7DE9D] text-[#22222B] text-xs font-black border border-[#F7DE9D] hover:bg-[#B0BE8C] disabled:opacity-50 transition-colors"
+                  className="w-full min-h-[44px] py-2.5 px-3 rounded-xl bg-[#F7DE9D] text-[#22222B] text-xs font-semibold border border-[#F7DE9D] hover:bg-[#B0BE8C] disabled:opacity-50 transition-colors"
                 >
                   {availabilityStatus === 'checking' ? 'Checking...' : availabilityStatus === 'available' ? 'Recheck Availability' : 'Check Availability'}
                 </button>
@@ -1270,14 +1270,14 @@ export default function CustomerDashboard() {
                 <div className="flex gap-2">
                   <button
                     onClick={handleClosePaymentModal}
-                    className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center"
+                    className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-medium transition-colors flex items-center justify-center"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleBuyPlan}
                     disabled={buying || availabilityStatus !== 'available'}
-                    className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B92F25] text-white text-xs font-black shadow-md hover:bg-[#741B22] disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
+                    className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B92F25] text-white text-xs font-semibold shadow-md hover:bg-[#741B22] disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
                   >
                     {buying ? 'Processing...' : 'Proceed to Payment'}
                   </button>
@@ -1295,11 +1295,11 @@ export default function CustomerDashboard() {
                       <div className="w-10 h-10 rounded-full bg-[#B0BE8C]/30 text-[#22222B] border border-[#B0BE8C] flex items-center justify-center mx-auto">
                         <CreditCard className="w-5 h-5 text-[#741B22]" />
                       </div>
-                      <h3 className="text-lg font-black text-[#22222B]">Manual UPI Payment</h3>
+                      <h3 className="text-lg font-semibold text-[#22222B]">Manual UPI Payment</h3>
                       <p className="text-xs text-slate-500">
                         Order #{subId} • Plan: <strong className="text-[#22222B]">{purchaseSuccessData.plan_name}</strong> × {purchaseSuccessData.quantity}
                       </p>
-                      <div className="inline-block px-3 py-0.5 rounded-full bg-[#B0BE8C]/20 border border-[#B0BE8C]/40 text-xs font-black text-[#741B22]">
+                      <div className="inline-block px-3 py-0.5 rounded-full bg-[#B0BE8C]/20 border border-[#B0BE8C]/40 text-xs font-semibold text-[#741B22]">
                         {formatShiftName(chosenMealOption || selectedPlanToBuy?.shifts)}
                       </div>
                     </div>
@@ -1307,8 +1307,8 @@ export default function CustomerDashboard() {
                     {/* Payable Amount & Payee Info */}
                     <div className="p-3.5 rounded-2xl bg-[#F3F5F4] border border-[#B0BE8C]/40 space-y-2.5 text-xs">
                       <div className="flex items-center justify-between border-b border-[#B0BE8C]/25 pb-2">
-                        <span className="font-bold text-slate-500">Exact Payable Amount:</span>
-                        <span className="text-lg font-black text-[#741B22]">₹{purchaseSuccessData.amount.toFixed(2)}</span>
+                        <span className="font-medium text-slate-500">Exact Payable Amount:</span>
+                        <span className="text-lg font-semibold text-[#741B22]">₹{purchaseSuccessData.amount.toFixed(2)}</span>
                       </div>
                       <div className="space-y-1 text-slate-600">
                         <div className="flex items-center justify-between gap-2">
@@ -1317,7 +1317,7 @@ export default function CustomerDashboard() {
                         </div>
                         <div className="flex items-center justify-between gap-2">
                           <span className="font-medium">UPI ID:</span>
-                          <code className="text-[#22222B] font-bold bg-white px-2 py-0.5 rounded border border-[#B0BE8C]/40 text-[11px] break-all">
+                          <code className="text-[#22222B] font-medium bg-white px-2 py-0.5 rounded border border-[#B0BE8C]/40 text-[11px] break-all">
                             {PAYMENT_CONFIG.upiId}
                           </code>
                         </div>
@@ -1328,7 +1328,7 @@ export default function CustomerDashboard() {
                         <button
                           type="button"
                           onClick={handleCopyUpiId}
-                          className="min-h-[44px] py-2 px-3 rounded-xl bg-white border border-[#B0BE8C] hover:bg-[#B0BE8C]/20 text-[#22222B] text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-2xs"
+                          className="min-h-[44px] py-2 px-3 rounded-xl bg-white border border-[#B0BE8C] hover:bg-[#B0BE8C]/20 text-[#22222B] text-xs font-medium transition-all flex items-center justify-center gap-1.5 shadow-2xs"
                         >
                           {copiedUpi ? <Check className="w-4 h-4 text-emerald-600 shrink-0" /> : <Copy className="w-4 h-4 text-[#741B22] shrink-0" />}
                           <span>{copiedUpi ? 'Copied!' : 'Copy UPI ID'}</span>
@@ -1336,7 +1336,7 @@ export default function CustomerDashboard() {
 
                         <a
                           href={`upi://pay?pa=${PAYMENT_CONFIG.upiId}&pn=${encodeURIComponent(PAYMENT_CONFIG.accountHolder)}&am=${purchaseSuccessData.amount.toFixed(2)}&cu=INR&tn=NutriSunSub${subId}`}
-                          className="min-h-[44px] py-2 px-3 rounded-xl bg-white border border-[#B0BE8C] hover:bg-[#B0BE8C]/20 text-[#22222B] text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-2xs text-center"
+                          className="min-h-[44px] py-2 px-3 rounded-xl bg-white border border-[#B0BE8C] hover:bg-[#B0BE8C]/20 text-[#22222B] text-xs font-medium transition-all flex items-center justify-center gap-1.5 shadow-2xs text-center"
                         >
                           <ExternalLink className="w-4 h-4 text-[#741B22] shrink-0" />
                           <span>Pay via UPI</span>
@@ -1345,7 +1345,7 @@ export default function CustomerDashboard() {
                         <a
                           href={PAYMENT_CONFIG.qrAssetPath}
                           download="NutriSun_KVB_UPI_QR.png"
-                          className="min-h-[44px] py-2 px-3 rounded-xl bg-white border border-[#B0BE8C] hover:bg-[#B0BE8C]/20 text-[#22222B] text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-2xs text-center"
+                          className="min-h-[44px] py-2 px-3 rounded-xl bg-white border border-[#B0BE8C] hover:bg-[#B0BE8C]/20 text-[#22222B] text-xs font-medium transition-all flex items-center justify-center gap-1.5 shadow-2xs text-center"
                         >
                           <Download className="w-4 h-4 text-[#741B22] shrink-0" />
                           <span>Download QR</span>
@@ -1364,7 +1364,7 @@ export default function CustomerDashboard() {
 
                     {/* Instruction Box */}
                     <div className="p-3.5 rounded-2xl bg-[#F7DE9D]/30 border border-[#F7DE9D] text-[#22222B] text-xs font-medium space-y-1">
-                      <div className="font-bold flex items-center gap-1.5 text-[#741B22]">
+                      <div className="font-medium flex items-center gap-1.5 text-[#741B22]">
                         <Info className="w-4 h-4 shrink-0" />
                         <span>Instructions:</span>
                       </div>
@@ -1374,7 +1374,7 @@ export default function CustomerDashboard() {
                     {/* Submission / Verification Status */}
                     {hasProof ? (
                       <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-950 text-xs space-y-1.5">
-                        <div className="font-black text-emerald-800 flex items-center gap-1.5">
+                        <div className="font-semibold text-emerald-800 flex items-center gap-1.5">
                           <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                           <span>Payment proof submitted.</span>
                         </div>
@@ -1386,7 +1386,7 @@ export default function CustomerDashboard() {
 
                     {/* Receipt Upload Form */}
                     <div className="space-y-3 p-3.5 rounded-2xl bg-[#F3F5F4] border border-[#B0BE8C]/40 text-xs">
-                      <div className="font-black text-[#22222B] flex items-center gap-1.5">
+                      <div className="font-semibold text-[#22222B] flex items-center gap-1.5">
                         <Upload className="w-4 h-4 text-[#741B22] shrink-0" />
                         <span>Upload Payment Screenshot (Receipt)</span>
                       </div>
@@ -1403,13 +1403,13 @@ export default function CustomerDashboard() {
                           className="hidden"
                         />
                         {receiptFile ? (
-                          <div className="flex items-center gap-2 text-[#22222B] font-bold">
+                          <div className="flex items-center gap-2 text-[#22222B] font-medium">
                             <ImageIcon className="w-4 h-4 text-emerald-600 shrink-0" />
                             <span className="truncate max-w-[200px]">{receiptFile.name}</span>
                           </div>
                         ) : (
                           <div className="text-slate-500 font-medium">
-                            <span className="text-[#741B22] font-bold">Choose Screenshot</span> or drag & drop (PNG, JPG, WEBP, PDF)
+                            <span className="text-[#741B22] font-medium">Choose Screenshot</span> or drag & drop (PNG, JPG, WEBP, PDF)
                           </div>
                         )}
                       </label>
@@ -1425,7 +1425,7 @@ export default function CustomerDashboard() {
                       )}
 
                       <div>
-                        <label className="block font-bold text-slate-700 mb-1">UPI Transaction Reference / UTR (Optional)</label>
+                        <label className="block font-medium text-slate-700 mb-1">UPI Transaction Reference / UTR (Optional)</label>
                         <input
                           type="text"
                           placeholder="e.g. 423589123456"
@@ -1439,7 +1439,7 @@ export default function CustomerDashboard() {
                         type="button"
                         onClick={() => handleUploadPaymentProof(subId)}
                         disabled={uploadingProof || (!receiptFile && !transactionRef.trim())}
-                        className="w-full min-h-[44px] py-2.5 px-4 rounded-xl bg-[#B92F25] hover:bg-[#741B22] disabled:opacity-50 text-white font-black text-xs shadow-md transition-all flex items-center justify-center gap-1.5"
+                        className="w-full min-h-[44px] py-2.5 px-4 rounded-xl bg-[#B92F25] hover:bg-[#741B22] disabled:opacity-50 text-white font-semibold text-xs shadow-md transition-all flex items-center justify-center gap-1.5"
                       >
                         {uploadingProof ? (
                           <>
@@ -1458,7 +1458,7 @@ export default function CustomerDashboard() {
                     <button
                       type="button"
                       onClick={handleClosePaymentModal}
-                      className="w-full min-h-[44px] py-2.5 px-4 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center"
+                      className="w-full min-h-[44px] py-2.5 px-4 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-medium transition-colors flex items-center justify-center"
                     >
                       Done (View Order in Dashboard)
                     </button>
@@ -1477,12 +1477,12 @@ export default function CustomerDashboard() {
             {/* Header */}
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
-                <span className="text-[10px] font-bold text-slate-400 uppercase">Order #{activePaymentModalSub.id}</span>
-                <h3 className="text-lg font-black text-[#22222B]">Manual UPI Payment</h3>
+                <span className="text-[10px] font-medium text-slate-400 uppercase">Order #{activePaymentModalSub.id}</span>
+                <h3 className="text-lg font-semibold text-[#22222B]">Manual UPI Payment</h3>
                 <p className="text-xs text-slate-500">
                   Plan: <strong className="text-[#22222B]">{activePaymentModalSub.plan_snapshot_name || activePaymentModalSub.plan?.name}</strong> × {activePaymentModalSub.quantity || 1}
                 </p>
-                <div className="inline-block mt-1 px-2.5 py-0.5 rounded-full bg-[#B0BE8C]/20 border border-[#B0BE8C]/40 text-xs font-black text-[#741B22]">
+                <div className="inline-block mt-1 px-2.5 py-0.5 rounded-full bg-[#B0BE8C]/20 border border-[#B0BE8C]/40 text-xs font-semibold text-[#741B22]">
                   {formatShiftName(activePaymentModalSub.selected_shifts || activePaymentModalSub.plan_snapshot_shifts)}
                 </div>
               </div>
@@ -1497,8 +1497,8 @@ export default function CustomerDashboard() {
             {/* Payable Amount & Payee Info */}
             <div className="p-3.5 rounded-2xl bg-[#F3F5F4] border border-[#B0BE8C]/40 space-y-2.5 text-xs">
               <div className="flex items-center justify-between border-b border-[#B0BE8C]/25 pb-2">
-                <span className="font-bold text-slate-500">Exact Payable Amount:</span>
-                <span className="text-lg font-black text-[#741B22]">
+                <span className="font-medium text-slate-500">Exact Payable Amount:</span>
+                <span className="text-lg font-semibold text-[#741B22]">
                   ₹{(activePaymentModalSub.plan_snapshot_price || activePaymentModalSub.plan?.price || 0).toFixed(2)}
                 </span>
               </div>
@@ -1509,7 +1509,7 @@ export default function CustomerDashboard() {
                 </div>
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-medium">UPI ID:</span>
-                  <code className="text-[#22222B] font-bold bg-white px-2 py-0.5 rounded border border-[#B0BE8C]/40 text-[11px] break-all">
+                  <code className="text-[#22222B] font-medium bg-white px-2 py-0.5 rounded border border-[#B0BE8C]/40 text-[11px] break-all">
                     {PAYMENT_CONFIG.upiId}
                   </code>
                 </div>
@@ -1520,7 +1520,7 @@ export default function CustomerDashboard() {
                 <button
                   type="button"
                   onClick={handleCopyUpiId}
-                  className="min-h-[44px] py-2 px-3 rounded-xl bg-white border border-[#B0BE8C] hover:bg-[#B0BE8C]/20 text-[#22222B] text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-2xs"
+                  className="min-h-[44px] py-2 px-3 rounded-xl bg-white border border-[#B0BE8C] hover:bg-[#B0BE8C]/20 text-[#22222B] text-xs font-medium transition-all flex items-center justify-center gap-1.5 shadow-2xs"
                 >
                   {copiedUpi ? <Check className="w-4 h-4 text-emerald-600 shrink-0" /> : <Copy className="w-4 h-4 text-[#741B22] shrink-0" />}
                   <span>{copiedUpi ? 'Copied!' : 'Copy UPI ID'}</span>
@@ -1528,7 +1528,7 @@ export default function CustomerDashboard() {
 
                 <a
                   href={`upi://pay?pa=${PAYMENT_CONFIG.upiId}&pn=${encodeURIComponent(PAYMENT_CONFIG.accountHolder)}&am=${(activePaymentModalSub.plan_snapshot_price || activePaymentModalSub.plan?.price || 0).toFixed(2)}&cu=INR&tn=NutriSunSub${activePaymentModalSub.id}`}
-                  className="min-h-[44px] py-2 px-3 rounded-xl bg-white border border-[#B0BE8C] hover:bg-[#B0BE8C]/20 text-[#22222B] text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-2xs text-center"
+                  className="min-h-[44px] py-2 px-3 rounded-xl bg-white border border-[#B0BE8C] hover:bg-[#B0BE8C]/20 text-[#22222B] text-xs font-medium transition-all flex items-center justify-center gap-1.5 shadow-2xs text-center"
                 >
                   <ExternalLink className="w-4 h-4 text-[#741B22] shrink-0" />
                   <span>Pay via UPI</span>
@@ -1537,7 +1537,7 @@ export default function CustomerDashboard() {
                 <a
                   href={PAYMENT_CONFIG.qrAssetPath}
                   download="NutriSun_KVB_UPI_QR.png"
-                  className="min-h-[44px] py-2 px-3 rounded-xl bg-white border border-[#B0BE8C] hover:bg-[#B0BE8C]/20 text-[#22222B] text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-2xs text-center"
+                  className="min-h-[44px] py-2 px-3 rounded-xl bg-white border border-[#B0BE8C] hover:bg-[#B0BE8C]/20 text-[#22222B] text-xs font-medium transition-all flex items-center justify-center gap-1.5 shadow-2xs text-center"
                 >
                   <Download className="w-4 h-4 text-[#741B22] shrink-0" />
                   <span>Download QR</span>
@@ -1556,7 +1556,7 @@ export default function CustomerDashboard() {
 
             {/* Instruction Box */}
             <div className="p-3.5 rounded-2xl bg-[#F7DE9D]/30 border border-[#F7DE9D] text-[#22222B] text-xs font-medium space-y-1">
-              <div className="font-bold flex items-center gap-1.5 text-[#741B22]">
+              <div className="font-medium flex items-center gap-1.5 text-[#741B22]">
                 <Info className="w-4 h-4 shrink-0" />
                 <span>Instructions:</span>
               </div>
@@ -1566,7 +1566,7 @@ export default function CustomerDashboard() {
             {/* Verification Status */}
             {(activePaymentModalSub.payment_record?.proof_image_url || activePaymentModalSub.payment_record?.transaction_ref || submittedProofSubIds.includes(activePaymentModalSub.id)) ? (
               <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-950 text-xs space-y-1.5">
-                <div className="font-black text-emerald-800 flex items-center gap-1.5">
+                <div className="font-semibold text-emerald-800 flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                   <span>Payment proof submitted.</span>
                 </div>
@@ -1586,7 +1586,7 @@ export default function CustomerDashboard() {
                           setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
                         }
                       }}
-                      className="inline-flex items-center gap-1 text-xs font-bold text-[#741B22] hover:underline"
+                      className="inline-flex items-center gap-1 text-xs font-medium text-[#741B22] hover:underline"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
                       <span>View Uploaded Screenshot</span>
@@ -1603,7 +1603,7 @@ export default function CustomerDashboard() {
 
             {/* Receipt Upload Form */}
             <div className="space-y-3 p-3.5 rounded-2xl bg-[#F3F5F4] border border-[#B0BE8C]/40 text-xs">
-              <div className="font-black text-[#22222B] flex items-center gap-1.5">
+              <div className="font-semibold text-[#22222B] flex items-center gap-1.5">
                 <Upload className="w-4 h-4 text-[#741B22] shrink-0" />
                 <span>Upload Payment Screenshot (Receipt)</span>
               </div>
@@ -1620,13 +1620,13 @@ export default function CustomerDashboard() {
                   className="hidden"
                 />
                 {receiptFile ? (
-                  <div className="flex items-center gap-2 text-[#22222B] font-bold">
+                  <div className="flex items-center gap-2 text-[#22222B] font-medium">
                     <ImageIcon className="w-4 h-4 text-emerald-600 shrink-0" />
                     <span className="truncate max-w-[200px]">{receiptFile.name}</span>
                   </div>
                 ) : (
                   <div className="text-slate-500 font-medium">
-                    <span className="text-[#741B22] font-bold">Choose Screenshot</span> or drag & drop (PNG, JPG, WEBP, PDF)
+                    <span className="text-[#741B22] font-medium">Choose Screenshot</span> or drag & drop (PNG, JPG, WEBP, PDF)
                   </div>
                 )}
               </label>
@@ -1642,7 +1642,7 @@ export default function CustomerDashboard() {
               )}
 
               <div>
-                <label className="block font-bold text-slate-700 mb-1">UPI Transaction Reference / UTR (Optional)</label>
+                <label className="block font-medium text-slate-700 mb-1">UPI Transaction Reference / UTR (Optional)</label>
                 <input
                   type="text"
                   placeholder="e.g. 423589123456"
@@ -1656,7 +1656,7 @@ export default function CustomerDashboard() {
                 type="button"
                 onClick={() => handleUploadPaymentProof(activePaymentModalSub.id)}
                 disabled={uploadingProof || (!receiptFile && !transactionRef.trim())}
-                className="w-full min-h-[44px] py-2.5 px-4 rounded-xl bg-[#B92F25] hover:bg-[#741B22] disabled:opacity-50 text-white font-black text-xs shadow-md transition-all flex items-center justify-center gap-1.5"
+                className="w-full min-h-[44px] py-2.5 px-4 rounded-xl bg-[#B92F25] hover:bg-[#741B22] disabled:opacity-50 text-white font-semibold text-xs shadow-md transition-all flex items-center justify-center gap-1.5"
               >
                 {uploadingProof ? (
                   <>
@@ -1675,7 +1675,7 @@ export default function CustomerDashboard() {
             <button
               type="button"
               onClick={handleClosePaymentModal}
-              className="w-full min-h-[44px] py-2.5 px-4 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center"
+              className="w-full min-h-[44px] py-2.5 px-4 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-medium transition-colors flex items-center justify-center"
             >
               Close
             </button>
@@ -1690,13 +1690,13 @@ export default function CustomerDashboard() {
         return (
           <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-[100] overflow-y-auto">
             <div className="bg-white rounded-3xl p-5 sm:p-8 max-w-md w-full border border-[#B0BE8C]/40 shadow-2xl space-y-4 max-h-[90dvh] overflow-y-auto overscroll-contain my-auto">
-              <h3 className="text-lg font-black text-[#22222B]">Cancel Scheduled Meals</h3>
+              <h3 className="text-lg font-semibold text-[#22222B]">Cancel Scheduled Meals</h3>
               <p className="text-xs text-slate-600">
                 Meal: <strong className="capitalize">{firstMeal.meal_slot}</strong> on <strong>{firstMeal.date}</strong>.
               </p>
 
               <label className="block p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
-                <span className="block text-xs font-black text-[#22222B] mb-1.5">Number of meals to cancel</span>
+                <span className="block text-xs font-semibold text-[#22222B] mb-1.5">Number of meals to cancel</span>
                 <input
                   type="number"
                   min={1}
@@ -1706,16 +1706,16 @@ export default function CustomerDashboard() {
                     const value = Number(event.target.value);
                     setSkipQuantity(Math.min(Math.max(Number.isFinite(value) ? value : 1, 1), mealsToSkip.length));
                   }}
-                  className="w-full min-h-[44px] rounded-xl border border-[#B0BE8C]/60 bg-white px-3 text-sm font-black text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#741B22]/20"
+                  className="w-full min-h-[44px] rounded-xl border border-[#B0BE8C]/60 bg-white px-3 text-sm font-semibold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#741B22]/20"
                 />
-                <span className="block text-[10px] text-slate-500 font-bold mt-1.5">
+                <span className="block text-[10px] text-slate-500 font-medium mt-1.5">
                   Choose from 1 to {mealsToSkip.length}, the number currently scheduled.
                 </span>
               </label>
 
               {isOnTime ? (
                 <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-950 text-xs font-medium space-y-1.5">
-                  <div className="font-black text-emerald-800 flex items-center gap-1.5">
+                  <div className="font-semibold text-emerald-800 flex items-center gap-1.5">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                     <span>Before Cutoff (Eligible for Rescheduling)</span>
                   </div>
@@ -1724,13 +1724,13 @@ export default function CustomerDashboard() {
                 </div>
               ) : (
                 <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-300 text-rose-950 text-xs font-medium space-y-1.5">
-                  <div className="font-black text-rose-800 flex items-center gap-1.5">
+                  <div className="font-semibold text-rose-800 flex items-center gap-1.5">
                     <Clock className="w-4 h-4 text-rose-600 shrink-0" />
                     <span>At or After Cut-off (Late Cancellation)</span>
                   </div>
-                  <p className="font-bold text-rose-900">• Cut-off passed (Breakfast/Lunch: prior night, Dinner: 12:00 PM same day).</p>
+                  <p className="font-medium text-rose-900">• Cut-off passed (Breakfast/Lunch: prior night, Dinner: 12:00 PM same day).</p>
                   <p>• The selected meal quantity will be cancelled immediately.</p>
-                  <p className="font-bold text-rose-700">• No replacement meals will be added.</p>
+                  <p className="font-medium text-rose-700">• No replacement meals will be added.</p>
                 </div>
               )}
 
@@ -1741,14 +1741,14 @@ export default function CustomerDashboard() {
                     setSkipQuantity(1);
                   }}
                   disabled={submittingSkip}
-                  className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center disabled:opacity-60"
+                  className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-medium transition-colors flex items-center justify-center disabled:opacity-60"
                 >
                   Keep Meals
                 </button>
                 <button
                   onClick={handleConfirmSkip}
                   disabled={submittingSkip}
-                  className={`flex-1 min-h-[44px] py-2.5 px-3 rounded-xl text-white text-xs font-black shadow-md transition-colors flex items-center justify-center disabled:opacity-60 ${
+                  className={`flex-1 min-h-[44px] py-2.5 px-3 rounded-xl text-white text-xs font-semibold shadow-md transition-colors flex items-center justify-center disabled:opacity-60 ${
                     isOnTime ? 'bg-emerald-700 hover:bg-emerald-800' : 'bg-[#B92F25] hover:bg-[#741B22]'
                   }`}
                 >

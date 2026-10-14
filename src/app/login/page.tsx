@@ -119,10 +119,10 @@ export default function LoginPage() {
               className="w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow-md hover:scale-105 transition-transform duration-300"
             />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-[#22222B] uppercase">
+          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#22222B] uppercase">
             NUTRISUN
           </h1>
-          <p className="text-xs font-bold text-[#741B22] italic tracking-wider">
+          <p className="text-xs font-medium text-[#741B22] italic tracking-wider">
             Healthy Tasty Daily
           </p>
           <p className="text-[11px] sm:text-xs text-[#22222B]/70 mt-2 font-medium px-2">
@@ -136,7 +136,7 @@ export default function LoginPage() {
             <div className="mb-5 sm:mb-6 p-3.5 sm:p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs sm:text-sm flex items-start gap-3 animate-in slide-in-from-top-1">
               <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
               <div className="break-words min-w-0">
-                <p className="font-bold">Password Updated Successfully</p>
+                <p className="font-medium">Password Updated Successfully</p>
                 <p className="text-xs text-emerald-700 mt-0.5">{successMessage}</p>
               </div>
             </div>
@@ -146,7 +146,7 @@ export default function LoginPage() {
             <div className="mb-5 sm:mb-6 p-3.5 sm:p-4 rounded-2xl bg-rose-50/90 border border-rose-200 text-rose-800 text-xs sm:text-sm flex items-start gap-3">
               <AlertCircle className="w-5 h-5 text-[#B92F25] shrink-0 mt-0.5" />
               <div className="break-words min-w-0">
-                <p className="font-bold">Authentication Issue</p>
+                <p className="font-medium">Authentication Issue</p>
                 <p className="text-xs text-rose-700 mt-0.5">{error}</p>
               </div>
             </div>
@@ -154,7 +154,7 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-[10px] font-black uppercase tracking-wider text-[#22222B]/70 mb-1.5">
+              <label className="block text-[10px] font-semibold uppercase tracking-wider text-[#22222B]/70 mb-1.5">
                 Phone Number
               </label>
               <div className="relative">
@@ -165,13 +165,13 @@ export default function LoginPage() {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="e.g. 9876543213"
-                  className="w-full min-h-[44px] pl-10 pr-4 py-2.5 rounded-2xl border border-[#B0BE8C]/40 bg-white focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C] text-base sm:text-xs font-bold transition-all text-[#22222B]"
+                  className="w-full min-h-[44px] pl-10 pr-4 py-2.5 rounded-2xl border border-[#B0BE8C]/40 bg-white focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C] text-base sm:text-xs font-medium transition-all text-[#22222B]"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-[10px] font-black uppercase tracking-wider text-[#22222B]/70 mb-1.5">
+              <label className="block text-[10px] font-semibold uppercase tracking-wider text-[#22222B]/70 mb-1.5">
                 Password
               </label>
               <div className="relative">
@@ -182,7 +182,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full min-h-[44px] pl-10 pr-4 py-2.5 rounded-2xl border border-[#B0BE8C]/40 bg-white focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C] text-base sm:text-xs font-bold transition-all text-[#22222B]"
+                  className="w-full min-h-[44px] pl-10 pr-4 py-2.5 rounded-2xl border border-[#B0BE8C]/40 bg-white focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C] text-base sm:text-xs font-medium transition-all text-[#22222B]"
                 />
               </div>
             </div>
@@ -190,7 +190,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full min-h-[44px] py-3 px-4 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white font-black text-xs shadow-md shadow-[#B92F25]/20 hover:shadow-lg transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 mt-2"
+              className="w-full min-h-[44px] py-3 px-4 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white font-semibold text-xs shadow-md shadow-[#B92F25]/20 hover:shadow-lg transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 mt-2"
             >
               {loading ? (
                 <span>Authenticating...</span>
@@ -213,7 +213,7 @@ export default function LoginPage() {
           New to NutriSun?{' '}
           <Link
             href="/register"
-            className="font-black text-[#B92F25] hover:text-[#741B22] inline-flex items-center gap-1 min-h-[44px] py-1"
+            className="font-semibold text-[#B92F25] hover:text-[#741B22] inline-flex items-center gap-1 min-h-[44px] py-1"
           >
             Create a customer account <ArrowRight className="w-3.5 h-3.5" />
           </Link>
@@ -227,14 +227,14 @@ export default function LoginPage() {
             <div className="flex items-center gap-3 mb-4 text-[#741B22]">
               <KeyRound className="w-7 h-7 text-[#741B22] shrink-0" />
               <div>
-                <h3 className="text-lg font-black text-[#22222B]">Password Change Required</h3>
+                <h3 className="text-lg font-semibold text-[#22222B]">Password Change Required</h3>
                 <p className="text-xs text-slate-500">You logged in using a temporary password. Please set your new password.</p>
               </div>
             </div>
 
             <form onSubmit={handleChangePasswordSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-[#22222B] mb-1">New Password (min 6 chars)</label>
+                <label className="block text-xs font-medium text-[#22222B] mb-1">New Password (min 6 chars)</label>
                 <input
                   type="password"
                   required
@@ -242,14 +242,14 @@ export default function LoginPage() {
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   placeholder="Enter new permanent password"
-                  className="w-full min-h-[44px] px-4 py-2.5 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-bold focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
+                  className="w-full min-h-[44px] px-4 py-2.5 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={changingPass}
-                className="w-full min-h-[44px] py-3 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white font-black text-xs transition-all shadow-md"
+                className="w-full min-h-[44px] py-3 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white font-semibold text-xs transition-all shadow-md"
               >
                 {changingPass ? 'Updating...' : 'Set Permanent Password & Continue'}
               </button>

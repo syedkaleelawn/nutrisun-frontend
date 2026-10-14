@@ -117,10 +117,10 @@ export default function RegisterPage() {
               className="w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow-md hover:scale-105 transition-transform duration-300"
             />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-[#22222B] uppercase">
+          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#22222B] uppercase">
             NUTRISUN
           </h1>
-          <p className="text-xs font-bold text-[#741B22] italic tracking-wider">
+          <p className="text-xs font-medium text-[#741B22] italic tracking-wider">
             Healthy Tasty Daily
           </p>
           <p className="text-[11px] sm:text-xs text-[#22222B]/70 mt-2 font-medium px-2">
@@ -134,7 +134,7 @@ export default function RegisterPage() {
             <div className="mb-5 sm:mb-6 p-3.5 sm:p-4 rounded-2xl bg-rose-50/90 border border-rose-200 text-rose-800 text-xs sm:text-sm flex items-start gap-3">
               <AlertCircle className="w-5 h-5 text-[#B92F25] shrink-0 mt-0.5" />
               <div className="break-words min-w-0">
-                <p className="font-bold">Registration Error</p>
+                <p className="font-medium">Registration Error</p>
                 <p className="text-xs text-rose-700 mt-0.5">{error}</p>
               </div>
             </div>
@@ -150,7 +150,7 @@ export default function RegisterPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Name */}
             <div>
-              <label className="block text-[10px] font-black uppercase tracking-wider text-[#22222B]/70 mb-1.5">
+              <label className="block text-[10px] font-semibold uppercase tracking-wider text-[#22222B]/70 mb-1.5">
                 Full Name
               </label>
               <div className="relative">
@@ -161,14 +161,14 @@ export default function RegisterPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Your Full Name"
-                  className="w-full min-h-[44px] pl-10 pr-4 py-2.5 rounded-2xl border border-[#B0BE8C]/40 bg-white focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C] text-base sm:text-xs font-bold text-[#22222B]"
+                  className="w-full min-h-[44px] pl-10 pr-4 py-2.5 rounded-2xl border border-[#B0BE8C]/40 bg-white focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C] text-base sm:text-xs font-medium text-[#22222B]"
                 />
               </div>
             </div>
 
             {/* Unique Phone Number */}
             <div>
-              <label className="block text-[10px] font-black uppercase tracking-wider text-[#22222B]/70 mb-1.5">
+              <label className="block text-[10px] font-semibold uppercase tracking-wider text-[#22222B]/70 mb-1.5">
                 Unique Phone Number (Used for Login & Deliveries)
               </label>
               <div className="relative">
@@ -179,14 +179,14 @@ export default function RegisterPage() {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="e.g. 9876543214"
-                  className="w-full min-h-[44px] pl-10 pr-4 py-2.5 rounded-2xl border border-[#B0BE8C]/40 bg-white focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C] text-base sm:text-xs font-bold text-[#22222B]"
+                  className="w-full min-h-[44px] pl-10 pr-4 py-2.5 rounded-2xl border border-[#B0BE8C]/40 bg-white focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C] text-base sm:text-xs font-medium text-[#22222B]"
                 />
               </div>
             </div>
 
             {/* Delivery Address */}
             <div>
-              <label className="block text-[10px] font-black uppercase tracking-wider text-[#22222B]/70 mb-1.5">
+              <label className="block text-[10px] font-semibold uppercase tracking-wider text-[#22222B]/70 mb-1.5">
                 Delivery Address
               </label>
               <div className="relative">
@@ -197,7 +197,7 @@ export default function RegisterPage() {
                   value={deliveryAddress}
                   onChange={(e) => setDeliveryAddress(e.target.value)}
                   placeholder="Complete flat, building, street, and area details"
-                  className="w-full min-h-[44px] pl-10 pr-4 py-2.5 rounded-2xl border border-[#B0BE8C]/40 bg-white focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C] text-base sm:text-xs font-bold text-[#22222B] resize-none"
+                  className="w-full min-h-[44px] pl-10 pr-4 py-2.5 rounded-2xl border border-[#B0BE8C]/40 bg-white focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C] text-base sm:text-xs font-medium text-[#22222B] resize-none"
                 />
               </div>
               <p className="text-[10px] text-slate-400 mt-1">
@@ -207,7 +207,7 @@ export default function RegisterPage() {
 
             {/* Password */}
             <div>
-              <label className="block text-[10px] font-black uppercase tracking-wider text-[#22222B]/70 mb-1.5">
+              <label className="block text-[10px] font-semibold uppercase tracking-wider text-[#22222B]/70 mb-1.5">
                 Password (min. 6 characters)
               </label>
               <div className="relative">
@@ -219,7 +219,7 @@ export default function RegisterPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full min-h-[44px] pl-10 pr-4 py-2.5 rounded-2xl border border-[#B0BE8C]/40 bg-white focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C] text-base sm:text-xs font-bold text-[#22222B]"
+                  className="w-full min-h-[44px] pl-10 pr-4 py-2.5 rounded-2xl border border-[#B0BE8C]/40 bg-white focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C] text-base sm:text-xs font-medium text-[#22222B]"
                 />
               </div>
             </div>
@@ -227,7 +227,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full min-h-[44px] py-3 px-4 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white font-black text-xs shadow-md shadow-[#B92F25]/20 hover:shadow-lg transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 mt-4"
+              className="w-full min-h-[44px] py-3 px-4 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white font-semibold text-xs shadow-md shadow-[#B92F25]/20 hover:shadow-lg transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 mt-4"
             >
               {loading ? (
                 <span>Creating Account...</span>
@@ -246,7 +246,7 @@ export default function RegisterPage() {
           Already registered?{' '}
           <Link
             href="/login"
-            className="font-black text-[#B92F25] hover:text-[#741B22] inline-flex items-center gap-1 min-h-[44px] py-1"
+            className="font-semibold text-[#B92F25] hover:text-[#741B22] inline-flex items-center gap-1 min-h-[44px] py-1"
           >
             Sign in here <ArrowRight className="w-3.5 h-3.5" />
           </Link>

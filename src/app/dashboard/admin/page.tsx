@@ -421,7 +421,7 @@ export default function AdminDashboard() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[65vh] gap-3 text-center px-4">
         <AlertTriangle className="w-10 h-10 text-amber-500" />
-        <h2 className="text-xl font-black text-[#22222B]">Access Restricted</h2>
+        <h2 className="text-xl font-semibold text-[#22222B]">Access Restricted</h2>
         <p className="text-xs text-slate-500 max-w-sm">
           Administrator privileges required. Redirecting to sign in...
         </p>
@@ -439,12 +439,12 @@ export default function AdminDashboard() {
       <div className="glass-card rounded-3xl p-5 sm:p-8 border border-[#B0BE8C]/35 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="px-3 py-1 rounded-full bg-[#741B22]/15 text-[#741B22] border border-[#741B22]/20 font-bold text-[11px] uppercase tracking-wider">
+            <span className="px-3 py-1 rounded-full bg-[#741B22]/15 text-[#741B22] border border-[#741B22]/20 font-medium text-[11px] uppercase tracking-wider">
               Administration Central
             </span>
             <span className="text-xs text-slate-500">Full Business Governance</span>
           </div>
-          <h1 className="text-xl sm:text-3xl font-black text-[#22222B] mt-2 break-words">
+          <h1 className="text-xl sm:text-3xl font-semibold text-[#22222B] mt-2 break-words">
             NutriSun Operations Management
           </h1>
           <p className="text-xs text-slate-600 mt-1">
@@ -456,7 +456,7 @@ export default function AdminDashboard() {
           <button
             type="button"
             onClick={() => setShowAdminChangePassword(true)}
-            className="w-full sm:w-auto min-h-[44px] px-4 py-3 rounded-2xl bg-white hover:bg-slate-50 border border-[#B0BE8C]/50 text-[#22222B] font-bold text-xs shadow-xs transition-all active:scale-95 flex items-center justify-center gap-2"
+            className="w-full sm:w-auto min-h-[44px] px-4 py-3 rounded-2xl bg-white hover:bg-slate-50 border border-[#B0BE8C]/50 text-[#22222B] font-medium text-xs shadow-xs transition-all active:scale-95 flex items-center justify-center gap-2"
             title="Change Account Password"
           >
             <KeyRound className="w-4 h-4 text-[#741B22] shrink-0" />
@@ -466,7 +466,7 @@ export default function AdminDashboard() {
             type="button"
             onClick={handleDownloadFullExcel}
             disabled={exportingFullExcel}
-            className="w-full sm:w-auto min-h-[44px] px-5 py-3 rounded-2xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] font-black text-xs shadow-sm transition-all active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50"
+            className="w-full sm:w-auto min-h-[44px] px-5 py-3 rounded-2xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] font-semibold text-xs shadow-sm transition-all active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50"
           >
             {exportingFullExcel ? (
               <Loader2 className="w-4 h-4 text-[#22222B] animate-spin shrink-0" />
@@ -480,13 +480,13 @@ export default function AdminDashboard() {
 
       {notification && (
         <div className="p-3.5 sm:p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div className="flex items-center gap-2 font-bold break-words min-w-0">
+          <div className="flex items-center gap-2 font-medium break-words min-w-0">
             <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
             <span>{notification}</span>
           </div>
           <button
             onClick={() => setNotification(null)}
-            className="min-h-[44px] px-2 py-1 text-emerald-700 hover:underline text-[11px] font-bold self-end sm:self-auto flex items-center"
+            className="min-h-[44px] px-2 py-1 text-emerald-700 hover:underline text-[11px] font-medium self-end sm:self-auto flex items-center"
           >
             Dismiss
           </button>
@@ -504,10 +504,10 @@ export default function AdminDashboard() {
           }`}
         >
           <div className="flex items-center justify-between gap-1">
-            <span className="text-[10px] font-black uppercase leading-tight text-[#22222B] px-2 py-0.5 rounded-full bg-[#F7DE9D]">Payment Approvals</span>
+            <span className="text-[10px] font-semibold uppercase leading-tight text-[#22222B] px-2 py-0.5 rounded-full bg-[#F7DE9D]">Payment Approvals</span>
             <CreditCard className="w-4 h-4 text-[#741B22] shrink-0" />
           </div>
-          <div className="text-xl sm:text-2xl font-black text-[#22222B] mt-1">{counts.payment_pending}</div>
+          <div className="text-xl sm:text-2xl font-semibold text-[#22222B] mt-1">{counts.payment_pending}</div>
           <p className="text-[10px] text-slate-400 mt-0.5 truncate">Purchases awaiting approval</p>
         </button>
 
@@ -516,10 +516,10 @@ export default function AdminDashboard() {
           className="bg-white border-[#B0BE8C]/35 p-3.5 sm:p-4 rounded-3xl border text-left transition-all min-h-[44px] flex flex-col justify-between hover:bg-[#B0BE8C]/10"
         >
           <div className="flex items-center justify-between gap-1">
-            <span className="text-[10px] font-black uppercase leading-tight text-[#22222B]">Total Cancellations</span>
+            <span className="text-[10px] font-semibold uppercase leading-tight text-[#22222B]">Total Cancellations</span>
             <SkipForward className="w-4 h-4 text-[#741B22] shrink-0" />
           </div>
-          <div className="text-xl sm:text-2xl font-black text-[#22222B] mt-1">{requests.length}</div>
+          <div className="text-xl sm:text-2xl font-semibold text-[#22222B] mt-1">{requests.length}</div>
           <p className="text-[10px] text-slate-400 mt-0.5 truncate">Auto-processed records</p>
         </button>
 
@@ -531,10 +531,10 @@ export default function AdminDashboard() {
           className="bg-emerald-50/70 border-emerald-200 p-3.5 sm:p-4 rounded-3xl border text-left transition-all min-h-[44px] flex flex-col justify-between hover:bg-emerald-100/70"
         >
           <div className="flex items-center justify-between gap-1">
-            <span className="text-[10px] font-black uppercase leading-tight text-emerald-800">Rescheduled Cancellations</span>
+            <span className="text-[10px] font-semibold uppercase leading-tight text-emerald-800">Rescheduled Cancellations</span>
             <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
           </div>
-          <div className="text-xl sm:text-2xl font-black text-emerald-700 mt-1">
+          <div className="text-xl sm:text-2xl font-semibold text-emerald-700 mt-1">
             {requests.filter((r) => r.is_on_time).length}
           </div>
           <p className="text-[10px] text-slate-400 mt-0.5 truncate">Moved to next matching slot</p>
@@ -548,10 +548,10 @@ export default function AdminDashboard() {
           className="bg-rose-50/70 border-rose-200 p-3.5 sm:p-4 rounded-3xl border text-left transition-all min-h-[44px] flex flex-col justify-between hover:bg-rose-100/70"
         >
           <div className="flex items-center justify-between gap-1">
-            <span className="text-[10px] font-black uppercase leading-tight text-rose-800">Late Cancellations</span>
+            <span className="text-[10px] font-semibold uppercase leading-tight text-rose-800">Late Cancellations</span>
             <Clock className="w-4 h-4 text-rose-600 shrink-0" />
           </div>
-          <div className="text-xl sm:text-2xl font-black text-rose-700 mt-1">
+          <div className="text-xl sm:text-2xl font-semibold text-rose-700 mt-1">
             {requests.filter((r) => !r.is_on_time).length}
           </div>
           <p className="text-[10px] text-slate-400 mt-0.5 truncate">Late cancellations</p>
@@ -560,7 +560,7 @@ export default function AdminDashboard() {
 
       {loadErrors.length > 0 && (
         <div className="p-3.5 sm:p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
-          <div className="flex items-center gap-2 font-bold break-words min-w-0">
+          <div className="flex items-center gap-2 font-medium break-words min-w-0">
             <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0" />
             <span>
               Could not sync latest {loadErrors.join(', ')} due to a network delay. Data shown below may be partial.
@@ -569,7 +569,7 @@ export default function AdminDashboard() {
           <button
             type="button"
             onClick={() => loadAll()}
-            className="min-h-[40px] px-3.5 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-black text-xs shrink-0 flex items-center gap-1.5 transition-all self-end sm:self-auto"
+            className="min-h-[40px] px-3.5 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs shrink-0 flex items-center gap-1.5 transition-all self-end sm:self-auto"
           >
             <RefreshCw className="w-3.5 h-3.5" />
             Retry Sync
@@ -591,7 +591,7 @@ export default function AdminDashboard() {
           <button
             key={t.id}
             onClick={() => setActiveTab(t.id as any)}
-            className={`min-h-[44px] px-3.5 sm:px-4 py-2.5 rounded-2xl text-xs font-black whitespace-nowrap transition-all shrink-0 flex items-center justify-center ${
+            className={`min-h-[44px] px-3.5 sm:px-4 py-2.5 rounded-2xl text-xs font-semibold whitespace-nowrap transition-all shrink-0 flex items-center justify-center ${
               activeTab === t.id
                 ? 'bg-[#B0BE8C] text-[#22222B] shadow-xs border border-[#B0BE8C]'
                 : 'text-[#22222B]/75 hover:bg-[#B0BE8C]/20 hover:text-[#22222B]'
@@ -607,7 +607,7 @@ export default function AdminDashboard() {
         <div className="space-y-6">
           {/* Payment Approvals Section */}
           <div>
-            <h2 className="text-base font-black text-[#22222B] mb-3 flex items-center gap-2">
+            <h2 className="text-base font-semibold text-[#22222B] mb-3 flex items-center gap-2">
               <CreditCard className="w-4 h-4 text-[#741B22] shrink-0" />
               Purchases Awaiting Payment Confirmation ({pendingPayments.length})
             </h2>
@@ -624,18 +624,18 @@ export default function AdminDashboard() {
                     <div key={sub.id} className="glass-card rounded-2xl p-4 border border-[#F7DE9D] bg-[#F7DE9D]/15 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                          <span className="font-bold text-xs text-[#22222B]">Sub #{sub.id}</span>
+                          <span className="font-medium text-xs text-[#22222B]">Sub #{sub.id}</span>
                           <span className="text-xs text-slate-600">• Customer: <strong>{sub.user?.name}</strong> ({sub.user?.phone})</span>
                           {sub.payment_record?.proof_image_url ? (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-100 text-emerald-800 border border-emerald-300">
                               <ImageIcon className="w-3 h-3" /> Screenshot Attached
                             </span>
                           ) : sub.payment_record?.transaction_ref ? (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-300">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-blue-100 text-blue-800 border border-blue-300">
                               Ref: {sub.payment_record.transaction_ref}
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-amber-100 text-amber-800 border border-amber-300">
                               No Proof Uploaded
                             </span>
                           )}
@@ -652,7 +652,7 @@ export default function AdminDashboard() {
                           setSubStartDate(new Date().toISOString().split('T')[0]);
                           setRejectReason('');
                         }}
-                        className="w-full sm:w-auto min-h-[44px] px-4 py-2.5 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white font-black text-xs shadow-sm transition-all flex items-center justify-center shrink-0 gap-1.5"
+                        className="w-full sm:w-auto min-h-[44px] px-4 py-2.5 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white font-semibold text-xs shadow-sm transition-all flex items-center justify-center shrink-0 gap-1.5"
                       >
                         <CreditCard className="w-4 h-4 shrink-0" />
                         <span>{hasProof ? 'Review Proof & Verify' : 'Review & Confirm'}</span>
@@ -669,30 +669,30 @@ export default function AdminDashboard() {
       {/* TAB 2: ALL SUBSCRIPTIONS */}
       {activeTab === 'subscriptions' && (
         <div className="space-y-4">
-          <h2 className="text-base font-black text-[#22222B]">All Customer Subscriptions</h2>
+          <h2 className="text-base font-semibold text-[#22222B]">All Customer Subscriptions</h2>
 
           {/* Mobile Cards View */}
           <div className="block md:hidden space-y-3">
             {subscriptions.length === 0 ? (
-              <div className="text-center py-10 px-4 rounded-3xl bg-white border border-[#B0BE8C]/30 text-xs text-slate-500 font-bold">
+              <div className="text-center py-10 px-4 rounded-3xl bg-white border border-[#B0BE8C]/30 text-xs text-slate-500 font-medium">
                 No customer subscriptions found.
               </div>
             ) : (
               subscriptions.map((s) => (
                 <div key={s.id} className="glass-card rounded-2xl p-4 border border-[#B0BE8C]/35 shadow-xs space-y-2.5">
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-xs text-[#22222B]">Sub #{s.id}</span>
+                  <span className="font-medium text-xs text-[#22222B]">Sub #{s.id}</span>
                   <div>
                     {s.payment_status === 'PENDING' ? (
-                       <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80">
+                       <span className="px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80">
                          PENDING
                        </span>
                      ) : s.payment_status === 'REJECTED' ? (
-                       <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200">
+                       <span className="px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-rose-100 text-rose-800 border border-rose-200">
                          REJECTED
                        </span>
                      ) : (
-                       <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#B0BE8C]/30 text-[#22222B] border border-[#B0BE8C]">
+                       <span className="px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#B0BE8C]/30 text-[#22222B] border border-[#B0BE8C]">
                          {s.status}
                        </span>
                      )}
@@ -700,12 +700,12 @@ export default function AdminDashboard() {
                 </div>
 
                 <div className="text-xs space-y-0.5">
-                  <div className="font-bold text-[#22222B]">{s.user?.name} <span className="font-normal text-slate-400">({s.user?.phone})</span></div>
-                  <div>Plan: <strong>{s.plan_snapshot_name || s.plan?.name}</strong> × <strong>{s.quantity || 1}</strong> (<span className="text-[#741B22] font-bold">{formatShiftName(s.selected_shifts || s.plan_snapshot_shifts)}</span>)</div>
+                  <div className="font-medium text-[#22222B]">{s.user?.name} <span className="font-normal text-slate-400">({s.user?.phone})</span></div>
+                  <div>Plan: <strong>{s.plan_snapshot_name || s.plan?.name}</strong> × <strong>{s.quantity || 1}</strong> (<span className="text-[#741B22] font-medium">{formatShiftName(s.selected_shifts || s.plan_snapshot_shifts)}</span>)</div>
                   <div>Meals: <strong className="text-emerald-700">{s.remaining_credits}</strong> remaining of {s.total_credits}</div>
                   <div className="text-[11px] text-slate-500">Dates: {s.start_date || 'Pending'} → {s.end_date || 'Pending'}</div>
                   {s.payment_record?.proof_image_url && (
-                    <div className="text-[10px] text-emerald-700 font-bold flex items-center gap-1">
+                    <div className="text-[10px] text-emerald-700 font-medium flex items-center gap-1">
                       <ImageIcon className="w-3 h-3" /> Screenshot Attached
                     </div>
                   )}
@@ -718,7 +718,7 @@ export default function AdminDashboard() {
                       setSubStartDate(new Date().toISOString().split('T')[0]);
                       setRejectReason('');
                     }}
-                    className="w-full min-h-[44px] py-2 px-3 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white text-xs font-bold transition-colors flex items-center justify-center gap-1.5"
+                    className="w-full min-h-[44px] py-2 px-3 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white text-xs font-medium transition-colors flex items-center justify-center gap-1.5"
                   >
                     <CreditCard className="w-3.5 h-3.5" />
                     <span>Review Payment</span>
@@ -731,7 +731,7 @@ export default function AdminDashboard() {
           {/* Desktop Table View */}
           <div className="hidden md:block glass-card rounded-3xl overflow-hidden border border-[#B0BE8C]/35 overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-[#F3F5F4] text-[#22222B] font-bold border-b border-[#B0BE8C]/35">
+              <thead className="bg-[#F3F5F4] text-[#22222B] font-medium border-b border-[#B0BE8C]/35">
                 <tr>
                   <th className="p-3">ID</th>
                   <th className="p-3">Customer</th>
@@ -747,21 +747,21 @@ export default function AdminDashboard() {
               <tbody className="divide-y divide-[#B0BE8C]/20">
                 {subscriptions.length === 0 ? (
                   <tr>
-                    <td colSpan={9} className="p-8 text-center text-slate-400 font-bold">
+                    <td colSpan={9} className="p-8 text-center text-slate-400 font-medium">
                       No customer subscriptions found.
                     </td>
                   </tr>
                 ) : (
                   subscriptions.map((s) => (
                   <tr key={s.id} className="hover:bg-[#B0BE8C]/10 transition-colors">
-                    <td className="p-3 font-bold">#{s.id}</td>
+                    <td className="p-3 font-medium">#{s.id}</td>
                     <td className="p-3">
-                      <div className="font-bold text-[#22222B]">{s.user?.name}</div>
+                      <div className="font-medium text-[#22222B]">{s.user?.name}</div>
                       <div className="text-[10px] text-slate-400">{s.user?.phone}</div>
                     </td>
                     <td className="p-3 font-medium">{s.plan_snapshot_name || s.plan?.name}</td>
-                    <td className="p-3 font-bold text-[11px] text-[#741B22]">{formatShiftName(s.selected_shifts || s.plan_snapshot_shifts)}</td>
-                    <td className="p-3 font-bold">
+                    <td className="p-3 font-medium text-[11px] text-[#741B22]">{formatShiftName(s.selected_shifts || s.plan_snapshot_shifts)}</td>
+                    <td className="p-3 font-medium">
                       <span className="text-emerald-700">{s.remaining_credits}</span> / {s.total_credits}
                     </td>
                     <td className="p-3">
@@ -777,7 +777,7 @@ export default function AdminDashboard() {
                               setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
                             }
                           }}
-                          className="inline-flex items-center gap-1 text-emerald-700 hover:text-emerald-900 font-bold underline text-xs"
+                          className="inline-flex items-center gap-1 text-emerald-700 hover:text-emerald-900 font-medium underline text-xs"
                         >
                           <ImageIcon className="w-3.5 h-3.5" />
                           <span>View Proof</span>
@@ -793,15 +793,15 @@ export default function AdminDashboard() {
                     </td>
                     <td className="p-3">
                       {s.payment_status === 'PENDING' ? (
-                       <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80">
+                       <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80">
                          PENDING
                        </span>
                      ) : s.payment_status === 'REJECTED' ? (
-                       <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200">
+                       <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-rose-100 text-rose-800 border border-rose-200">
                          REJECTED
                        </span>
                      ) : (
-                       <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#B0BE8C]/30 text-[#22222B] border border-[#B0BE8C]">
+                       <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-[#B0BE8C]/30 text-[#22222B] border border-[#B0BE8C]">
                          {s.status}
                        </span>
                      )}
@@ -814,7 +814,7 @@ export default function AdminDashboard() {
                             setSubStartDate(new Date().toISOString().split('T')[0]);
                             setRejectReason('');
                           }}
-                          className="px-2.5 py-1 rounded-lg bg-[#B92F25] hover:bg-[#741B22] text-white text-[10px] font-bold transition-colors whitespace-nowrap"
+                          className="px-2.5 py-1 rounded-lg bg-[#B92F25] hover:bg-[#741B22] text-white text-[10px] font-medium transition-colors whitespace-nowrap"
                         >
                           Review & Verify
                         </button>
@@ -859,7 +859,7 @@ export default function AdminDashboard() {
           <div className="space-y-4">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
               <div>
-                <h2 className="text-base font-black text-[#22222B]">Meal Cancellations</h2>
+                <h2 className="text-base font-semibold text-[#22222B]">Meal Cancellations</h2>
                 <p className="text-xs text-slate-500">
                   Automatically processed customer meal cancellations.
                 </p>
@@ -876,7 +876,7 @@ export default function AdminDashboard() {
                     key={s.id}
                     type="button"
                     onClick={() => setReqFilterScope(s.id as any)}
-                    className={`min-h-[38px] px-3.5 py-1.5 rounded-xl text-xs font-black transition-all ${
+                    className={`min-h-[38px] px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
                       reqFilterScope === s.id
                         ? 'bg-[#B0BE8C] text-[#22222B] shadow-2xs'
                         : 'text-slate-600 hover:text-[#22222B]'
@@ -891,32 +891,32 @@ export default function AdminDashboard() {
             {/* Filter Bar */}
             <div className="glass-card rounded-2xl p-4 border border-[#B0BE8C]/35 shadow-xs grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
               <div>
-                <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Search Customer</label>
+                <label className="block text-[10px] font-medium text-slate-400 uppercase mb-1">Search Customer</label>
                 <input
                   type="text"
                   placeholder="Name or phone..."
                   value={reqFilterCustomer}
                   onChange={(e) => setReqFilterCustomer(e.target.value)}
-                  className="w-full min-h-[40px] px-3 py-2 rounded-xl border border-[#B0BE8C]/40 text-xs font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
+                  className="w-full min-h-[40px] px-3 py-2 rounded-xl border border-[#B0BE8C]/40 text-xs font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
                 />
               </div>
 
               <div>
-                <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Delivery Date</label>
+                <label className="block text-[10px] font-medium text-slate-400 uppercase mb-1">Delivery Date</label>
                 <input
                   type="date"
                   value={reqFilterDate}
                   onChange={(e) => setReqFilterDate(e.target.value)}
-                  className="w-full min-h-[40px] px-3 py-2 rounded-xl border border-[#B0BE8C]/40 text-xs font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
+                  className="w-full min-h-[40px] px-3 py-2 rounded-xl border border-[#B0BE8C]/40 text-xs font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
                 />
               </div>
 
               <div>
-                <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Meal Shift</label>
+                <label className="block text-[10px] font-medium text-slate-400 uppercase mb-1">Meal Shift</label>
                 <select
                   value={reqFilterMeal}
                   onChange={(e) => setReqFilterMeal(e.target.value as any)}
-                  className="w-full min-h-[40px] px-3 py-2 rounded-xl border border-[#B0BE8C]/40 text-xs font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
+                  className="w-full min-h-[40px] px-3 py-2 rounded-xl border border-[#B0BE8C]/40 text-xs font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
                 >
                   <option value="ALL">All Shifts</option>
                   <option value="breakfast">Breakfast</option>
@@ -926,11 +926,11 @@ export default function AdminDashboard() {
               </div>
 
               <div>
-                <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Timing / Outcome</label>
+                <label className="block text-[10px] font-medium text-slate-400 uppercase mb-1">Timing / Outcome</label>
                 <select
                   value={reqFilterTiming}
                   onChange={(e) => setReqFilterTiming(e.target.value as any)}
-                  className="w-full min-h-[40px] px-3 py-2 rounded-xl border border-[#B0BE8C]/40 text-xs font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
+                  className="w-full min-h-[40px] px-3 py-2 rounded-xl border border-[#B0BE8C]/40 text-xs font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
                 >
                   <option value="ALL">All Outcomes</option>
                   <option value="ON_TIME">Before Cutoff (Rescheduled)</option>
@@ -941,7 +941,7 @@ export default function AdminDashboard() {
 
             {filteredRequests.length === 0 ? (
               <div className="glass-card rounded-2xl p-6 sm:p-8 text-center text-slate-500 border border-[#B0BE8C]/35">
-                <p className="text-sm font-bold text-[#22222B]">No records match the current filters.</p>
+                <p className="text-sm font-medium text-[#22222B]">No records match the current filters.</p>
                 <button
                   type="button"
                   onClick={() => {
@@ -951,7 +951,7 @@ export default function AdminDashboard() {
                     setReqFilterTiming('ALL');
                     setReqFilterScope('ALL');
                   }}
-                  className="mt-2 text-xs font-bold text-[#741B22] hover:underline"
+                  className="mt-2 text-xs font-medium text-[#741B22] hover:underline"
                 >
                   Reset all filters
                 </button>
@@ -964,18 +964,18 @@ export default function AdminDashboard() {
                     <div key={r.id} className="glass-card rounded-2xl p-4 border border-[#B0BE8C]/35 shadow-xs space-y-2">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1.5">
-                          <span className="font-bold text-xs text-[#22222B]">#{r.id}</span>
-                          <span className="px-2 py-0.5 rounded-md bg-[#B0BE8C]/20 border border-[#B0BE8C]/35 text-[#22222B] font-bold text-xs">
+                          <span className="font-medium text-xs text-[#22222B]">#{r.id}</span>
+                          <span className="px-2 py-0.5 rounded-md bg-[#B0BE8C]/20 border border-[#B0BE8C]/35 text-[#22222B] font-medium text-xs">
                             Meal Cancellation
                           </span>
                         </div>
                         <div>
                           {r.is_on_time ? (
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-100 text-emerald-800 border border-emerald-200">
                               Rescheduled
                             </span>
                           ) : (
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200">
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-rose-100 text-rose-800 border border-rose-200">
                               Cancelled
                             </span>
                           )}
@@ -983,7 +983,7 @@ export default function AdminDashboard() {
                       </div>
 
                       <div className="text-xs space-y-1">
-                        <div className="font-bold text-[#22222B]">{r.user?.name} <span className="font-normal text-slate-400">({r.user?.phone})</span></div>
+                        <div className="font-medium text-[#22222B]">{r.user?.name} <span className="font-normal text-slate-400">({r.user?.phone})</span></div>
                         <div className="text-slate-600">
                           Plan: <strong>{r.subscription?.plan_snapshot_name || 'Active Plan'}</strong> (Sub #{r.subscription_id})
                         </div>
@@ -993,9 +993,9 @@ export default function AdminDashboard() {
                         <div>
                           Timing:{' '}
                           {r.is_on_time ? (
-                            <span className="text-emerald-700 font-bold">Before Cutoff</span>
+                            <span className="text-emerald-700 font-medium">Before Cutoff</span>
                           ) : (
-                            <span className="text-rose-700 font-bold">Late Cancellation</span>
+                            <span className="text-rose-700 font-medium">Late Cancellation</span>
                           )}
                         </div>
                         <div className="text-[10px] text-slate-400">
@@ -1012,7 +1012,7 @@ export default function AdminDashboard() {
                 {/* Desktop Table View */}
                 <div className="hidden md:block glass-card rounded-3xl overflow-hidden border border-[#B0BE8C]/35 overflow-x-auto">
                   <table className="w-full text-left text-xs">
-                    <thead className="bg-[#F3F5F4] text-[#22222B] font-bold border-b border-[#B0BE8C]/35">
+                    <thead className="bg-[#F3F5F4] text-[#22222B] font-medium border-b border-[#B0BE8C]/35">
                       <tr>
                         <th className="p-3">ID</th>
                         <th className="p-3">Customer & Phone</th>
@@ -1028,9 +1028,9 @@ export default function AdminDashboard() {
                     <tbody className="divide-y divide-[#B0BE8C]/20">
                       {filteredRequests.map((r) => (
                         <tr key={r.id} className="hover:bg-[#B0BE8C]/10 transition-colors">
-                          <td className="p-3 font-bold">#{r.id}</td>
+                          <td className="p-3 font-medium">#{r.id}</td>
                           <td className="p-3">
-                            <div className="font-bold text-[#22222B]">{r.user?.name}</div>
+                            <div className="font-medium text-[#22222B]">{r.user?.name}</div>
                             <div className="text-[10px] text-slate-400">{r.user?.phone}</div>
                           </td>
                           <td className="p-3 font-medium">
@@ -1038,36 +1038,36 @@ export default function AdminDashboard() {
                             <div className="text-[10px] text-slate-400">Sub #{r.subscription_id}</div>
                           </td>
                           <td className="p-3">
-                            <span className="px-2 py-0.5 rounded-md bg-[#B0BE8C]/25 text-[#22222B] border border-[#B0BE8C]/40 text-[10px] font-black">
+                            <span className="px-2 py-0.5 rounded-md bg-[#B0BE8C]/25 text-[#22222B] border border-[#B0BE8C]/40 text-[10px] font-semibold">
                               Meal Cancellation
                             </span>
                           </td>
                           <td className="p-3 font-medium whitespace-nowrap">
-                            <div>{r.effective_date} {r.meal_slot && <span className="capitalize font-bold">({r.meal_slot})</span>}</div>
+                            <div>{r.effective_date} {r.meal_slot && <span className="capitalize font-medium">({r.meal_slot})</span>}</div>
                           </td>
                           <td className="p-3 text-slate-500 whitespace-nowrap">
                             {new Date(r.submission_time).toLocaleString()}
                           </td>
                           <td className="p-3">
                             {r.is_on_time ? (
-                              <span className="text-emerald-700 font-bold">Before Cutoff</span>
+                              <span className="text-emerald-700 font-medium">Before Cutoff</span>
                             ) : (
-                              <span className="text-rose-700 font-bold">Late Cancellation</span>
+                              <span className="text-rose-700 font-medium">Late Cancellation</span>
                             )}
                           </td>
                           <td className="p-3">
                             {r.is_on_time ? (
-                              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                              <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-100 text-emerald-800 border border-emerald-200">
                                 Rescheduled
                               </span>
                             ) : (
-                              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200">
+                              <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-rose-100 text-rose-800 border border-rose-200">
                                 Cancelled
                               </span>
                             )}
                           </td>
                           <td className="p-3">
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-100 text-slate-700 border border-slate-200">
                               Auto-Processed
                             </span>
                           </td>
@@ -1086,7 +1086,7 @@ export default function AdminDashboard() {
       {activeTab === 'customers' && (
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-            <h2 className="text-base font-black text-[#22222B]">Customer Directory</h2>
+            <h2 className="text-base font-semibold text-[#22222B]">Customer Directory</h2>
             <span className="text-xs text-slate-500">Address updates and temporary password resets are Admin-governed</span>
           </div>
 
@@ -1095,7 +1095,7 @@ export default function AdminDashboard() {
             {customers.map((c) => (
               <div key={c.id} className="glass-card rounded-2xl p-4 border border-[#B0BE8C]/35 shadow-xs space-y-2.5">
                 <div className="flex items-center justify-between">
-                  <div className="font-black text-sm text-[#22222B]">{c.name}</div>
+                  <div className="font-semibold text-sm text-[#22222B]">{c.name}</div>
                   <span className="text-[10px] text-slate-400">#{c.id}</span>
                 </div>
                 <div className="text-xs space-y-1">
@@ -1107,7 +1107,7 @@ export default function AdminDashboard() {
                   <div>
                     Temp Password Status:{' '}
                     {c.must_change_password ? (
-                      <span className="px-2 py-0.5 rounded-full bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80 text-[10px] font-bold">
+                      <span className="px-2 py-0.5 rounded-full bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80 text-[10px] font-medium">
                         Change Required
                       </span>
                     ) : (
@@ -1121,7 +1121,7 @@ export default function AdminDashboard() {
                       setEditingCust(c);
                       setNewCustAddress(c.delivery_address);
                     }}
-                    className="min-h-[44px] px-3 py-2 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center"
+                    className="min-h-[44px] px-3 py-2 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-medium transition-colors flex items-center justify-center"
                   >
                     Edit Address
                   </button>
@@ -1130,7 +1130,7 @@ export default function AdminDashboard() {
                       setResetCust(c);
                       setTempPassword('');
                     }}
-                    className="min-h-[44px] px-3 py-2 rounded-xl bg-[#F7DE9D] hover:bg-[#F7DE9D]/80 border border-[#F7DE9D] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center"
+                    className="min-h-[44px] px-3 py-2 rounded-xl bg-[#F7DE9D] hover:bg-[#F7DE9D]/80 border border-[#F7DE9D] text-[#22222B] text-xs font-medium transition-colors flex items-center justify-center"
                   >
                     Set Temp Pass
                   </button>
@@ -1142,7 +1142,7 @@ export default function AdminDashboard() {
           {/* Desktop Table View */}
           <div className="hidden md:block glass-card rounded-3xl overflow-hidden border border-[#B0BE8C]/35 overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-[#F3F5F4] text-[#22222B] font-bold border-b border-[#B0BE8C]/35">
+              <thead className="bg-[#F3F5F4] text-[#22222B] font-medium border-b border-[#B0BE8C]/35">
                 <tr>
                   <th className="p-3">ID</th>
                   <th className="p-3">Name</th>
@@ -1156,14 +1156,14 @@ export default function AdminDashboard() {
               <tbody className="divide-y divide-[#B0BE8C]/20">
                 {customers.map((c) => (
                   <tr key={c.id} className="hover:bg-[#B0BE8C]/10 transition-colors">
-                    <td className="p-3 font-bold">#{c.id}</td>
-                    <td className="p-3 font-bold text-[#22222B]">{c.name}</td>
+                    <td className="p-3 font-medium">#{c.id}</td>
+                    <td className="p-3 font-medium text-[#22222B]">{c.name}</td>
                     <td className="p-3">{c.phone}</td>
                     <td className="p-3">{c.secondary_phone || 'None'}</td>
                     <td className="p-3 text-slate-700 max-w-xs truncate">{c.delivery_address || 'None'}</td>
                     <td className="p-3">
                       {c.must_change_password ? (
-                        <span className="px-2 py-0.5 rounded-full bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80 text-[10px] font-bold">
+                        <span className="px-2 py-0.5 rounded-full bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80 text-[10px] font-medium">
                           Change Required
                         </span>
                       ) : (
@@ -1176,7 +1176,7 @@ export default function AdminDashboard() {
                           setEditingCust(c);
                           setNewCustAddress(c.delivery_address);
                         }}
-                        className="px-2.5 py-1 rounded-lg bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-[10px] font-bold transition-colors"
+                        className="px-2.5 py-1 rounded-lg bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-[10px] font-medium transition-colors"
                       >
                         Edit Address
                       </button>
@@ -1185,7 +1185,7 @@ export default function AdminDashboard() {
                           setResetCust(c);
                           setTempPassword('');
                         }}
-                        className="px-2.5 py-1 rounded-lg bg-[#F7DE9D] hover:bg-[#F7DE9D]/80 border border-[#F7DE9D] text-[#22222B] text-[10px] font-bold transition-colors"
+                        className="px-2.5 py-1 rounded-lg bg-[#F7DE9D] hover:bg-[#F7DE9D]/80 border border-[#F7DE9D] text-[#22222B] text-[10px] font-medium transition-colors"
                       >
                         Set Temp Password
                       </button>
@@ -1203,12 +1203,12 @@ export default function AdminDashboard() {
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="text-base font-black text-[#22222B]">Kitchen & Logistics Staff</h2>
+              <h2 className="text-base font-semibold text-[#22222B]">Kitchen & Logistics Staff</h2>
               <p className="text-xs text-slate-500">Staff registration is private. Only Admin can create Chef and Delivery accounts.</p>
             </div>
             <button
               onClick={() => setShowStaffModal(true)}
-              className="w-full sm:w-auto min-h-[44px] px-4 py-2.5 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white text-xs font-black flex items-center justify-center gap-1.5 shadow-md shadow-[#B92F25]/20 transition-colors"
+              className="w-full sm:w-auto min-h-[44px] px-4 py-2.5 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white text-xs font-semibold flex items-center justify-center gap-1.5 shadow-md shadow-[#B92F25]/20 transition-colors"
             >
               <Plus className="w-4 h-4 shrink-0" />
               Add Staff Member
@@ -1217,7 +1217,7 @@ export default function AdminDashboard() {
 
           {staff.length === 0 ? (
             <div className="text-center py-12 px-4 rounded-3xl bg-white border border-[#B0BE8C]/30 shadow-xs">
-              <p className="text-sm font-bold text-[#22222B]">No staff members found</p>
+              <p className="text-sm font-medium text-[#22222B]">No staff members found</p>
               <p className="text-xs text-slate-500 mt-1">Use &quot;Add Staff Member&quot; above to create Chef or Delivery Rider accounts.</p>
             </div>
           ) : (
@@ -1227,10 +1227,10 @@ export default function AdminDashboard() {
                 {staff.map((s) => (
                   <div key={s.id} className="glass-card rounded-2xl p-4 border border-[#B0BE8C]/35 shadow-xs space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#B0BE8C]/25 text-[#22222B] border border-[#B0BE8C]/40">
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-[#B0BE8C]/25 text-[#22222B] border border-[#B0BE8C]/40">
                         {s.role}
                       </span>
-                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium border ${
                         s.credential_locked
                           ? 'bg-rose-50 text-rose-700 border-rose-200'
                           : 'bg-emerald-50 text-emerald-700 border-emerald-200'
@@ -1239,17 +1239,17 @@ export default function AdminDashboard() {
                       </span>
                     </div>
                     <div>
-                      <h3 className="text-sm font-black text-[#22222B] break-words">{s.name}</h3>
+                      <h3 className="text-sm font-semibold text-[#22222B] break-words">{s.name}</h3>
                       <p className="text-xs text-slate-500 mt-0.5">Phone: {s.phone}</p>
                       {s.must_change_password && (
-                        <p className="text-[10px] text-amber-700 font-bold mt-1">Password Change Required</p>
+                        <p className="text-[10px] text-amber-700 font-medium mt-1">Password Change Required</p>
                       )}
                     </div>
                     <div className="grid grid-cols-2 gap-2 pt-1 border-t border-[#B0BE8C]/20">
                       <button
                         onClick={() => handleToggleStaffStatus(s.id, Boolean(s.credential_locked))}
                         disabled={togglingStaffId === s.id}
-                        className={`min-h-[44px] px-2 py-1 rounded-xl text-xs font-bold border transition-colors flex items-center justify-center ${
+                        className={`min-h-[44px] px-2 py-1 rounded-xl text-xs font-medium border transition-colors flex items-center justify-center ${
                           s.credential_locked
                             ? 'bg-emerald-50 hover:bg-emerald-100 border-emerald-300 text-emerald-800'
                             : 'bg-rose-50 hover:bg-rose-100 border-rose-300 text-rose-800'
@@ -1262,7 +1262,7 @@ export default function AdminDashboard() {
                           setResetStaffMember(s);
                           setStaffTempPassword('');
                         }}
-                        className="min-h-[44px] px-2 py-1 rounded-xl bg-[#F7DE9D] hover:bg-[#F7DE9D]/80 border border-[#F7DE9D] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center"
+                        className="min-h-[44px] px-2 py-1 rounded-xl bg-[#F7DE9D] hover:bg-[#F7DE9D]/80 border border-[#F7DE9D] text-[#22222B] text-xs font-medium transition-colors flex items-center justify-center"
                       >
                         Reset Pass
                       </button>
@@ -1274,7 +1274,7 @@ export default function AdminDashboard() {
               {/* Desktop Table View */}
               <div className="hidden md:block glass-card rounded-3xl overflow-hidden border border-[#B0BE8C]/35 overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-[#F3F5F4] text-[#22222B] font-bold border-b border-[#B0BE8C]/35">
+                  <thead className="bg-[#F3F5F4] text-[#22222B] font-medium border-b border-[#B0BE8C]/35">
                     <tr>
                       <th className="p-3">ID</th>
                       <th className="p-3">Name</th>
@@ -1288,12 +1288,12 @@ export default function AdminDashboard() {
                   <tbody className="divide-y divide-[#B0BE8C]/20">
                     {staff.map((s) => (
                       <tr key={s.id} className="hover:bg-[#B0BE8C]/10 transition-colors">
-                        <td className="p-3 font-bold">#{s.id}</td>
-                        <td className="p-3 font-bold text-[#22222B]">{s.name}</td>
-                        <td className="p-3 uppercase font-bold text-[#741B22]">{s.role}</td>
+                        <td className="p-3 font-medium">#{s.id}</td>
+                        <td className="p-3 font-medium text-[#22222B]">{s.name}</td>
+                        <td className="p-3 uppercase font-medium text-[#741B22]">{s.role}</td>
                         <td className="p-3">{s.phone}</td>
                         <td className="p-3">
-                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium border ${
                             s.credential_locked
                               ? 'bg-rose-50 text-rose-700 border-rose-200'
                               : 'bg-emerald-50 text-emerald-700 border-emerald-200'
@@ -1303,7 +1303,7 @@ export default function AdminDashboard() {
                         </td>
                         <td className="p-3">
                           {s.must_change_password ? (
-                            <span className="px-2 py-0.5 rounded-full bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80 text-[10px] font-bold">
+                            <span className="px-2 py-0.5 rounded-full bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80 text-[10px] font-medium">
                               Change Required
                             </span>
                           ) : (
@@ -1314,7 +1314,7 @@ export default function AdminDashboard() {
                           <button
                             onClick={() => handleToggleStaffStatus(s.id, Boolean(s.credential_locked))}
                             disabled={togglingStaffId === s.id}
-                            className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-colors ${
+                            className={`px-2.5 py-1 rounded-lg text-[10px] font-medium border transition-colors ${
                               s.credential_locked
                                 ? 'bg-emerald-50 hover:bg-emerald-100 border-emerald-300 text-emerald-800'
                                 : 'bg-rose-50 hover:bg-rose-100 border-rose-300 text-rose-800'
@@ -1327,7 +1327,7 @@ export default function AdminDashboard() {
                               setResetStaffMember(s);
                               setStaffTempPassword('');
                             }}
-                            className="px-2.5 py-1 rounded-lg bg-[#F7DE9D] hover:bg-[#F7DE9D]/80 border border-[#F7DE9D] text-[#22222B] text-[10px] font-bold transition-colors"
+                            className="px-2.5 py-1 rounded-lg bg-[#F7DE9D] hover:bg-[#F7DE9D]/80 border border-[#F7DE9D] text-[#22222B] text-[10px] font-medium transition-colors"
                           >
                             Set Temp Password
                           </button>
@@ -1347,7 +1347,7 @@ export default function AdminDashboard() {
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="text-base font-black text-[#22222B]">Plans</h2>
+              <h2 className="text-base font-semibold text-[#22222B]">Plans</h2>
               <p className="text-xs text-slate-500">
                 Support 1 meal, 2-meal combos, and 3 meals. Referenced plans are archived instead of deleted.
               </p>
@@ -1362,7 +1362,7 @@ export default function AdminDashboard() {
                 setPlanCredits(14);
                 setShowPlanModal(true);
               }}
-              className="w-full sm:w-auto min-h-[44px] px-4 py-2.5 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white text-xs font-black flex items-center justify-center gap-1.5 shadow-md shadow-[#B92F25]/20 transition-colors"
+              className="w-full sm:w-auto min-h-[44px] px-4 py-2.5 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white text-xs font-semibold flex items-center justify-center gap-1.5 shadow-md shadow-[#B92F25]/20 transition-colors"
             >
               <Plus className="w-4 h-4 shrink-0" />
               Create Plan
@@ -1375,12 +1375,12 @@ export default function AdminDashboard() {
                 p.is_archived ? 'opacity-60 bg-slate-50 border-[#B0BE8C]/20' : 'border-[#B0BE8C]/35'
               }`}>
                 <div>
-                  <div className="flex items-center justify-between text-xs text-slate-400 font-bold mb-1">
+                  <div className="flex items-center justify-between text-xs text-slate-400 font-medium mb-1">
                     <span>{p.days_count} Days</span>
                     <span>{p.meal_credits} Meals</span>
                   </div>
-                  <h3 className="text-base font-black text-[#22222B] break-words">{p.name}</h3>
-                  <div className="text-xl font-black text-[#741B22] my-2">₹{p.price.toFixed(2)}</div>
+                  <h3 className="text-base font-semibold text-[#22222B] break-words">{p.name}</h3>
+                  <div className="text-xl font-semibold text-[#741B22] my-2">₹{p.price.toFixed(2)}</div>
                   <p className="text-xs text-slate-600">
                     Included Shifts: <strong className="uppercase">{p.shifts}</strong>
                   </p>
@@ -1397,13 +1397,13 @@ export default function AdminDashboard() {
                       setPlanCredits(p.meal_credits);
                       setShowPlanModal(true);
                     }}
-                    className="min-h-[44px] px-4 py-2 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-xs font-bold text-[#22222B] transition-colors flex items-center justify-center"
+                    className="min-h-[44px] px-4 py-2 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-xs font-medium text-[#22222B] transition-colors flex items-center justify-center"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => handleArchivePlan(p.id)}
-                    className="min-h-[44px] px-3 py-2 text-xs font-bold text-[#741B22] hover:underline flex items-center"
+                    className="min-h-[44px] px-3 py-2 text-xs font-medium text-[#741B22] hover:underline flex items-center"
                   >
                     {p.is_archived ? 'Unarchive' : 'Archive'}
                   </button>
@@ -1426,8 +1426,8 @@ export default function AdminDashboard() {
             {/* Header */}
             <div className="flex items-start justify-between gap-2 border-b border-[#B0BE8C]/25 pb-3">
               <div className="min-w-0">
-                <span className="text-[10px] font-bold text-slate-400 uppercase">Verification Review</span>
-                <h3 className="text-lg font-black text-[#22222B]">Review Manual UPI Payment</h3>
+                <span className="text-[10px] font-medium text-slate-400 uppercase">Verification Review</span>
+                <h3 className="text-lg font-semibold text-[#22222B]">Review Manual UPI Payment</h3>
                 <p className="text-xs text-slate-600">
                   Sub #{confirmSub.id} • Customer: <strong>{confirmSub.user?.name}</strong> ({confirmSub.user?.phone})
                 </p>
@@ -1452,14 +1452,14 @@ export default function AdminDashboard() {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-500 font-medium">Payable Amount:</span>
-                <strong className="text-base font-black text-[#741B22]">
+                <strong className="text-base font-semibold text-[#741B22]">
                   ₹{(confirmSub.plan_snapshot_price || confirmSub.plan?.price || 0).toFixed(2)}
-                  <span className="ml-2 text-xs font-bold text-slate-500">({confirmSub.quantity || 1} plan{(confirmSub.quantity || 1) === 1 ? '' : 's'})</span>
+                  <span className="ml-2 text-xs font-medium text-slate-500">({confirmSub.quantity || 1} plan{(confirmSub.quantity || 1) === 1 ? '' : 's'})</span>
                 </strong>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-500 font-medium">Total Meals:</span>
-                <strong className="text-emerald-700 font-black">{confirmSub.total_credits} Meals</strong>
+                <strong className="text-emerald-700 font-semibold">{confirmSub.total_credits} Meals</strong>
               </div>
               <div className="text-[11px] text-slate-500 pt-1 border-t border-[#B0BE8C]/20">
                 <span>Address: </span>
@@ -1469,7 +1469,7 @@ export default function AdminDashboard() {
 
             {/* Payment Proof Section */}
             <div className="space-y-2">
-              <h4 className="text-xs font-black text-[#22222B] flex items-center gap-1.5">
+              <h4 className="text-xs font-semibold text-[#22222B] flex items-center gap-1.5">
                 <ImageIcon className="w-4 h-4 text-[#741B22] shrink-0" />
                 <span>Customer Uploaded Payment Proof</span>
               </h4>
@@ -1502,7 +1502,7 @@ export default function AdminDashboard() {
                       <a
                         href={receiptBlobUrl}
                         download
-                        className="inline-flex items-center gap-1 text-[#741B22] hover:text-[#B92F25] font-bold underline text-xs ml-auto"
+                        className="inline-flex items-center gap-1 text-[#741B22] hover:text-[#B92F25] font-medium underline text-xs ml-auto"
                       >
                         <ExternalLink className="w-3.5 h-3.5" />
                         <span>Download Receipt</span>
@@ -1512,8 +1512,8 @@ export default function AdminDashboard() {
                 </div>
               ) : confirmSub.payment_record?.transaction_ref ? (
                 <div className="p-3 bg-blue-50 border border-blue-200 rounded-2xl text-xs space-y-1">
-                  <div className="font-bold text-blue-900">Transaction Reference Provided:</div>
-                  <div className="font-bold text-blue-950 text-sm">{confirmSub.payment_record.transaction_ref}</div>
+                  <div className="font-medium text-blue-900">Transaction Reference Provided:</div>
+                  <div className="font-medium text-blue-950 text-sm">{confirmSub.payment_record.transaction_ref}</div>
                 </div>
               ) : (
                 <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-2xl text-xs text-amber-900 flex items-center gap-2">
@@ -1525,13 +1525,13 @@ export default function AdminDashboard() {
 
             {/* Set Start Date (Required for approval) */}
             <div className="space-y-1 text-xs">
-              <label className="block font-bold text-[#22222B]">Set Subscription Start Date</label>
+              <label className="block font-medium text-[#22222B]">Set Subscription Start Date</label>
               <input
                 type="date"
                 required
                 value={subStartDate}
                 onChange={(e) => setSubStartDate(e.target.value)}
-                className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
+                className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
               />
               <p className="text-[10px] text-slate-400">
                 Deliveries and meal schedule will start from this date strictly for {formatShiftName(confirmSub.selected_shifts || confirmSub.plan_snapshot_shifts)}.
@@ -1540,7 +1540,7 @@ export default function AdminDashboard() {
 
             {/* Optional Rejection Reason */}
             <div className="space-y-1 text-xs">
-              <label className="block font-bold text-slate-600">Rejection Reason / Admin Note (Optional)</label>
+              <label className="block font-medium text-slate-600">Rejection Reason / Admin Note (Optional)</label>
               <input
                 type="text"
                 placeholder="e.g. Unverified screenshot, amount mismatch, etc."
@@ -1555,7 +1555,7 @@ export default function AdminDashboard() {
               <button
                 type="button"
                 onClick={() => setConfirmSub(null)}
-                className="order-3 sm:order-1 flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center"
+                className="order-3 sm:order-1 flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-medium transition-colors flex items-center justify-center"
               >
                 Cancel
               </button>
@@ -1564,7 +1564,7 @@ export default function AdminDashboard() {
                 type="button"
                 onClick={handleRejectPayment}
                 disabled={rejectingPayment || confirmingPayment}
-                className="order-2 sm:order-2 flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-white hover:bg-rose-50 border border-rose-300 text-rose-700 text-xs font-bold transition-colors flex items-center justify-center disabled:opacity-50"
+                className="order-2 sm:order-2 flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-white hover:bg-rose-50 border border-rose-300 text-rose-700 text-xs font-medium transition-colors flex items-center justify-center disabled:opacity-50"
               >
                 {rejectingPayment ? 'Rejecting...' : 'Reject Payment'}
               </button>
@@ -1573,7 +1573,7 @@ export default function AdminDashboard() {
                 type="button"
                 onClick={handleConfirmPayment}
                 disabled={confirmingPayment || rejectingPayment}
-                className="order-1 sm:order-3 flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white font-black text-xs shadow-md transition-colors flex items-center justify-center disabled:opacity-50"
+                className="order-1 sm:order-3 flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white font-semibold text-xs shadow-md transition-colors flex items-center justify-center disabled:opacity-50"
               >
                 {confirmingPayment ? 'Activating...' : 'Approve & Activate'}
               </button>
@@ -1586,31 +1586,31 @@ export default function AdminDashboard() {
       {editingCust && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-[100] overflow-y-auto">
           <div className="bg-white rounded-3xl p-5 sm:p-8 max-w-md w-full border border-[#B0BE8C]/40 shadow-2xl space-y-4 max-h-[90dvh] overflow-y-auto overscroll-contain my-auto">
-            <h3 className="text-lg font-black text-[#22222B]">Update Customer Delivery Address</h3>
+            <h3 className="text-lg font-semibold text-[#22222B]">Update Customer Delivery Address</h3>
             <p className="text-xs text-slate-500">Customer: {editingCust.name} ({editingCust.phone})</p>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">New Delivery Address</label>
+              <label className="block text-xs font-medium text-slate-700 mb-1">New Delivery Address</label>
               <textarea
                 rows={3}
                 required
                 value={newCustAddress}
                 onChange={(e) => setNewCustAddress(e.target.value)}
-                className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
+                className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
               />
             </div>
 
             <div className="flex gap-2">
               <button
                 onClick={() => setEditingCust(null)}
-                className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center"
+                className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-medium transition-colors flex items-center justify-center"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSaveCustomerAddress}
                 disabled={savingCustAddress}
-                className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white text-xs font-black shadow-md transition-colors flex items-center justify-center"
+                className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white text-xs font-semibold shadow-md transition-colors flex items-center justify-center"
               >
                 {savingCustAddress ? 'Saving...' : 'Save Address'}
               </button>
@@ -1623,13 +1623,13 @@ export default function AdminDashboard() {
       {resetCust && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-[100] overflow-y-auto">
           <div className="bg-white rounded-3xl p-5 sm:p-8 max-w-md w-full border border-[#B0BE8C]/40 shadow-2xl space-y-4 max-h-[90dvh] overflow-y-auto overscroll-contain my-auto">
-            <h3 className="text-lg font-black text-[#22222B]">Set Temporary Password</h3>
+            <h3 className="text-lg font-semibold text-[#22222B]">Set Temporary Password</h3>
             <p className="text-xs text-slate-500">
               Customer: {resetCust.name} ({resetCust.phone}). Customer must change it upon next login.
             </p>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Temporary Password (min 6 chars)</label>
+              <label className="block text-xs font-medium text-slate-700 mb-1">Temporary Password (min 6 chars)</label>
               <input
                 type="password"
                 required
@@ -1637,21 +1637,21 @@ export default function AdminDashboard() {
                 value={tempPassword}
                 onChange={(e) => setTempPassword(e.target.value)}
                 placeholder="Temporary password"
-                className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
+                className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
               />
             </div>
 
             <div className="flex gap-2">
               <button
                 onClick={() => setResetCust(null)}
-                className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center"
+                className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-medium transition-colors flex items-center justify-center"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSaveTempPassword}
                 disabled={savingTempPass}
-                className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#F7DE9D] hover:bg-[#F7DE9D]/80 border border-[#F7DE9D] text-[#22222B] text-xs font-black shadow-sm transition-colors flex items-center justify-center"
+                className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#F7DE9D] hover:bg-[#F7DE9D]/80 border border-[#F7DE9D] text-[#22222B] text-xs font-semibold shadow-sm transition-colors flex items-center justify-center"
               >
                 {savingTempPass ? 'Setting...' : 'Set Temp Password'}
               </button>
@@ -1664,15 +1664,15 @@ export default function AdminDashboard() {
       {showStaffModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-[100] overflow-y-auto">
           <div className="bg-white rounded-3xl p-5 sm:p-8 max-w-md w-full border border-[#B0BE8C]/40 shadow-2xl space-y-3 text-xs max-h-[90dvh] overflow-y-auto overscroll-contain my-auto">
-            <h3 className="text-lg font-black text-[#22222B]">Create Staff Account</h3>
+            <h3 className="text-lg font-semibold text-[#22222B]">Create Staff Account</h3>
             <p className="text-slate-500">Private staff provisioning for Chef or Delivery Rider.</p>
 
             <div>
-              <label className="block font-bold mb-1 text-[#22222B]">Role</label>
+              <label className="block font-medium mb-1 text-[#22222B]">Role</label>
               <select
                 value={staffRole}
                 onChange={(e) => setStaffRole(e.target.value as any)}
-                className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
+                className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
               >
                 <option value="chef">Chef</option>
                 <option value="delivery">Delivery Person</option>
@@ -1680,50 +1680,50 @@ export default function AdminDashboard() {
             </div>
 
             <div>
-              <label className="block font-bold mb-1 text-[#22222B]">Full Name</label>
+              <label className="block font-medium mb-1 text-[#22222B]">Full Name</label>
               <input
                 type="text"
                 required
                 value={staffName}
                 onChange={(e) => setStaffName(e.target.value)}
-                className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
+                className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
               />
             </div>
 
             <div>
-              <label className="block font-bold mb-1 text-[#22222B]">Phone Number (Login ID)</label>
+              <label className="block font-medium mb-1 text-[#22222B]">Phone Number (Login ID)</label>
               <input
                 type="tel"
                 required
                 value={staffPhone}
                 onChange={(e) => setStaffPhone(e.target.value)}
-                className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
+                className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
               />
             </div>
 
             <div>
-              <label className="block font-bold mb-1 text-[#22222B]">Password</label>
+              <label className="block font-medium mb-1 text-[#22222B]">Password</label>
               <input
                 type="password"
                 required
                 minLength={6}
                 value={staffPassword}
                 onChange={(e) => setStaffPassword(e.target.value)}
-                className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
+                className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
               />
             </div>
 
             <div className="flex gap-2 pt-2">
               <button
                 onClick={() => setShowStaffModal(false)}
-                className="flex-1 min-h-[44px] py-2 px-3 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-xs font-bold text-[#22222B] transition-colors flex items-center justify-center"
+                className="flex-1 min-h-[44px] py-2 px-3 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-xs font-medium text-[#22222B] transition-colors flex items-center justify-center"
               >
                 Cancel
               </button>
               <button
                 onClick={handleCreateStaff}
                 disabled={creatingStaff}
-                className="flex-1 min-h-[44px] py-2 px-3 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white font-black text-xs shadow-md transition-colors flex items-center justify-center"
+                className="flex-1 min-h-[44px] py-2 px-3 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white font-semibold text-xs shadow-md transition-colors flex items-center justify-center"
               >
                 {creatingStaff ? 'Creating...' : 'Create Account'}
               </button>
@@ -1736,13 +1736,13 @@ export default function AdminDashboard() {
       {resetStaffMember && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-[100] overflow-y-auto">
           <div className="bg-white rounded-3xl p-5 sm:p-8 max-w-md w-full border border-[#B0BE8C]/40 shadow-2xl space-y-4 max-h-[90dvh] overflow-y-auto overscroll-contain my-auto">
-            <h3 className="text-lg font-black text-[#22222B]">Set Temporary Password</h3>
+            <h3 className="text-lg font-semibold text-[#22222B]">Set Temporary Password</h3>
             <p className="text-xs text-slate-500">
               Staff Member: {resetStaffMember.name} ({resetStaffMember.phone}, {resetStaffMember.role}). They must change this password on next login.
             </p>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Temporary Password (min 6 chars)</label>
+              <label className="block text-xs font-medium text-slate-700 mb-1">Temporary Password (min 6 chars)</label>
               <input
                 type="password"
                 required
@@ -1750,21 +1750,21 @@ export default function AdminDashboard() {
                 value={staffTempPassword}
                 onChange={(e) => setStaffTempPassword(e.target.value)}
                 placeholder="Temporary password"
-                className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
+                className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
               />
             </div>
 
             <div className="flex gap-2">
               <button
                 onClick={() => setResetStaffMember(null)}
-                className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-bold transition-colors flex items-center justify-center"
+                className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-medium transition-colors flex items-center justify-center"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSaveStaffTempPassword}
                 disabled={savingStaffTempPass}
-                className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#F7DE9D] hover:bg-[#F7DE9D]/80 border border-[#F7DE9D] text-[#22222B] text-xs font-black shadow-sm transition-colors flex items-center justify-center"
+                className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#F7DE9D] hover:bg-[#F7DE9D]/80 border border-[#F7DE9D] text-[#22222B] text-xs font-semibold shadow-sm transition-colors flex items-center justify-center"
               >
                 {savingStaffTempPass ? 'Setting...' : 'Set Temp Password'}
               </button>
@@ -1777,78 +1777,78 @@ export default function AdminDashboard() {
       {showPlanModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-[100] overflow-y-auto">
           <div className="bg-white rounded-3xl p-5 sm:p-8 max-w-md w-full border border-[#B0BE8C]/40 shadow-2xl space-y-3 text-xs max-h-[90dvh] overflow-y-auto overscroll-contain my-auto">
-            <h3 className="text-lg font-black text-[#22222B]">
+            <h3 className="text-lg font-semibold text-[#22222B]">
               {editingPlanId ? 'Edit Subscription Plan' : 'Create New Subscription Plan'}
             </h3>
 
             <div>
-              <label className="block font-bold mb-1 text-[#22222B]">Plan Name</label>
+              <label className="block font-medium mb-1 text-[#22222B]">Plan Name</label>
               <input
                 type="text"
                 required
                 value={planName}
                 onChange={(e) => setPlanName(e.target.value)}
                 placeholder="e.g. Breakfast + Dinner (1 Week)"
-                className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
+                className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="block font-bold mb-1 text-[#22222B]">Duration (Days)</label>
+                <label className="block font-medium mb-1 text-[#22222B]">Duration (Days)</label>
                 <input
                   type="number"
                   min={1}
                   value={planDays}
                   onChange={(e) => setPlanDays(parseInt(e.target.value, 10))}
-                  className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
+                  className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
                 />
               </div>
               <div>
-                <label className="block font-bold mb-1 text-[#22222B]">Total Included Meals</label>
+                <label className="block font-medium mb-1 text-[#22222B]">Total Included Meals</label>
                 <input
                   type="number"
                   min={1}
                   value={planCredits}
                   onChange={(e) => setPlanCredits(parseInt(e.target.value, 10))}
-                  className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
+                  className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block font-bold mb-1 text-[#22222B]">Price (INR)</label>
+              <label className="block font-medium mb-1 text-[#22222B]">Price (INR)</label>
               <input
                 type="number"
                 min={0}
                 value={planPrice}
                 onChange={(e) => setPlanPrice(parseFloat(e.target.value))}
-                className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
+                className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
               />
             </div>
 
             <div>
-              <label className="block font-bold mb-1 text-[#22222B]">Included Meal Shifts (comma-separated)</label>
+              <label className="block font-medium mb-1 text-[#22222B]">Included Meal Shifts (comma-separated)</label>
               <input
                 type="text"
                 value={planShifts}
                 onChange={(e) => setPlanShifts(e.target.value)}
                 placeholder="e.g. breakfast OR lunch OR breakfast,dinner OR breakfast,lunch,dinner"
-                className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
+                className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
               />
             </div>
 
             <div className="flex gap-2 pt-2">
               <button
                 onClick={() => setShowPlanModal(false)}
-                className="flex-1 min-h-[44px] py-2 px-3 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-xs font-bold text-[#22222B] transition-colors flex items-center justify-center"
+                className="flex-1 min-h-[44px] py-2 px-3 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-xs font-medium text-[#22222B] transition-colors flex items-center justify-center"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSavePlan}
                 disabled={savingPlan}
-                className="flex-1 min-h-[44px] py-2 px-3 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white font-black text-xs shadow-md transition-colors flex items-center justify-center"
+                className="flex-1 min-h-[44px] py-2 px-3 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white font-semibold text-xs shadow-md transition-colors flex items-center justify-center"
               >
                 {savingPlan ? 'Saving...' : 'Save Plan'}
               </button>

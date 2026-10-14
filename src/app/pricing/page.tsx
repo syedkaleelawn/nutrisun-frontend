@@ -181,12 +181,12 @@ export default function PublicPricingPage() {
         <div className="glass-card rounded-3xl border border-[#B0BE8C]/35 shadow-lg p-5 sm:p-8">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F7DE9D] border border-[#F7DE9D]/80 text-[#22222B] text-[11px] font-black uppercase tracking-wider">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F7DE9D] border border-[#F7DE9D]/80 text-[#22222B] text-[11px] font-semibold uppercase tracking-wider">
                 <Sparkles className="w-3.5 h-3.5" />
                 NutriSun Plans
               </div>
 
-              <h1 className="text-3xl sm:text-4xl font-black mt-3">
+              <h1 className="text-3xl sm:text-4xl font-semibold mt-3">
                 Simple, Fresh Meal Plans
               </h1>
 
@@ -200,7 +200,7 @@ export default function PublicPricingPage() {
               type="button"
               onClick={fetchPlans}
               disabled={loading}
-              className="min-h-[44px] px-5 py-3 rounded-2xl bg-white border border-[#B0BE8C]/50 hover:bg-[#F3F5F4] text-[#22222B] font-black text-xs flex items-center justify-center gap-2 transition-all disabled:opacity-60"
+              className="min-h-[44px] px-5 py-3 rounded-2xl bg-white border border-[#B0BE8C]/50 hover:bg-[#F3F5F4] text-[#22222B] font-semibold text-xs flex items-center justify-center gap-2 transition-all disabled:opacity-60"
             >
               <RefreshCw
                 className={`w-4 h-4 ${
@@ -225,7 +225,7 @@ export default function PublicPricingPage() {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div className="flex items-center gap-2">
               <CalendarDays className="w-4 h-4 text-[#741B22]" />
-              <span className="text-xs font-black text-[#22222B]">
+              <span className="text-xs font-semibold text-[#22222B]">
                 Choose Package Duration
               </span>
             </div>
@@ -234,7 +234,7 @@ export default function PublicPricingPage() {
               <button
                 type="button"
                 onClick={() => setFilter('all')}
-                className={`min-h-[40px] px-4 py-2 rounded-xl text-xs font-black transition-all ${
+                className={`min-h-[40px] px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
                   filter === 'all'
                     ? 'bg-[#B0BE8C] text-[#22222B] shadow-sm'
                     : 'text-slate-600 hover:text-[#22222B]'
@@ -246,7 +246,7 @@ export default function PublicPricingPage() {
               <button
                 type="button"
                 onClick={() => setFilter('weekly')}
-                className={`min-h-[40px] px-4 py-2 rounded-xl text-xs font-black transition-all ${
+                className={`min-h-[40px] px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
                   filter === 'weekly'
                     ? 'bg-[#B0BE8C] text-[#22222B] shadow-sm'
                     : 'text-slate-600 hover:text-[#22222B]'
@@ -258,7 +258,7 @@ export default function PublicPricingPage() {
               <button
                 type="button"
                 onClick={() => setFilter('monthly')}
-                className={`min-h-[40px] px-4 py-2 rounded-xl text-xs font-black transition-all ${
+                className={`min-h-[40px] px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
                   filter === 'monthly'
                     ? 'bg-[#B0BE8C] text-[#22222B] shadow-sm'
                     : 'text-slate-600 hover:text-[#22222B]'
@@ -277,7 +277,7 @@ export default function PublicPricingPage() {
           <div className="min-h-[300px] flex items-center justify-center">
             <div className="text-center">
               <RefreshCw className="w-8 h-8 text-[#B92F25] animate-spin mx-auto" />
-              <p className="text-xs text-slate-500 font-bold mt-3">
+              <p className="text-xs text-slate-500 font-medium mt-3">
                 Loading latest plans...
               </p>
             </div>
@@ -285,7 +285,7 @@ export default function PublicPricingPage() {
         ) : error ? (
           <div className="glass-card rounded-3xl border border-rose-200 bg-rose-50 p-8 text-center">
             <AlertTriangle className="w-8 h-8 text-rose-600 mx-auto" />
-            <h2 className="text-sm font-black text-rose-900 mt-3">
+            <h2 className="text-sm font-semibold text-rose-900 mt-3">
               Unable to load pricing
             </h2>
             <p className="text-xs text-rose-700 mt-1">
@@ -295,14 +295,14 @@ export default function PublicPricingPage() {
             <button
               type="button"
               onClick={fetchPlans}
-              className="mt-5 min-h-[44px] px-5 py-2.5 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white text-xs font-black"
+              className="mt-5 min-h-[44px] px-5 py-2.5 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white text-xs font-semibold"
             >
               Try Again
             </button>
           </div>
         ) : filteredPlans.length === 0 ? (
           <div className="glass-card rounded-3xl border border-[#B0BE8C]/35 p-8 text-center">
-            <p className="text-sm font-black text-[#22222B]">
+            <p className="text-sm font-semibold text-[#22222B]">
               No pricing plans available.
             </p>
             <p className="text-xs text-slate-500 mt-1">
@@ -330,14 +330,14 @@ export default function PublicPricingPage() {
                 >
                   {isFeatured && (
                     <div className="absolute -top-3 right-5">
-                      <span className="px-3 py-1 rounded-full bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80 text-[10px] font-black uppercase tracking-wider shadow-sm">
+                      <span className="px-3 py-1 rounded-full bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80 text-[10px] font-semibold uppercase tracking-wider shadow-sm">
                         Complete All-Meals Plan
                       </span>
                     </div>
                   )}
 
                   <div>
-                    <div className="flex items-center justify-between gap-2 text-xs text-slate-400 font-bold mb-3">
+                    <div className="flex items-center justify-between gap-2 text-xs text-slate-400 font-medium mb-3">
                       <span className="px-2 py-1 rounded-md bg-[#F3F5F4] border border-[#B0BE8C]/30 text-[#22222B]">
                         {isWeekly
                           ? '1 Week (7 Days)'
@@ -350,22 +350,22 @@ export default function PublicPricingPage() {
                       </span>
                     </div>
 
-                    <h2 className="text-lg sm:text-xl font-black text-[#22222B]">
+                    <h2 className="text-lg sm:text-xl font-semibold text-[#22222B]">
                       {plan.name}
                     </h2>
 
-                    <div className="text-3xl font-black text-[#741B22] my-4">
+                    <div className="text-3xl font-semibold text-[#741B22] my-4">
                       ₹{plan.price.toFixed(2)}
                     </div>
 
                     <div className="space-y-2.5 mb-5">
                       {isOrPlan ? (
                         <div className="p-3 rounded-xl bg-[#F7DE9D]/30 border border-[#F7DE9D]">
-                          <span className="inline-block px-2 py-0.5 rounded-md bg-[#F7DE9D] text-[#741B22] text-[10px] font-black uppercase tracking-wider">
+                          <span className="inline-block px-2 py-0.5 rounded-md bg-[#F7DE9D] text-[#741B22] text-[10px] font-semibold uppercase tracking-wider">
                             Meal Choice Required
                           </span>
 
-                          <p className="text-xs text-[#22222B] font-bold mt-2">
+                          <p className="text-xs text-[#22222B] font-medium mt-2">
                             {planType === 'OR_LUNCH'
                               ? 'Choose: Breakfast + Lunch OR Lunch + Dinner (2 meals/day)'
                               : 'Choose: Breakfast OR Dinner (1 meal/day)'}
@@ -409,7 +409,7 @@ export default function PublicPricingPage() {
 
                   <a
                     href="https://app.nutrisun.cloud"
-                    className="w-full min-h-[46px] py-3 px-4 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white font-black text-xs shadow-md shadow-[#B92F25]/20 transition-all flex items-center justify-center"
+                    className="w-full min-h-[46px] py-3 px-4 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white font-semibold text-xs shadow-md shadow-[#B92F25]/20 transition-all flex items-center justify-center"
                   >
                     Sign Up / Sign In to Buy
                   </a>
@@ -423,7 +423,7 @@ export default function PublicPricingPage() {
       {/* Footer CTA */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-10">
         <div className="rounded-3xl bg-[#741B22] text-white p-6 sm:p-8 text-center shadow-lg">
-          <h2 className="text-xl sm:text-2xl font-black">
+          <h2 className="text-xl sm:text-2xl font-semibold">
             Ready to get started?
           </h2>
 
@@ -433,7 +433,7 @@ export default function PublicPricingPage() {
 
           <a
             href="https://app.nutrisun.cloud"
-            className="inline-flex items-center justify-center min-h-[44px] mt-5 px-6 py-3 rounded-xl bg-white text-[#741B22] hover:bg-[#F7DE9D] font-black text-xs transition-all"
+            className="inline-flex items-center justify-center min-h-[44px] mt-5 px-6 py-3 rounded-xl bg-white text-[#741B22] hover:bg-[#F7DE9D] font-semibold text-xs transition-all"
           >
             Get Started
           </a>

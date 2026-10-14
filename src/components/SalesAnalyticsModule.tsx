@@ -384,12 +384,12 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-1 rounded-full bg-[#741B22]/15 text-[#741B22] font-black text-[10px] uppercase tracking-wider">
+              <span className="px-2.5 py-1 rounded-full bg-[#741B22]/15 text-[#741B22] font-semibold text-[10px] uppercase tracking-wider">
                 Sales & Analytics
               </span>
-              <span className="text-xs text-slate-500 font-bold">IST (UTC+5:30) Business Reporting</span>
+              <span className="text-xs text-slate-500 font-medium">IST (UTC+5:30) Business Reporting</span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-black text-[#22222B] mt-1.5">
+            <h2 className="text-xl sm:text-2xl font-semibold text-[#22222B] mt-1.5">
               Monthly Sales & Customer Intelligence
             </h2>
             <p className="text-xs text-slate-600 mt-0.5">
@@ -403,7 +403,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
               type="button"
               onClick={handleExportMonthly}
               disabled={exportingMonthly || loading}
-              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#741B22] hover:bg-[#B92F25] text-white font-bold text-xs shadow-sm transition-all active:scale-95 disabled:opacity-50 min-h-[44px]"
+              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#741B22] hover:bg-[#B92F25] text-white font-medium text-xs shadow-sm transition-all active:scale-95 disabled:opacity-50 min-h-[44px]"
             >
               {exportingMonthly ? (
                 <Loader2 className="w-4 h-4 animate-spin text-white" />
@@ -417,7 +417,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
               type="button"
               onClick={handleExportFull}
               disabled={exportingFull || loading}
-              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-[#B0BE8C]/20 border border-[#B0BE8C] text-[#22222B] font-bold text-xs shadow-2xs transition-all active:scale-95 disabled:opacity-50 min-h-[44px]"
+              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-[#B0BE8C]/20 border border-[#B0BE8C] text-[#22222B] font-medium text-xs shadow-2xs transition-all active:scale-95 disabled:opacity-50 min-h-[44px]"
             >
               {exportingFull ? (
                 <Loader2 className="w-4 h-4 animate-spin text-[#22222B]" />
@@ -434,14 +434,14 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
           <div className="flex flex-wrap items-center gap-3">
             {!useCustomRange ? (
               <div className="flex items-center gap-2">
-                <label className="text-xs font-bold text-[#22222B] flex items-center gap-1.5">
+                <label className="text-xs font-medium text-[#22222B] flex items-center gap-1.5">
                   <Calendar className="w-4 h-4 text-[#741B22]" />
                   <span>Report Month:</span>
                 </label>
                 <select
                   value={selectedMonth}
                   onChange={(e) => setSelectedMonth(e.target.value)}
-                  className="px-3 py-2 rounded-xl border border-[#B0BE8C]/50 bg-white text-xs font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#741B22]/20 min-h-[40px]"
+                  className="px-3 py-2 rounded-xl border border-[#B0BE8C]/50 bg-white text-xs font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#741B22]/20 min-h-[40px]"
                 >
                   {monthOptions.map((opt) => (
                     <option key={opt.value} value={opt.value}>
@@ -453,21 +453,21 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
             ) : (
               <div className="flex flex-wrap items-center gap-2">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-bold text-[#22222B]">From:</span>
+                  <span className="text-xs font-medium text-[#22222B]">From:</span>
                   <input
                     type="date"
                     value={customStartDate}
                     onChange={(e) => setCustomStartDate(e.target.value)}
-                    className="px-3 py-1.5 rounded-xl border border-[#B0BE8C]/50 bg-white text-xs font-bold text-[#22222B] min-h-[40px]"
+                    className="px-3 py-1.5 rounded-xl border border-[#B0BE8C]/50 bg-white text-xs font-medium text-[#22222B] min-h-[40px]"
                   />
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-bold text-[#22222B]">To:</span>
+                  <span className="text-xs font-medium text-[#22222B]">To:</span>
                   <input
                     type="date"
                     value={customEndDate}
                     onChange={(e) => setCustomEndDate(e.target.value)}
-                    className="px-3 py-1.5 rounded-xl border border-[#B0BE8C]/50 bg-white text-xs font-bold text-[#22222B] min-h-[40px]"
+                    className="px-3 py-1.5 rounded-xl border border-[#B0BE8C]/50 bg-white text-xs font-medium text-[#22222B] min-h-[40px]"
                   />
                 </div>
               </div>
@@ -476,7 +476,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
             <button
               type="button"
               onClick={() => setUseCustomRange(!useCustomRange)}
-              className="px-3 py-1.5 text-xs font-bold text-[#741B22] hover:underline"
+              className="px-3 py-1.5 text-xs font-medium text-[#741B22] hover:underline"
             >
               {useCustomRange ? '← Switch to Monthly Selector' : 'Use Custom Date Range'}
             </button>
@@ -486,7 +486,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
             type="button"
             onClick={fetchReportData}
             disabled={loading}
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-[#22222B] p-2 rounded-lg hover:bg-slate-100 transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-[#22222B] p-2 rounded-lg hover:bg-slate-100 transition-colors"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-[#741B22]' : ''}`} />
             <span>Refresh Figures</span>
@@ -496,11 +496,11 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
 
       {error && (
         <div className="p-4 rounded-2xl bg-red-50 border border-red-200 text-red-800 text-xs flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2 font-bold">
+          <div className="flex items-center gap-2 font-medium">
             <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
             <span>{error}</span>
           </div>
-          <button onClick={() => setError(null)} className="text-red-700 font-bold hover:underline">
+          <button onClick={() => setError(null)} className="text-red-700 font-medium hover:underline">
             Dismiss
           </button>
         </div>
@@ -512,74 +512,74 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
           {/* Confirmed Sales */}
           <div className="glass-card rounded-3xl p-5 border border-[#B0BE8C]/40 bg-gradient-to-br from-white via-white to-emerald-50/40 shadow-xs space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
                 Confirmed Revenue
               </span>
               <span className="p-1.5 rounded-xl bg-emerald-100 text-emerald-800">
                 <TrendingUp className="w-4 h-4" />
               </span>
             </div>
-            <div className="text-2xl sm:text-3xl font-black text-[#741B22]">
+            <div className="text-2xl sm:text-3xl font-semibold text-[#741B22]">
               ₹{analytics.total_confirmed_sales.toFixed(2)}
             </div>
             <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-100 font-medium">
               <span>{analytics.confirmed_payment_count || 0} Confirmed Payments</span>
-              <span className="text-emerald-700 font-bold">Verified UPI</span>
+              <span className="text-emerald-700 font-medium">Verified UPI</span>
             </div>
           </div>
 
           {/* Pending Sales */}
           <div className="glass-card rounded-3xl p-5 border border-[#B0BE8C]/40 bg-gradient-to-br from-white via-white to-amber-50/40 shadow-xs space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
                 Pending Verification
               </span>
               <span className="p-1.5 rounded-xl bg-amber-100 text-amber-800">
                 <Clock className="w-4 h-4" />
               </span>
             </div>
-            <div className="text-2xl sm:text-3xl font-black text-amber-700">
+            <div className="text-2xl sm:text-3xl font-semibold text-amber-700">
               ₹{(analytics.total_pending_amount || 0).toFixed(2)}
             </div>
             <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-100 font-medium">
               <span>{analytics.pending_payment_count || 0} Awaiting Review</span>
-              <span className="text-amber-700 font-bold">Pending Approval</span>
+              <span className="text-amber-700 font-medium">Pending Approval</span>
             </div>
           </div>
 
           {/* Payment Count & Success */}
           <div className="glass-card rounded-3xl p-5 border border-[#B0BE8C]/40 bg-gradient-to-br from-white via-white to-blue-50/40 shadow-xs space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
                 Transaction Count
               </span>
               <span className="p-1.5 rounded-xl bg-blue-100 text-blue-800">
                 <CreditCard className="w-4 h-4" />
               </span>
             </div>
-            <div className="text-2xl sm:text-3xl font-black text-[#22222B]">
+            <div className="text-2xl sm:text-3xl font-semibold text-[#22222B]">
               {(analytics.confirmed_payment_count || 0) + (analytics.pending_payment_count || 0)}
             </div>
             <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-100 font-medium">
               <span>{analytics.confirmed_payment_count || 0} Confirmed</span>
-              <span className="text-blue-700 font-bold">{analytics.pending_payment_count || 0} Pending</span>
+              <span className="text-blue-700 font-medium">{analytics.pending_payment_count || 0} Pending</span>
             </div>
           </div>
 
           {/* Completed Meals */}
           <div className="glass-card rounded-3xl p-5 border border-[#B0BE8C]/40 bg-gradient-to-br from-white via-white to-[#F7DE9D]/20 shadow-xs space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
                 Completed Meals
               </span>
               <span className="p-1.5 rounded-xl bg-[#F7DE9D] text-[#741B22]">
                 <Truck className="w-4 h-4" />
               </span>
             </div>
-            <div className="text-2xl sm:text-3xl font-black text-[#22222B]">
+            <div className="text-2xl sm:text-3xl font-semibold text-[#22222B]">
               {analytics.total_delivered_meals}
             </div>
-            <div className="flex items-center gap-2 text-[10px] font-bold text-slate-600 pt-1 border-t border-slate-100">
+            <div className="flex items-center gap-2 text-[10px] font-medium text-slate-600 pt-1 border-t border-slate-100">
               <span className="text-amber-800">BF: {analytics.breakfast_delivered}</span>
               <span>•</span>
               <span className="text-emerald-800">LN: {analytics.lunch_delivered}</span>
@@ -594,12 +594,12 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
       <div className="grid grid-cols-1 xl:grid-cols-[minmax(390px,0.9fr)_minmax(0,1.7fr)] gap-5 items-stretch">
         <div className="glass-card rounded-3xl border border-[#B0BE8C]/40 shadow-sm overflow-hidden flex flex-col xl:h-[500px]">
           <div className="px-5 py-4 border-b border-[#B0BE8C]/30 bg-[#F3F5F4]">
-            <h3 className="text-sm sm:text-base font-black text-[#22222B]">Monthly Meal Averages</h3>
+            <h3 className="text-sm sm:text-base font-semibold text-[#22222B]">Monthly Meal Averages</h3>
             <p className="text-xs text-slate-500 mt-0.5">Average meals per calendar day. The latest month is month to date.</p>
           </div>
           <div className="overflow-auto flex-1 min-h-0">
             <table className="w-full min-w-[560px] text-xs text-right">
-              <thead className="sticky top-0 z-10 bg-[#22222B] text-white font-black">
+              <thead className="sticky top-0 z-10 bg-[#22222B] text-white font-semibold">
                 <tr>
                   <th className="py-2.5 px-3 text-left">Y - M</th>
                   <th className="py-2.5 px-3">Start</th>
@@ -618,17 +618,17 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
                   }).replace(' ', '-');
                   const isCurrentMonth = index === monthlyMealAverages.length - 1;
                   return (
-                    <tr key={month.year_month} className={isCurrentMonth ? 'bg-[#F7DE9D]/25 font-bold' : 'hover:bg-slate-50'}>
-                      <td className="py-2 px-3 text-left font-bold text-[#22222B] whitespace-nowrap">
+                    <tr key={month.year_month} className={isCurrentMonth ? 'bg-[#F7DE9D]/25 font-medium' : 'hover:bg-slate-50'}>
+                      <td className="py-2 px-3 text-left font-medium text-[#22222B] whitespace-nowrap">
                         {monthLabel}
                         {isCurrentMonth && <span className="ml-1.5 text-[9px] uppercase text-[#741B22]">MTD</span>}
                       </td>
                       <td className="py-2 px-3 whitespace-nowrap text-slate-600">{formatDate(month.start_date)}</td>
                       <td className="py-2 px-3 whitespace-nowrap text-slate-600">{formatDate(month.end_date)}</td>
-                      <td className="py-2 px-3 font-black text-[#22222B]">{month.average_total.toFixed(1)}</td>
-                      <td className="py-2 px-3 text-amber-800 font-bold">{month.average_breakfast.toFixed(1)}</td>
-                      <td className="py-2 px-3 text-emerald-800 font-bold">{month.average_lunch.toFixed(1)}</td>
-                      <td className="py-2 px-3 text-indigo-800 font-bold">{month.average_dinner.toFixed(1)}</td>
+                      <td className="py-2 px-3 font-semibold text-[#22222B]">{month.average_total.toFixed(1)}</td>
+                      <td className="py-2 px-3 text-amber-800 font-medium">{month.average_breakfast.toFixed(1)}</td>
+                      <td className="py-2 px-3 text-emerald-800 font-medium">{month.average_lunch.toFixed(1)}</td>
+                      <td className="py-2 px-3 text-indigo-800 font-medium">{month.average_dinner.toFixed(1)}</td>
                     </tr>
                   );
                 })}
@@ -642,7 +642,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
 
         <div className="glass-card rounded-3xl border border-[#B0BE8C]/40 shadow-sm overflow-hidden flex flex-col xl:h-[500px]">
           <div className="px-5 pt-5 text-center">
-            <h3 className="text-base sm:text-lg font-black text-[#22222B]">Average #Meals Per Meal Type Per Day</h3>
+            <h3 className="text-base sm:text-lg font-semibold text-[#22222B]">Average #Meals Per Meal Type Per Day</h3>
             <p className="text-xs text-slate-500 mt-1">Monthly averages through the current month (MTD)</p>
           </div>
           <div className="overflow-x-auto px-2 pb-3 flex-1 min-h-0 flex items-center">
@@ -714,14 +714,14 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
       <div className="glass-card rounded-3xl p-5 sm:p-6 border border-[#B0BE8C]/40 shadow-sm space-y-4">
         <div className="flex items-center justify-between gap-3">
           <div>
-            <h3 className="text-sm sm:text-base font-black text-[#22222B]">
+            <h3 className="text-sm sm:text-base font-semibold text-[#22222B]">
               Sales Breakdown
             </h3>
             <p className="text-xs text-slate-500 mt-0.5">
               Payments confirmed by an administrator for {analytics?.selected_month || selectedMonth}, newest first.
             </p>
           </div>
-          <span className="text-xs font-bold text-slate-400">
+          <span className="text-xs font-medium text-slate-400">
             {confirmedSalesBreakdown.length} Confirmed Sales
           </span>
         </div>
@@ -729,7 +729,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
         {confirmedSalesBreakdown.length > 0 ? (
           <div className="overflow-x-auto border border-[#B0BE8C]/30 rounded-2xl">
             <table className="w-full min-w-[520px] text-left text-xs">
-              <thead className="bg-[#F3F5F4] text-[#22222B] font-black border-b border-[#B0BE8C]/30 uppercase text-[10px]">
+              <thead className="bg-[#F3F5F4] text-[#22222B] font-semibold border-b border-[#B0BE8C]/30 uppercase text-[10px]">
                 <tr>
                   <th className="py-3 px-4">Date</th>
                   <th className="py-3 px-4">Customer</th>
@@ -739,9 +739,9 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
               <tbody className="divide-y divide-slate-100">
                 {confirmedSalesBreakdown.map((sale) => (
                   <tr key={sale.id} className="hover:bg-slate-50 transition-colors font-medium">
-                    <td className="py-3 px-4 font-bold text-[#22222B] whitespace-nowrap">{sale.date}</td>
-                    <td className="py-3 px-4 font-bold text-slate-700">{sale.customer}</td>
-                    <td className="py-3 px-4 text-right font-black text-[#741B22] whitespace-nowrap">
+                    <td className="py-3 px-4 font-medium text-[#22222B] whitespace-nowrap">{sale.date}</td>
+                    <td className="py-3 px-4 font-medium text-slate-700">{sale.customer}</td>
+                    <td className="py-3 px-4 text-right font-semibold text-[#741B22] whitespace-nowrap">
                       ₹{sale.sales.toFixed(2)}
                     </td>
                   </tr>
@@ -765,7 +765,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
               <span className="p-1 rounded-lg bg-[#741B22] text-white">
                 <Users className="w-4 h-4" />
               </span>
-              <h3 className="text-base font-black text-[#22222B]">
+              <h3 className="text-base font-semibold text-[#22222B]">
                 Customer Details & Chronological Activity Report
               </h3>
             </div>
@@ -783,14 +783,14 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
                 placeholder="Search name, phone, address..."
                 value={customerSearch}
                 onChange={(e) => setCustomerSearch(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 bg-white rounded-xl border border-[#B0BE8C]/40 text-xs font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#741B22]/20 min-h-[40px]"
+                className="w-full pl-9 pr-3 py-2 bg-white rounded-xl border border-[#B0BE8C]/40 text-xs font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#741B22]/20 min-h-[40px]"
               />
             </div>
 
             <select
               value={selectedCustomerId || ''}
               onChange={(e) => setSelectedCustomerId(Number(e.target.value))}
-              className="px-3 py-2 bg-white rounded-xl border border-[#B0BE8C]/40 text-xs font-bold text-[#22222B] focus:outline-none min-h-[40px]"
+              className="px-3 py-2 bg-white rounded-xl border border-[#B0BE8C]/40 text-xs font-medium text-[#22222B] focus:outline-none min-h-[40px]"
             >
               {filteredCustomers.map((c) => (
                 <option key={c.id} value={c.id}>
@@ -806,8 +806,8 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
             {/* Customer Profile Banner */}
             <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#F3F5F4] via-white to-[#F3F5F4] border border-[#B0BE8C]/40 grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
               <div>
-                <span className="text-[10px] font-black uppercase text-slate-400">Customer Identity</span>
-                <div className="font-black text-sm text-[#22222B] mt-0.5">{activeCustomer.name}</div>
+                <span className="text-[10px] font-semibold uppercase text-slate-400">Customer Identity</span>
+                <div className="font-semibold text-sm text-[#22222B] mt-0.5">{activeCustomer.name}</div>
                 <div className="text-slate-500 mt-0.5 flex items-center gap-1">
                   <Phone className="w-3 h-3 text-[#741B22]" /> {activeCustomer.phone}
                 </div>
@@ -819,8 +819,8 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
               </div>
 
               <div className="md:col-span-2">
-                <span className="text-[10px] font-black uppercase text-slate-400">Delivery Address</span>
-                <div className="font-bold text-slate-700 mt-0.5 flex items-start gap-1.5">
+                <span className="text-[10px] font-semibold uppercase text-slate-400">Delivery Address</span>
+                <div className="font-medium text-slate-700 mt-0.5 flex items-start gap-1.5">
                   <MapPin className="w-3.5 h-3.5 text-[#741B22] shrink-0 mt-0.5" />
                   <span className="break-words">{activeCustomer.delivery_address || 'Not recorded'}</span>
                 </div>
@@ -830,9 +830,9 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
               </div>
 
               <div className="flex flex-col justify-center items-start md:items-end">
-                <span className="text-[10px] font-black uppercase text-slate-400">Subscription Status</span>
+                <span className="text-[10px] font-semibold uppercase text-slate-400">Subscription Status</span>
                 <span
-                  className={`mt-1 px-3 py-1 rounded-full font-black text-xs uppercase tracking-wider ${
+                  className={`mt-1 px-3 py-1 rounded-full font-semibold text-xs uppercase tracking-wider ${
                     activeCustomer.current_status === 'ACTIVE'
                       ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
                       : 'bg-slate-100 text-slate-700 border border-slate-300'
@@ -840,7 +840,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
                 >
                   {activeCustomer.current_status}
                 </span>
-                <span className="text-[11px] text-slate-500 font-bold mt-1">
+                <span className="text-[11px] text-slate-500 font-medium mt-1">
                   {activeCustomer.active_plans}
                 </span>
               </div>
@@ -850,30 +850,30 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <Coins className="w-4 h-4 text-[#741B22]" />
-                <h4 className="text-xs font-black uppercase text-slate-600 tracking-wider">
+                <h4 className="text-xs font-semibold uppercase text-slate-600 tracking-wider">
                   Live Meal Schedule
                 </h4>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-xs space-y-1">
-                  <span className="text-[10px] font-black uppercase text-emerald-700">Upcoming Meals</span>
-                  <div className="text-2xl font-black text-emerald-800">
+                  <span className="text-[10px] font-semibold uppercase text-emerald-700">Upcoming Meals</span>
+                  <div className="text-2xl font-semibold text-emerald-800">
                     {activeCustomer.credit_balance.available}
                   </div>
                   <p className="text-[10px] text-emerald-600 font-medium">Paid, uncancelled deliveries still scheduled</p>
                 </div>
 
                 <div className="p-3.5 rounded-2xl bg-blue-50/70 border border-blue-200 text-xs space-y-1">
-                  <span className="text-[10px] font-black uppercase text-blue-700">Completed Meals</span>
-                  <div className="text-2xl font-black text-blue-800">
+                  <span className="text-[10px] font-semibold uppercase text-blue-700">Completed Meals</span>
+                  <div className="text-2xl font-semibold text-blue-800">
                     {activeCustomer.credit_balance.used}
                   </div>
                   <p className="text-[10px] text-blue-600 font-medium">Past service times</p>
                 </div>
 
                 <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-1">
-                  <span className="text-[10px] font-black uppercase text-slate-700">Total Meals</span>
-                  <div className="text-2xl font-black text-slate-800">
+                  <span className="text-[10px] font-semibold uppercase text-slate-700">Total Meals</span>
+                  <div className="text-2xl font-semibold text-slate-800">
                     {activeCustomer.credit_balance.total}
                   </div>
                   <p className="text-[10px] text-slate-600 font-medium">Completed plus upcoming meals</p>
@@ -883,13 +883,13 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
 
             {/* Subscriptions & Meal Shifts Table */}
             <div className="space-y-2">
-              <h4 className="text-xs font-black uppercase text-slate-600 tracking-wider">
+              <h4 className="text-xs font-semibold uppercase text-slate-600 tracking-wider">
                 Subscriptions & Scheduled Shifts ({activeCustomer.subscriptions.length})
               </h4>
               {activeCustomer.subscriptions.length > 0 ? (
                 <div className="overflow-x-auto border border-[#B0BE8C]/30 rounded-2xl">
                   <table className="w-full min-w-[760px] text-left text-xs">
-                    <thead className="bg-[#F3F5F4] text-[#22222B] font-black border-b border-[#B0BE8C]/30 uppercase text-[10px]">
+                    <thead className="bg-[#F3F5F4] text-[#22222B] font-semibold border-b border-[#B0BE8C]/30 uppercase text-[10px]">
                       <tr>
                         <th className="py-2.5 px-3">Plan Name</th>
                         <th className="py-2.5 px-3">Shifts</th>
@@ -903,19 +903,19 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
                     <tbody className="divide-y divide-slate-100 font-medium">
                       {activeCustomer.subscriptions.map((s) => (
                         <tr key={s.id} className="hover:bg-slate-50">
-                          <td className="py-2.5 px-3 font-bold text-[#22222B]">{s.plan_name}</td>
+                          <td className="py-2.5 px-3 font-medium text-[#22222B]">{s.plan_name}</td>
                           <td className="py-2.5 px-3 text-slate-700">{s.selected_shifts || 'Standard'}</td>
                           <td className="py-2.5 px-3 text-slate-600 whitespace-nowrap">
                             {s.start_date} → {s.end_date}
                           </td>
                           <td className="py-2.5 px-3">
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700">
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-100 text-slate-700">
                               {s.status}
                             </span>
                           </td>
                           <td className="py-2.5 px-3">
                             <span
-                              className={`px-2 py-0.5 rounded-full text-[10px] font-black ${
+                              className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${
                                 s.payment_status === 'PAID'
                                   ? 'bg-emerald-100 text-emerald-800'
                                   : s.payment_status === 'REJECTED'
@@ -927,7 +927,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
                             </span>
                           </td>
                           <td className="py-2.5 px-3">
-                            <span className="font-bold text-[#741B22]">{s.total_credits}</span>
+                            <span className="font-medium text-[#741B22]">{s.total_credits}</span>
                           </td>
                           <td className="py-2.5 px-3 text-slate-500 whitespace-nowrap">
                             {s.payment_confirmed_at}
@@ -944,13 +944,13 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
 
             {/* Payment History Table */}
             <div className="space-y-2">
-              <h4 className="text-xs font-black uppercase text-slate-600 tracking-wider">
+              <h4 className="text-xs font-semibold uppercase text-slate-600 tracking-wider">
                 Payment History ({activeCustomer.payment_history.length})
               </h4>
               {activeCustomer.payment_history.length > 0 ? (
                 <div className="overflow-x-auto border border-[#B0BE8C]/30 rounded-2xl">
                   <table className="w-full min-w-[760px] text-left text-xs">
-                    <thead className="bg-[#F3F5F4] text-[#22222B] font-black border-b border-[#B0BE8C]/30 uppercase text-[10px]">
+                    <thead className="bg-[#F3F5F4] text-[#22222B] font-semibold border-b border-[#B0BE8C]/30 uppercase text-[10px]">
                       <tr>
                         <th className="py-2.5 px-3">Amount</th>
                         <th className="py-2.5 px-3">Status</th>
@@ -964,10 +964,10 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
                     <tbody className="divide-y divide-slate-100 font-medium">
                       {activeCustomer.payment_history.map((p) => (
                         <tr key={p.id} className="hover:bg-slate-50">
-                          <td className="py-2.5 px-3 font-black text-[#741B22]">₹{p.amount.toFixed(2)}</td>
+                          <td className="py-2.5 px-3 font-semibold text-[#741B22]">₹{p.amount.toFixed(2)}</td>
                           <td className="py-2.5 px-3">
                             <span
-                              className={`px-2 py-0.5 rounded-full text-[10px] font-black uppercase ${
+                              className={`px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase ${
                                 p.status === 'CONFIRMED'
                                   ? 'bg-emerald-100 text-emerald-800'
                                   : p.status === 'PENDING'
@@ -983,7 +983,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
                           </td>
                           <td className="py-2.5 px-3 text-slate-500 whitespace-nowrap">{p.created_at}</td>
                           <td className="py-2.5 px-3 text-slate-500 whitespace-nowrap">{p.confirmed_at}</td>
-                          <td className="py-2.5 px-3 text-slate-600 font-bold">{p.confirmed_by}</td>
+                          <td className="py-2.5 px-3 text-slate-600 font-medium">{p.confirmed_by}</td>
                           <td className="py-2.5 px-3 text-slate-500 text-[11px]">{p.admin_notes || '—'}</td>
                         </tr>
                       ))}
@@ -1000,7 +1000,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <History className="w-4 h-4 text-[#741B22]" />
-                  <h4 className="text-xs font-black uppercase text-slate-600 tracking-wider">
+                  <h4 className="text-xs font-semibold uppercase text-slate-600 tracking-wider">
                     Chronological Activity History ({activeCustomer.activity_history.length} events)
                   </h4>
                 </div>
@@ -1017,7 +1017,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-slate-100 pb-1.5">
                         <div className="flex items-center gap-2">
                           <span
-                            className={`px-2 py-0.5 rounded-full font-black text-[10px] uppercase ${
+                            className={`px-2 py-0.5 rounded-full font-semibold text-[10px] uppercase ${
                               act.event_type === 'PAYMENT'
                                 ? 'bg-emerald-100 text-emerald-800'
                                 : act.event_type === 'SKIP'
@@ -1031,7 +1031,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
                           </span>
                           <strong className="text-[#22222B]">{act.action}</strong>
                         </div>
-                        <span className="text-[11px] font-bold text-slate-400 whitespace-nowrap">
+                        <span className="text-[11px] font-medium text-slate-400 whitespace-nowrap">
                           {act.timestamp}
                         </span>
                       </div>
@@ -1050,10 +1050,10 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
                           <strong
                             className={
                               act.credit_change.includes('+')
-                                ? 'text-emerald-700 font-black'
+                                ? 'text-emerald-700 font-semibold'
                                 : act.credit_change.includes('-')
-                                ? 'text-red-700 font-black'
-                                : 'text-slate-700 font-bold'
+                                ? 'text-red-700 font-semibold'
+                                : 'text-slate-700 font-medium'
                             }
                           >
                             {act.credit_change}
@@ -1064,7 +1064,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-[11px] pt-1 border-t border-slate-50 text-slate-500">
                         <div>
                           <span className="text-slate-400">Actor:</span>{' '}
-                          <span className="font-bold text-[#741B22]">{act.actor}</span>
+                          <span className="font-medium text-[#741B22]">{act.actor}</span>
                         </div>
                         <div>
                           <span className="text-slate-400">Reason / Notes:</span>{' '}

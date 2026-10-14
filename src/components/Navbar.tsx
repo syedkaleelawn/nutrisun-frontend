@@ -141,11 +141,11 @@ export default function Navbar() {
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-1.5 sm:gap-2">
-                <span className="font-black text-base sm:text-xl md:text-2xl tracking-wider text-[#22222B] uppercase truncate">
+                <span className="font-semibold text-base sm:text-xl md:text-2xl tracking-wider text-[#22222B] uppercase truncate">
                   NUTRISUN
                 </span>
               </div>
-              <p className="text-[10px] sm:text-[11px] text-[#741B22] font-bold tracking-wider -mt-0.5 italic hidden sm:block">
+              <p className="text-[10px] sm:text-[11px] text-[#741B22] font-medium tracking-wider -mt-0.5 italic hidden sm:block">
                 Healthy Tasty Daily
               </p>
             </div>
@@ -160,11 +160,11 @@ export default function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`relative py-2 rounded-full text-xs font-bold transition-all duration-200 flex items-center gap-1.5 min-h-[44px] whitespace-nowrap ${
+                  className={`relative py-2 rounded-full text-xs font-medium transition-all duration-200 flex items-center gap-1.5 min-h-[44px] whitespace-nowrap ${
                     user?.role === 'admin' ? 'px-2.5 2xl:px-3.5' : 'px-4'
                   } ${
                     isActive
-                      ? 'text-[#22222B] font-extrabold bg-[#B0BE8C] border border-[#B0BE8C] shadow-xs'
+                      ? 'text-[#22222B] font-semibold bg-[#B0BE8C] border border-[#B0BE8C] shadow-xs'
                       : 'text-[#22222B]/75 hover:text-[#B92F25] hover:bg-[#B0BE8C]/20'
                   }`}
                 >
@@ -196,12 +196,12 @@ export default function Navbar() {
                   title="Account Options"
                 >
                   <div className="text-right hidden 2xl:block">
-                    <div className="text-xs font-bold text-[#22222B] leading-tight flex items-center justify-end gap-1">
+                    <div className="text-xs font-medium text-[#22222B] leading-tight flex items-center justify-end gap-1">
                       <span>{user.name}</span>
                     </div>
                     <div className="flex items-center justify-end gap-1 mt-0.5">
                       <span
-                        className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full border tracking-wide ${roleTheme.badge}`}
+                        className={`text-[9px] font-semibold uppercase px-2 py-0.5 rounded-full border tracking-wide ${roleTheme.badge}`}
                       >
                         {user.role}
                       </span>
@@ -211,7 +211,7 @@ export default function Navbar() {
                   {/* Avatar with Status Ring Indicator */}
                   <div className="relative">
                     <div
-                      className={`w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#22222B] font-black text-xs ring-2 ${roleTheme.ring} ring-offset-2 ring-offset-[#F3F5F4] shadow-xs border border-[#B0BE8C]/30`}
+                      className={`w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#22222B] font-semibold text-xs ring-2 ${roleTheme.ring} ring-offset-2 ring-offset-[#F3F5F4] shadow-xs border border-[#B0BE8C]/30`}
                     >
                       {user.name ? user.name.slice(0, 2).toUpperCase() : 'NS'}
                     </div>
@@ -254,10 +254,10 @@ export default function Navbar() {
                 {accountMenuOpen && (
                   <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-2xl shadow-xl border border-[#B0BE8C]/40 p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
                     <div className="px-3 py-2 border-b border-slate-100 mb-1">
-                      <div className="text-xs font-black text-[#22222B] truncate">{user.name}</div>
+                      <div className="text-xs font-semibold text-[#22222B] truncate">{user.name}</div>
                       <div className="text-[11px] text-slate-500 truncate">{user.phone}</div>
                       <span
-                        className={`inline-block mt-1 text-[9px] font-black uppercase px-2 py-0.5 rounded-full border ${roleTheme.badge}`}
+                        className={`inline-block mt-1 text-[9px] font-semibold uppercase px-2 py-0.5 rounded-full border ${roleTheme.badge}`}
                       >
                         {user.role}
                       </span>
@@ -269,7 +269,7 @@ export default function Navbar() {
                         setAccountMenuOpen(false);
                         setShowChangePasswordModal(true);
                       }}
-                      className="w-full flex items-center gap-2 px-3 py-2 text-xs font-bold text-[#22222B] hover:bg-[#B0BE8C]/20 rounded-xl transition-colors min-h-[38px] text-left"
+                      className="w-full flex items-center gap-2 px-3 py-2 text-xs font-medium text-[#22222B] hover:bg-[#B0BE8C]/20 rounded-xl transition-colors min-h-[38px] text-left"
                     >
                       <KeyRound className="w-4 h-4 text-[#741B22] shrink-0" />
                       <span>Change Password</span>
@@ -281,7 +281,7 @@ export default function Navbar() {
                         setAccountMenuOpen(false);
                         logout();
                       }}
-                      className="w-full flex items-center gap-2 px-3 py-2 text-xs font-bold text-[#B92F25] hover:bg-[#B92F25]/10 rounded-xl transition-colors min-h-[38px] text-left"
+                      className="w-full flex items-center gap-2 px-3 py-2 text-xs font-medium text-[#B92F25] hover:bg-[#B92F25]/10 rounded-xl transition-colors min-h-[38px] text-left"
                     >
                       <LogOut className="w-4 h-4 shrink-0" />
                       <span>Sign Out</span>
@@ -293,14 +293,14 @@ export default function Navbar() {
               <div className="flex items-center gap-2">
                 <Link
                   href="/login"
-                  className="flex items-center gap-1 px-4 py-2 text-xs font-bold text-[#22222B] hover:text-[#B92F25] hover:bg-[#B0BE8C]/20 rounded-xl transition-all min-h-[44px]"
+                  className="flex items-center gap-1 px-4 py-2 text-xs font-medium text-[#22222B] hover:text-[#B92F25] hover:bg-[#B0BE8C]/20 rounded-xl transition-all min-h-[44px]"
                 >
                   <LogIn className="w-3.5 h-3.5" />
                   Log In
                 </Link>
                 <Link
                   href="/register"
-                  className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-[#B92F25] hover:bg-[#741B22] rounded-xl shadow-md transition-all duration-200 min-h-[44px]"
+                  className="flex items-center gap-1.5 px-4 py-2 text-xs font-medium text-white bg-[#B92F25] hover:bg-[#741B22] rounded-xl shadow-md transition-all duration-200 min-h-[44px]"
                 >
                   <Sparkles className="w-3.5 h-3.5 text-[#F7DE9D]" />
                   Get Started
@@ -332,7 +332,7 @@ export default function Navbar() {
                   key={link.href}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center justify-between px-4 py-3 rounded-2xl text-sm font-bold min-h-[44px] transition-all ${
+                  className={`flex items-center justify-between px-4 py-3 rounded-2xl text-sm font-medium min-h-[44px] transition-all ${
                     isActive
                       ? 'bg-[#B0BE8C] text-[#22222B] shadow-sm'
                       : 'text-[#22222B] hover:bg-[#B0BE8C]/20'
@@ -352,15 +352,15 @@ export default function Navbar() {
                 <div className="space-y-2.5">
                   <div className="flex items-center gap-3 p-2.5 bg-white/80 rounded-2xl border border-[#B0BE8C]/30">
                     <div
-                      className={`w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-[#22222B] font-bold shrink-0 ring-2 ${roleTheme.ring}`}
+                      className={`w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-[#22222B] font-medium shrink-0 ring-2 ${roleTheme.ring}`}
                     >
                       {user.name.slice(0, 2).toUpperCase()}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <div className="text-xs font-black text-[#22222B] truncate">{user.name}</div>
+                      <div className="text-xs font-semibold text-[#22222B] truncate">{user.name}</div>
                       <div className="text-[11px] text-slate-500 truncate">{user.phone}</div>
                       <span
-                        className={`inline-block mt-0.5 text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-full border ${roleTheme.badge}`}
+                        className={`inline-block mt-0.5 text-[9px] font-semibold uppercase px-2 py-0.5 rounded-full border ${roleTheme.badge}`}
                       >
                         {user.role}
                       </span>
@@ -373,7 +373,7 @@ export default function Navbar() {
                         setMobileMenuOpen(false);
                         setShowChangePasswordModal(true);
                       }}
-                      className="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-bold text-[#22222B] bg-white hover:bg-slate-50 border border-[#B0BE8C]/40 rounded-xl transition-colors min-h-[44px]"
+                      className="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-medium text-[#22222B] bg-white hover:bg-slate-50 border border-[#B0BE8C]/40 rounded-xl transition-colors min-h-[44px]"
                     >
                       <KeyRound className="w-4 h-4 text-[#741B22]" />
                       <span>Change Password</span>
@@ -384,7 +384,7 @@ export default function Navbar() {
                         setMobileMenuOpen(false);
                         logout();
                       }}
-                      className="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-bold text-[#B92F25] bg-[#B92F25]/10 hover:bg-[#B92F25]/20 rounded-xl transition-colors min-h-[44px]"
+                      className="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-medium text-[#B92F25] bg-[#B92F25]/10 hover:bg-[#B92F25]/20 rounded-xl transition-colors min-h-[44px]"
                     >
                       <LogOut className="w-4 h-4" />
                       <span>Sign Out</span>
@@ -396,7 +396,7 @@ export default function Navbar() {
                   <Link
                     href="/login"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-center gap-1.5 px-3 py-3 text-xs font-bold text-[#22222B] bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] rounded-xl text-center transition-colors min-h-[44px]"
+                    className="flex items-center justify-center gap-1.5 px-3 py-3 text-xs font-medium text-[#22222B] bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] rounded-xl text-center transition-colors min-h-[44px]"
                   >
                     <LogIn className="w-3.5 h-3.5" />
                     Log In
@@ -404,7 +404,7 @@ export default function Navbar() {
                   <Link
                     href="/register"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-center gap-1.5 px-3 py-3 text-xs font-bold text-white bg-[#B92F25] hover:bg-[#741B22] rounded-xl text-center shadow-md transition-all min-h-[44px]"
+                    className="flex items-center justify-center gap-1.5 px-3 py-3 text-xs font-medium text-white bg-[#B92F25] hover:bg-[#741B22] rounded-xl text-center shadow-md transition-all min-h-[44px]"
                   >
                     <UserPlus className="w-3.5 h-3.5" />
                     Register
