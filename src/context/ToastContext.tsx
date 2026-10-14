@@ -145,7 +145,7 @@ function ToastContainer({ toasts, onDismiss }: { toasts: Toast[]; onDismiss: (id
           >
             <IconComponent className={`w-5 h-5 shrink-0 mt-0.5 ${iconColor}`} />
             <div className="flex-1 min-w-0">
-              {toast.title && <div className={`text-xs font-black uppercase tracking-wider mb-0.5 ${textClass}`}>{toast.title}</div>}
+              {toast.title && <div className={`text-xs font-semibold uppercase tracking-wider mb-0.5 ${textClass}`}>{toast.title}</div>}
               <div className={`text-xs font-medium leading-relaxed break-words ${textClass}`}>{toast.message}</div>
             </div>
             <button
