@@ -227,7 +227,7 @@ export default function MonthlyMenuPage() {
     const clean = dietType.toLowerCase().replace('-', '_');
     if (clean === 'non_veg') {
       return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wider bg-rose-50 text-rose-700 border border-rose-200/80 shadow-2xs">
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold tracking-wider bg-rose-50 text-rose-700 border border-rose-200/80 shadow-2xs">
           <span className="w-1.5 h-1.5 rounded-full bg-rose-600" />
           Non-Veg
         </span>
@@ -235,14 +235,14 @@ export default function MonthlyMenuPage() {
     }
     if (clean === 'egg') {
       return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wider bg-amber-50 text-amber-700 border border-amber-200/80 shadow-2xs">
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold tracking-wider bg-amber-50 text-amber-700 border border-amber-200/80 shadow-2xs">
           <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
           Egg
         </span>
       );
     }
     return (
-      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200/80 shadow-2xs">
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200/80 shadow-2xs">
         <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
         Veg
       </span>
@@ -263,7 +263,7 @@ export default function MonthlyMenuPage() {
       <div className="glass-card rounded-3xl p-5 sm:p-7 border border-[#B0BE8C]/35 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="px-3 py-1 rounded-full bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80 font-medium text-[11px] uppercase tracking-wider">
+            <span className="px-3 py-1 rounded-full bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80 font-medium text-[11px] tracking-wider">
               {isAdmin ? 'Admin Master Control' : isChef ? 'Chef Kitchen Menu' : 'Monthly Nutrition Plan'}
             </span>
             <span className="text-xs text-slate-500">
@@ -361,7 +361,7 @@ export default function MonthlyMenuPage() {
           {/* Supported Format Guide Box */}
           <div className="p-4 rounded-2xl bg-[#F3F5F4] border border-[#B0BE8C]/35 space-y-3">
             <div className="flex items-center justify-between flex-wrap gap-2">
-              <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+              <span className="text-[10px] font-semibold tracking-wider text-slate-500 flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-[#B92F25]" />
                 Supported File Formats & Layout Structures
               </span>
@@ -539,7 +539,7 @@ export default function MonthlyMenuPage() {
               {/* Uncertain Entries Section if any */}
               {conflictDetails.uncertainEntries && conflictDetails.uncertainEntries.length > 0 && (
                 <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 space-y-1">
-                  <div className="flex items-center gap-1.5 font-semibold text-[11px] text-rose-700 uppercase tracking-wide">
+                  <div className="flex items-center gap-1.5 font-semibold text-[11px] text-rose-700 tracking-wide">
                     <AlertCircle className="w-3.5 h-3.5 text-rose-600" />
                     Uncertain Rows Detected:
                   </div>
@@ -554,7 +554,7 @@ export default function MonthlyMenuPage() {
               {/* Extracted Preview Table */}
               {conflictDetails.extractedPreview && conflictDetails.extractedPreview.length > 0 && (
                 <div className="space-y-1.5">
-                  <div className="flex items-center justify-between text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                  <div className="flex items-center justify-between text-[11px] font-semibold tracking-wider text-slate-500">
                     <span className="flex items-center gap-1">
                       <Eye className="w-3.5 h-3.5 text-[#B92F25]" />
                       Extracted Menu Preview ({conflictDetails.extractedPreview.length} dishes)
@@ -710,7 +710,7 @@ export default function MonthlyMenuPage() {
                       </div>
 
                       {isToday && (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#B92F25] text-white text-[10px] font-semibold uppercase tracking-wider shadow-xs shrink-0 animate-pulse">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#B92F25] text-white text-[10px] font-semibold tracking-wider shadow-xs shrink-0 animate-pulse">
                           <Sparkles className="w-3 h-3 text-[#F7DE9D]" />
                           Today&apos;s Menu
                         </span>
@@ -721,7 +721,7 @@ export default function MonthlyMenuPage() {
                     <div className="space-y-2.5">
                       {/* Breakfast */}
                       <div className="p-2.5 rounded-xl bg-white/80 border border-[#B0BE8C]/25 space-y-1">
-                        <div className="flex items-center justify-between text-[11px] font-semibold uppercase tracking-wide text-amber-700">
+                        <div className="flex items-center justify-between text-[11px] font-semibold tracking-wide text-amber-700">
                           <span className="flex items-center gap-1.5">
                             <Coffee className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                             Breakfast
@@ -737,7 +737,7 @@ export default function MonthlyMenuPage() {
 
                       {/* Lunch */}
                       <div className="p-2.5 rounded-xl bg-white/80 border border-[#B0BE8C]/25 space-y-1">
-                        <div className="flex items-center justify-between text-[11px] font-semibold uppercase tracking-wide text-emerald-700">
+                        <div className="flex items-center justify-between text-[11px] font-semibold tracking-wide text-emerald-700">
                           <span className="flex items-center gap-1.5">
                             <Utensils className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                             Lunch
@@ -753,7 +753,7 @@ export default function MonthlyMenuPage() {
 
                       {/* Dinner */}
                       <div className="p-2.5 rounded-xl bg-white/80 border border-[#B0BE8C]/25 space-y-1">
-                        <div className="flex items-center justify-between text-[11px] font-semibold uppercase tracking-wide text-indigo-700">
+                        <div className="flex items-center justify-between text-[11px] font-semibold tracking-wide text-indigo-700">
                           <span className="flex items-center gap-1.5">
                             <Moon className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
                             Dinner
