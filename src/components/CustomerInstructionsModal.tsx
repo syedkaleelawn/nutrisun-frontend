@@ -164,7 +164,7 @@ export default function CustomerInstructionsModal({
                 height={26}
                 className="w-6 h-6 object-contain shrink-0"
               />
-              <span className="text-[11px] font-black tracking-wider text-[#22222B] uppercase">
+              <span className="text-[11px] font-semibold tracking-wider text-[#22222B] uppercase">
                 NutriSun
               </span>
             </div>
@@ -172,7 +172,7 @@ export default function CustomerInstructionsModal({
             <button
               type="button"
               onClick={logout}
-              className="flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-[#B92F25] hover:bg-[#B92F25]/10 active:bg-[#B92F25]/20 rounded-lg transition-colors shrink-0 border border-[#B92F25]/25"
+              className="flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-[#B92F25] hover:bg-[#B92F25]/10 active:bg-[#B92F25]/20 rounded-lg transition-colors shrink-0 border border-[#B92F25]/25"
               title="Sign out of account"
             >
               <LogOut className="w-3.5 h-3.5 shrink-0" />
@@ -182,13 +182,13 @@ export default function CustomerInstructionsModal({
 
           {/* Row 2: Welcome text & Row 3: Full-width title */}
           <div>
-            <div className="flex items-center gap-1 text-[11.5px] font-bold text-[#741B22] mb-0.5">
+            <div className="flex items-center gap-1 text-[11.5px] font-medium text-[#741B22] mb-0.5">
               <Sparkles className="w-3 h-3 text-[#B92F25] shrink-0" />
               <span>Welcome to NutriSun</span>
             </div>
             <h2
               id="instructions-modal-title"
-              className="text-[18px] font-black text-[#22222B] leading-tight break-normal w-full"
+              className="text-[18px] font-semibold text-[#22222B] leading-tight break-normal w-full"
             >
               Customer Instructions
             </h2>
@@ -210,8 +210,8 @@ export default function CustomerInstructionsModal({
         >
           {/* 1. Subscription Duration */}
           <div className="p-2.5 sm:p-3 rounded-xl bg-[#F3F5F4] border border-[#B0BE8C]/30 space-y-1">
-            <div className="flex items-center gap-2 font-black text-[13.5px] text-[#22222B]">
-              <div className="w-5 h-5 rounded-full bg-[#741B22] text-white flex items-center justify-center text-[10px] font-black shrink-0">
+            <div className="flex items-center gap-2 font-semibold text-[13.5px] text-[#22222B]">
+              <div className="w-5 h-5 rounded-full bg-[#741B22] text-white flex items-center justify-center text-[10px] font-semibold shrink-0">
                 1
               </div>
               <Calendar className="w-3.5 h-3.5 text-[#741B22] shrink-0" />
@@ -224,8 +224,8 @@ export default function CustomerInstructionsModal({
 
           {/* 2. Tiffin Box Returns */}
           <div className="p-2.5 sm:p-3 rounded-xl bg-[#F3F5F4] border border-[#B0BE8C]/30 space-y-1">
-            <div className="flex items-center gap-2 font-black text-[13.5px] text-[#22222B]">
-              <div className="w-5 h-5 rounded-full bg-[#741B22] text-white flex items-center justify-center text-[10px] font-black shrink-0">
+            <div className="flex items-center gap-2 font-semibold text-[13.5px] text-[#22222B]">
+              <div className="w-5 h-5 rounded-full bg-[#741B22] text-white flex items-center justify-center text-[10px] font-semibold shrink-0">
                 2
               </div>
               <Package className="w-3.5 h-3.5 text-[#741B22] shrink-0" />
@@ -239,8 +239,8 @@ export default function CustomerInstructionsModal({
 
           {/* 3. Meal Cancellation & Rescheduling */}
           <div className="p-2.5 sm:p-3 rounded-xl bg-[#F3F5F4] border border-[#B0BE8C]/30 space-y-1">
-            <div className="flex items-center gap-2 font-black text-[13.5px] text-[#22222B]">
-              <div className="w-5 h-5 rounded-full bg-[#741B22] text-white flex items-center justify-center text-[10px] font-black shrink-0">
+            <div className="flex items-center gap-2 font-semibold text-[13.5px] text-[#22222B]">
+              <div className="w-5 h-5 rounded-full bg-[#741B22] text-white flex items-center justify-center text-[10px] font-semibold shrink-0">
                 3
               </div>
               <RotateCcw className="w-3.5 h-3.5 text-[#741B22] shrink-0" />
@@ -259,8 +259,8 @@ export default function CustomerInstructionsModal({
 
           {/* 4. Holidays */}
           <div className="p-2.5 sm:p-3 rounded-xl bg-[#F3F5F4] border border-[#B0BE8C]/30 space-y-1">
-            <div className="flex items-center gap-2 font-black text-[13.5px] text-[#22222B]">
-              <div className="w-5 h-5 rounded-full bg-[#741B22] text-white flex items-center justify-center text-[10px] font-black shrink-0">
+            <div className="flex items-center gap-2 font-semibold text-[13.5px] text-[#22222B]">
+              <div className="w-5 h-5 rounded-full bg-[#741B22] text-white flex items-center justify-center text-[10px] font-semibold shrink-0">
                 4
               </div>
               <SunMedium className="w-3.5 h-3.5 text-[#741B22] shrink-0" />
@@ -273,8 +273,8 @@ export default function CustomerInstructionsModal({
 
           {/* 5. Fixed Menu */}
           <div className="p-2.5 sm:p-3 rounded-xl bg-[#F3F5F4] border border-[#B0BE8C]/30 space-y-1">
-            <div className="flex items-center gap-2 font-black text-[13.5px] text-[#22222B]">
-              <div className="w-5 h-5 rounded-full bg-[#741B22] text-white flex items-center justify-center text-[10px] font-black shrink-0">
+            <div className="flex items-center gap-2 font-semibold text-[13.5px] text-[#22222B]">
+              <div className="w-5 h-5 rounded-full bg-[#741B22] text-white flex items-center justify-center text-[10px] font-semibold shrink-0">
                 5
               </div>
               <CheckCircle2 className="w-3.5 h-3.5 text-[#741B22] shrink-0" />
@@ -287,8 +287,8 @@ export default function CustomerInstructionsModal({
 
           {/* 6. Estimated Delivery Timings */}
           <div className="p-2.5 sm:p-3 rounded-xl bg-[#F3F5F4] border border-[#B0BE8C]/30 space-y-1">
-            <div className="flex items-center gap-2 font-black text-[13.5px] text-[#22222B]">
-              <div className="w-5 h-5 rounded-full bg-[#741B22] text-white flex items-center justify-center text-[10px] font-black shrink-0">
+            <div className="flex items-center gap-2 font-semibold text-[13.5px] text-[#22222B]">
+              <div className="w-5 h-5 rounded-full bg-[#741B22] text-white flex items-center justify-center text-[10px] font-semibold shrink-0">
                 6
               </div>
               <Clock className="w-3.5 h-3.5 text-[#741B22] shrink-0" />
@@ -315,7 +315,7 @@ export default function CustomerInstructionsModal({
                 type="button"
                 onClick={handleAgreeAndContinue}
                 disabled={saving}
-                className="px-2 py-0.5 rounded-md bg-rose-600 text-white font-bold text-[11px] hover:bg-rose-700 transition-colors shrink-0 flex items-center gap-1"
+                className="px-2 py-0.5 rounded-md bg-rose-600 text-white font-medium text-[11px] hover:bg-rose-700 transition-colors shrink-0 flex items-center gap-1"
               >
                 <RefreshCw className={`w-3 h-3 ${saving ? 'animate-spin' : ''}`} />
                 Retry
@@ -343,7 +343,7 @@ export default function CustomerInstructionsModal({
             type="button"
             onClick={handleAgreeAndContinue}
             disabled={!agreed || saving}
-            className={`w-full h-[44px] rounded-xl font-bold text-[14px] shadow-sm flex items-center justify-center gap-2 transition-all ${
+            className={`w-full h-[44px] rounded-xl font-medium text-[14px] shadow-sm flex items-center justify-center gap-2 transition-all ${
               agreed && !saving
                 ? 'bg-[#B92F25] hover:bg-[#741B22] text-white active:scale-98 shadow-[#B92F25]/25 cursor-pointer'
                 : 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none'
