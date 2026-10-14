@@ -99,9 +99,9 @@ export default function RootLayout({
                   className="w-8 h-8 object-contain shrink-0"
                 />
                 <div className="min-w-0">
-                  <div className="font-black text-[#22222B] flex items-center gap-2">
+                  <div className="font-semibold text-[#22222B] flex items-center gap-2">
                     <span>NUTRISUN</span>
-                    <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80 shrink-0">
+                    <span className="text-[10px] font-semibold uppercase px-2 py-0.5 rounded-full bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80 shrink-0">
                       Healthy Tasty Daily
                     </span>
                   </div>
