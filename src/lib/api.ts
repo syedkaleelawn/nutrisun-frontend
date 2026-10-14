@@ -305,6 +305,16 @@ export interface PendingCountsResponse {
   total_pending: number;
 }
 
+export interface BusinessHoliday {
+  id: number;
+  date: string;
+  meal_slot: MealSlot;
+  affected_meals: number;
+  admin_id: number;
+  created_at: string;
+  admin?: User;
+}
+
 export interface ShiftKitchenResponse {
   date: string;
   shift: MealSlot;
@@ -672,6 +682,10 @@ export const adminApi = {
     scope?: string;
   }) =>
     api.get<{ count: number; requests: ServiceRequest[] }>('/admin/requests', { params }),
+  getHolidays: () =>
+    api.get<{ count: number; holidays: BusinessHoliday[] }>('/admin/holidays'),
+  declareHoliday: (data: { date: string; meal_slot: MealSlot }) =>
+    api.post<{ message: string; holiday: BusinessHoliday }>('/admin/holidays', data),
   reallocate: (data: { original_meal_log_id: number; new_date: string; new_slot: MealSlot; reason?: string }) =>
     api.post<{ message: string; original_meal_id: number; new_meal_id: number; new_date: string; new_slot: MealSlot }>('/admin/reallocate', data),
   adjustCredits: (data: { subscription_id: number; delta: number; reason: string }) =>
