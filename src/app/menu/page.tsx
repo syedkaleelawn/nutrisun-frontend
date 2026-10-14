@@ -155,7 +155,7 @@ export default function PublicMenuPage() {
 
     if (clean === 'non_veg') {
       return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wider bg-rose-50 text-rose-700 border border-rose-200/80">
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold tracking-wider bg-rose-50 text-rose-700 border border-rose-200/80">
           <span className="w-1.5 h-1.5 rounded-full bg-rose-600" />
           Non-Veg
         </span>
@@ -164,7 +164,7 @@ export default function PublicMenuPage() {
 
     if (clean === 'egg') {
       return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wider bg-amber-50 text-amber-700 border border-amber-200/80">
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold tracking-wider bg-amber-50 text-amber-700 border border-amber-200/80">
           <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
           Egg
         </span>
@@ -172,7 +172,7 @@ export default function PublicMenuPage() {
     }
 
     return (
-      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200/80">
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200/80">
         <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
         Veg
       </span>
@@ -186,7 +186,7 @@ export default function PublicMenuPage() {
         <div className="glass-card rounded-3xl p-5 sm:p-7 border border-[#B0BE8C]/35 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="px-3 py-1 rounded-full bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80 font-medium text-[11px] uppercase tracking-wider">
+              <span className="px-3 py-1 rounded-full bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80 font-medium text-[11px] tracking-wider">
                 NutriSun Menu
               </span>
 
@@ -334,7 +334,7 @@ export default function PublicMenuPage() {
                       </div>
 
                       {isToday && (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#B92F25] text-white text-[10px] font-semibold uppercase tracking-wider shadow-xs shrink-0">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#B92F25] text-white text-[10px] font-semibold tracking-wider shadow-xs shrink-0">
                           <Sparkles className="w-3 h-3 text-[#F7DE9D]" />
                           Today&apos;s Menu
                         </span>
@@ -345,7 +345,7 @@ export default function PublicMenuPage() {
                     <div className="space-y-2.5">
                       {/* Breakfast */}
                       <div className="p-2.5 rounded-xl bg-white/80 border border-[#B0BE8C]/25 space-y-1">
-                        <div className="flex items-center justify-between text-[11px] font-semibold uppercase tracking-wide text-amber-700">
+                        <div className="flex items-center justify-between text-[11px] font-semibold tracking-wide text-amber-700">
                           <span className="flex items-center gap-1.5">
                             <Coffee className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                             Breakfast
@@ -367,7 +367,7 @@ export default function PublicMenuPage() {
 
                       {/* Lunch */}
                       <div className="p-2.5 rounded-xl bg-white/80 border border-[#B0BE8C]/25 space-y-1">
-                        <div className="flex items-center justify-between text-[11px] font-semibold uppercase tracking-wide text-emerald-700">
+                        <div className="flex items-center justify-between text-[11px] font-semibold tracking-wide text-emerald-700">
                           <span className="flex items-center gap-1.5">
                             <Utensils className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                             Lunch
@@ -387,7 +387,7 @@ export default function PublicMenuPage() {
 
                       {/* Dinner */}
                       <div className="p-2.5 rounded-xl bg-white/80 border border-[#B0BE8C]/25 space-y-1">
-                        <div className="flex items-center justify-between text-[11px] font-semibold uppercase tracking-wide text-indigo-700">
+                        <div className="flex items-center justify-between text-[11px] font-semibold tracking-wide text-indigo-700">
                           <span className="flex items-center gap-1.5">
                             <Moon className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
                             Dinner

@@ -128,7 +128,7 @@ export default function DeliveryDashboard() {
       <div className="glass-card rounded-3xl p-5 sm:p-8 border border-[#B0BE8C]/35 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="px-3 py-1 rounded-full bg-[#B92F25]/15 text-[#B92F25] font-medium text-[11px] uppercase tracking-wider">
+            <span className="px-3 py-1 rounded-full bg-[#B92F25]/15 text-[#B92F25] font-medium text-[11px] tracking-wider">
               Logistics & Delivery Run-Sheet
             </span>
             <span className="text-xs text-slate-500">One row per customer</span>
@@ -144,11 +144,11 @@ export default function DeliveryDashboard() {
 
         <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center sm:gap-3 w-full md:w-auto">
           <div className="p-3 rounded-2xl bg-white/90 border border-[#B0BE8C]/35 text-center min-w-0 sm:min-w-[100px] shadow-xs flex-1">
-            <span className="text-[10px] font-medium uppercase text-slate-400">Customers</span>
+            <span className="text-[10px] font-medium text-slate-400">Customers</span>
             <div className="text-xl font-semibold text-[#22222B]">{deliveries.length}</div>
           </div>
           <div className="p-3 rounded-2xl bg-white/90 border border-[#B0BE8C]/35 text-center min-w-0 sm:min-w-[100px] shadow-xs flex-1">
-            <span className="text-[10px] font-medium uppercase text-slate-400">Total Portions</span>
+            <span className="text-[10px] font-medium text-slate-400">Total Portions</span>
             <div className="text-xl font-semibold text-[#741B22]">{totalPortions}</div>
           </div>
         </div>
@@ -159,7 +159,7 @@ export default function DeliveryDashboard() {
           <div className="flex items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
             <Calendar className="w-5 h-5 text-[#B0BE8C] shrink-0" />
             <div className="w-full sm:w-auto">
-              <label className="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-0.5">Delivery Date</label>
+              <label className="block text-[10px] font-semibold tracking-wider text-slate-400 mb-0.5">Delivery Date</label>
               <input
                 type="date"
                 value={date}

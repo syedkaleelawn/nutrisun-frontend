@@ -141,7 +141,7 @@ export default function Navbar() {
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-1.5 sm:gap-2">
-                <span className="font-semibold text-base sm:text-xl md:text-2xl tracking-wider text-[#22222B] uppercase truncate">
+                <span className="font-semibold text-base sm:text-xl md:text-2xl tracking-wider text-[#22222B] truncate">
                   NUTRISUN
                 </span>
               </div>
@@ -201,7 +201,7 @@ export default function Navbar() {
                     </div>
                     <div className="flex items-center justify-end gap-1 mt-0.5">
                       <span
-                        className={`text-[9px] font-semibold uppercase px-2 py-0.5 rounded-full border tracking-wide ${roleTheme.badge}`}
+                        className={`text-[9px] font-semibold px-2 py-0.5 rounded-full border tracking-wide ${roleTheme.badge}`}
                       >
                         {user.role}
                       </span>
@@ -257,7 +257,7 @@ export default function Navbar() {
                       <div className="text-xs font-semibold text-[#22222B] truncate">{user.name}</div>
                       <div className="text-[11px] text-slate-500 truncate">{user.phone}</div>
                       <span
-                        className={`inline-block mt-1 text-[9px] font-semibold uppercase px-2 py-0.5 rounded-full border ${roleTheme.badge}`}
+                        className={`inline-block mt-1 text-[9px] font-semibold px-2 py-0.5 rounded-full border ${roleTheme.badge}`}
                       >
                         {user.role}
                       </span>
@@ -360,7 +360,7 @@ export default function Navbar() {
                       <div className="text-xs font-semibold text-[#22222B] truncate">{user.name}</div>
                       <div className="text-[11px] text-slate-500 truncate">{user.phone}</div>
                       <span
-                        className={`inline-block mt-0.5 text-[9px] font-semibold uppercase px-2 py-0.5 rounded-full border ${roleTheme.badge}`}
+                        className={`inline-block mt-0.5 text-[9px] font-semibold px-2 py-0.5 rounded-full border ${roleTheme.badge}`}
                       >
                         {user.role}
                       </span>

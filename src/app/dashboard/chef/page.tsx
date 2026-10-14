@@ -15,6 +15,15 @@ const MEAL_META: Record<MealSlot, { label: string; icon: React.ComponentType<{ c
 };
 type KitchenData = Partial<Record<MealSlot, ShiftKitchenResponse>>;
 
+const formatDietaryType = (value?: string) => {
+  if (!value) return '';
+  const normalized = value.trim().toLowerCase().replace(/[\s-]+/g, '_');
+  if (normalized === 'non_veg') return 'Non-Veg';
+  if (normalized === 'veg') return 'Veg';
+  if (normalized === 'egg') return 'Egg';
+  return value.replace(/_/g, ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
+};
+
 export default function ChefDashboard() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
@@ -72,7 +81,7 @@ export default function ChefDashboard() {
           </div>
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
             <label>
-              <span className="mb-1 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+              <span className="mb-1 flex items-center gap-1.5 text-[10px] font-semibold tracking-wider text-slate-500">
                 <Calendar className="h-3.5 w-3.5 text-[#741B22]" /> Preparation Date
               </span>
               <input type="date" value={date} onChange={(event) => setDate(event.target.value)}
@@ -108,7 +117,7 @@ export default function ChefDashboard() {
                   <div className="flex items-center gap-2"><Icon className={`h-5 w-5 ${meta.iconClass}`} /><h2 className="text-base font-semibold text-[#22222B]">{meta.label}</h2></div>
                   <div className="text-right">
                     <div className="text-3xl font-semibold leading-none text-[#741B22]">{mealData?.total_portions ?? 0}</div>
-                    <div className="mt-0.5 text-[9px] font-semibold uppercase tracking-wider text-slate-500">Portions</div>
+                    <div className="mt-0.5 text-[9px] font-semibold tracking-wider text-slate-500">Portions</div>
                   </div>
                 </div>
                 {lateCancellations > 0 && (
@@ -118,14 +127,14 @@ export default function ChefDashboard() {
                   </div>
                 )}
                 <div className="p-3">
-                  <div className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-500">Menu</div>
+                  <div className="mb-2 text-[10px] font-semibold tracking-wider text-slate-500">Menu</div>
                   {mealData?.menu_items?.length ? (
                     <div className="space-y-2">
                       {mealData.menu_items.map((item) => (
                         <div key={item.id} className="rounded-xl border border-[#B0BE8C]/30 bg-white/80 px-3 py-2.5">
                           <div className="flex items-start justify-between gap-2">
                             <p className="text-sm font-semibold text-[#22222B]">{item.item_name}</p>
-                            {item.dietary_type && <span className="shrink-0 rounded-md border border-[#B0BE8C]/35 bg-[#B0BE8C]/20 px-1.5 py-0.5 text-[9px] font-medium uppercase text-[#22222B]">{item.dietary_type}</span>}
+                            {item.dietary_type && <span className="shrink-0 rounded-md border border-[#B0BE8C]/35 bg-[#B0BE8C]/20 px-1.5 py-0.5 text-[9px] font-medium text-[#22222B]">{formatDietaryType(item.dietary_type)}</span>}
                           </div>
                         </div>
                       ))}
