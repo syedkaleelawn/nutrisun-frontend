@@ -117,7 +117,7 @@ export default function RegisterPage() {
               className="w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow-md hover:scale-105 transition-transform duration-300"
             />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#22222B] uppercase">
+          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#22222B]">
             NUTRISUN
           </h1>
           <p className="text-xs font-medium text-[#741B22] italic tracking-wider">
@@ -150,7 +150,7 @@ export default function RegisterPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Name */}
             <div>
-              <label className="block text-[10px] font-semibold uppercase tracking-wider text-[#22222B]/70 mb-1.5">
+              <label className="block text-[10px] font-semibold tracking-wider text-[#22222B]/70 mb-1.5">
                 Full Name
               </label>
               <div className="relative">
@@ -168,7 +168,7 @@ export default function RegisterPage() {
 
             {/* Unique Phone Number */}
             <div>
-              <label className="block text-[10px] font-semibold uppercase tracking-wider text-[#22222B]/70 mb-1.5">
+              <label className="block text-[10px] font-semibold tracking-wider text-[#22222B]/70 mb-1.5">
                 Unique Phone Number (Used for Login & Deliveries)
               </label>
               <div className="relative">
@@ -186,7 +186,7 @@ export default function RegisterPage() {
 
             {/* Delivery Address */}
             <div>
-              <label className="block text-[10px] font-semibold uppercase tracking-wider text-[#22222B]/70 mb-1.5">
+              <label className="block text-[10px] font-semibold tracking-wider text-[#22222B]/70 mb-1.5">
                 Delivery Address
               </label>
               <div className="relative">
@@ -207,7 +207,7 @@ export default function RegisterPage() {
 
             {/* Password */}
             <div>
-              <label className="block text-[10px] font-semibold uppercase tracking-wider text-[#22222B]/70 mb-1.5">
+              <label className="block text-[10px] font-semibold tracking-wider text-[#22222B]/70 mb-1.5">
                 Password (min. 6 characters)
               </label>
               <div className="relative">
