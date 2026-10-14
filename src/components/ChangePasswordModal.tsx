@@ -126,7 +126,7 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
               <KeyRound className="w-6 h-6" />
             </div>
             <div>
-              <h2 id="change-password-title" className="text-lg sm:text-xl font-black tracking-tight">
+              <h2 id="change-password-title" className="text-lg sm:text-xl font-semibold tracking-tight">
                 Change Password
               </h2>
               <p className="text-xs text-white/70 mt-0.5">
@@ -147,7 +147,7 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
 
           {/* Current Password Field */}
           <div>
-            <label className="block text-xs font-bold text-[#22222B] mb-1.5">
+            <label className="block text-xs font-medium text-[#22222B] mb-1.5">
               Current Password <span className="text-red-500">*</span>
             </label>
             <div className="relative">
@@ -176,7 +176,7 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
 
           {/* New Password Field */}
           <div>
-            <label className="block text-xs font-bold text-[#22222B] mb-1.5">
+            <label className="block text-xs font-medium text-[#22222B] mb-1.5">
               New Password <span className="text-red-500">*</span>
             </label>
             <div className="relative">
@@ -207,7 +207,7 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
 
           {/* Confirm New Password Field */}
           <div>
-            <label className="block text-xs font-bold text-[#22222B] mb-1.5">
+            <label className="block text-xs font-medium text-[#22222B] mb-1.5">
               Confirm New Password <span className="text-red-500">*</span>
             </label>
             <div className="relative">
@@ -241,14 +241,14 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
               type="button"
               onClick={handleClose}
               disabled={loading}
-              className="w-full sm:w-1/2 py-2.5 sm:py-3 px-4 rounded-2xl border border-slate-300 text-slate-700 font-bold text-xs hover:bg-slate-50 active:scale-95 transition-all disabled:opacity-50 min-h-[44px]"
+              className="w-full sm:w-1/2 py-2.5 sm:py-3 px-4 rounded-2xl border border-slate-300 text-slate-700 font-medium text-xs hover:bg-slate-50 active:scale-95 transition-all disabled:opacity-50 min-h-[44px]"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="w-full sm:w-1/2 py-2.5 sm:py-3 px-4 rounded-2xl bg-[#741B22] hover:bg-[#741B22] text-white font-bold text-xs shadow-md active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2 min-h-[44px]"
+              className="w-full sm:w-1/2 py-2.5 sm:py-3 px-4 rounded-2xl bg-[#741B22] hover:bg-[#741B22] text-white font-medium text-xs shadow-md active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2 min-h-[44px]"
             >
               {loading ? (
                 <>
