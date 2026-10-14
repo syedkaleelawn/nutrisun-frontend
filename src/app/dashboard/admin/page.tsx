@@ -439,7 +439,7 @@ export default function AdminDashboard() {
       <div className="glass-card rounded-3xl p-5 sm:p-8 border border-[#B0BE8C]/35 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="px-3 py-1 rounded-full bg-[#741B22]/15 text-[#741B22] border border-[#741B22]/20 font-medium text-[11px] uppercase tracking-wider">
+            <span className="px-3 py-1 rounded-full bg-[#741B22]/15 text-[#741B22] border border-[#741B22]/20 font-medium text-[11px] tracking-wider">
               Administration Central
             </span>
             <span className="text-xs text-slate-500">Full Business Governance</span>
@@ -504,7 +504,7 @@ export default function AdminDashboard() {
           }`}
         >
           <div className="flex items-center justify-between gap-1">
-            <span className="text-[10px] font-semibold uppercase leading-tight text-[#22222B] px-2 py-0.5 rounded-full bg-[#F7DE9D]">Payment Approvals</span>
+            <span className="text-[10px] font-semibold leading-tight text-[#22222B] px-2 py-0.5 rounded-full bg-[#F7DE9D]">Payment Approvals</span>
             <CreditCard className="w-4 h-4 text-[#741B22] shrink-0" />
           </div>
           <div className="text-xl sm:text-2xl font-semibold text-[#22222B] mt-1">{counts.payment_pending}</div>
@@ -516,7 +516,7 @@ export default function AdminDashboard() {
           className="bg-white border-[#B0BE8C]/35 p-3.5 sm:p-4 rounded-3xl border text-left transition-all min-h-[44px] flex flex-col justify-between hover:bg-[#B0BE8C]/10"
         >
           <div className="flex items-center justify-between gap-1">
-            <span className="text-[10px] font-semibold uppercase leading-tight text-[#22222B]">Total Cancellations</span>
+            <span className="text-[10px] font-semibold leading-tight text-[#22222B]">Total Cancellations</span>
             <SkipForward className="w-4 h-4 text-[#741B22] shrink-0" />
           </div>
           <div className="text-xl sm:text-2xl font-semibold text-[#22222B] mt-1">{requests.length}</div>
@@ -531,7 +531,7 @@ export default function AdminDashboard() {
           className="bg-emerald-50/70 border-emerald-200 p-3.5 sm:p-4 rounded-3xl border text-left transition-all min-h-[44px] flex flex-col justify-between hover:bg-emerald-100/70"
         >
           <div className="flex items-center justify-between gap-1">
-            <span className="text-[10px] font-semibold uppercase leading-tight text-emerald-800">Rescheduled Cancellations</span>
+            <span className="text-[10px] font-semibold leading-tight text-emerald-800">Rescheduled Cancellations</span>
             <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
           </div>
           <div className="text-xl sm:text-2xl font-semibold text-emerald-700 mt-1">
@@ -548,7 +548,7 @@ export default function AdminDashboard() {
           className="bg-rose-50/70 border-rose-200 p-3.5 sm:p-4 rounded-3xl border text-left transition-all min-h-[44px] flex flex-col justify-between hover:bg-rose-100/70"
         >
           <div className="flex items-center justify-between gap-1">
-            <span className="text-[10px] font-semibold uppercase leading-tight text-rose-800">Late Cancellations</span>
+            <span className="text-[10px] font-semibold leading-tight text-rose-800">Late Cancellations</span>
             <Clock className="w-4 h-4 text-rose-600 shrink-0" />
           </div>
           <div className="text-xl sm:text-2xl font-semibold text-rose-700 mt-1">
@@ -891,7 +891,7 @@ export default function AdminDashboard() {
             {/* Filter Bar */}
             <div className="glass-card rounded-2xl p-4 border border-[#B0BE8C]/35 shadow-xs grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
               <div>
-                <label className="block text-[10px] font-medium text-slate-400 uppercase mb-1">Search Customer</label>
+                <label className="block text-[10px] font-medium text-slate-400 mb-1">Search Customer</label>
                 <input
                   type="text"
                   placeholder="Name or phone..."
@@ -902,7 +902,7 @@ export default function AdminDashboard() {
               </div>
 
               <div>
-                <label className="block text-[10px] font-medium text-slate-400 uppercase mb-1">Delivery Date</label>
+                <label className="block text-[10px] font-medium text-slate-400 mb-1">Delivery Date</label>
                 <input
                   type="date"
                   value={reqFilterDate}
@@ -912,7 +912,7 @@ export default function AdminDashboard() {
               </div>
 
               <div>
-                <label className="block text-[10px] font-medium text-slate-400 uppercase mb-1">Meal Shift</label>
+                <label className="block text-[10px] font-medium text-slate-400 mb-1">Meal Shift</label>
                 <select
                   value={reqFilterMeal}
                   onChange={(e) => setReqFilterMeal(e.target.value as any)}
@@ -926,7 +926,7 @@ export default function AdminDashboard() {
               </div>
 
               <div>
-                <label className="block text-[10px] font-medium text-slate-400 uppercase mb-1">Timing / Outcome</label>
+                <label className="block text-[10px] font-medium text-slate-400 mb-1">Timing / Outcome</label>
                 <select
                   value={reqFilterTiming}
                   onChange={(e) => setReqFilterTiming(e.target.value as any)}
@@ -1227,7 +1227,7 @@ export default function AdminDashboard() {
                 {staff.map((s) => (
                   <div key={s.id} className="glass-card rounded-2xl p-4 border border-[#B0BE8C]/35 shadow-xs space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-[#B0BE8C]/25 text-[#22222B] border border-[#B0BE8C]/40">
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold tracking-wider bg-[#B0BE8C]/25 text-[#22222B] border border-[#B0BE8C]/40">
                         {s.role}
                       </span>
                       <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium border ${
@@ -1290,7 +1290,7 @@ export default function AdminDashboard() {
                       <tr key={s.id} className="hover:bg-[#B0BE8C]/10 transition-colors">
                         <td className="p-3 font-medium">#{s.id}</td>
                         <td className="p-3 font-medium text-[#22222B]">{s.name}</td>
-                        <td className="p-3 uppercase font-medium text-[#741B22]">{s.role}</td>
+                        <td className="p-3 font-medium text-[#741B22]">{s.role.charAt(0).toUpperCase() + s.role.slice(1)}</td>
                         <td className="p-3">{s.phone}</td>
                         <td className="p-3">
                           <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium border ${
@@ -1382,7 +1382,7 @@ export default function AdminDashboard() {
                   <h3 className="text-base font-semibold text-[#22222B] break-words">{p.name}</h3>
                   <div className="text-xl font-semibold text-[#741B22] my-2">₹{p.price.toFixed(2)}</div>
                   <p className="text-xs text-slate-600">
-                    Included Shifts: <strong className="uppercase">{p.shifts}</strong>
+                    Included Shifts: <strong className="uppercase">{formatShiftName(p.shifts)}</strong>
                   </p>
                 </div>
 
@@ -1426,7 +1426,7 @@ export default function AdminDashboard() {
             {/* Header */}
             <div className="flex items-start justify-between gap-2 border-b border-[#B0BE8C]/25 pb-3">
               <div className="min-w-0">
-                <span className="text-[10px] font-medium text-slate-400 uppercase">Verification Review</span>
+                <span className="text-[10px] font-medium text-slate-400">Verification Review</span>
                 <h3 className="text-lg font-semibold text-[#22222B]">Review Manual UPI Payment</h3>
                 <p className="text-xs text-slate-600">
                   Sub #{confirmSub.id} • Customer: <strong>{confirmSub.user?.name}</strong> ({confirmSub.user?.phone})
