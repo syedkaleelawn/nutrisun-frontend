@@ -181,7 +181,7 @@ export default function PublicPricingPage() {
         <div className="glass-card rounded-3xl border border-[#B0BE8C]/35 shadow-lg p-5 sm:p-8">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F7DE9D] border border-[#F7DE9D]/80 text-[#22222B] text-[11px] font-semibold uppercase tracking-wider">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F7DE9D] border border-[#F7DE9D]/80 text-[#22222B] text-[11px] font-semibold tracking-wider">
                 <Sparkles className="w-3.5 h-3.5" />
                 NutriSun Plans
               </div>
@@ -330,7 +330,7 @@ export default function PublicPricingPage() {
                 >
                   {isFeatured && (
                     <div className="absolute -top-3 right-5">
-                      <span className="px-3 py-1 rounded-full bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80 text-[10px] font-semibold uppercase tracking-wider shadow-sm">
+                      <span className="px-3 py-1 rounded-full bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80 text-[10px] font-semibold tracking-wider shadow-sm">
                         Complete All-Meals Plan
                       </span>
                     </div>
@@ -361,7 +361,7 @@ export default function PublicPricingPage() {
                     <div className="space-y-2.5 mb-5">
                       {isOrPlan ? (
                         <div className="p-3 rounded-xl bg-[#F7DE9D]/30 border border-[#F7DE9D]">
-                          <span className="inline-block px-2 py-0.5 rounded-md bg-[#F7DE9D] text-[#741B22] text-[10px] font-semibold uppercase tracking-wider">
+                          <span className="inline-block px-2 py-0.5 rounded-md bg-[#F7DE9D] text-[#741B22] text-[10px] font-semibold tracking-wider">
                             Meal Choice Required
                           </span>
 
