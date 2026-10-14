@@ -164,7 +164,7 @@ export default function CustomerInstructionsModal({
                 height={26}
                 className="w-6 h-6 object-contain shrink-0"
               />
-              <span className="text-[11px] font-semibold tracking-wider text-[#22222B] uppercase">
+              <span className="text-[11px] font-semibold tracking-wider text-[#22222B]">
                 NutriSun
               </span>
             </div>
