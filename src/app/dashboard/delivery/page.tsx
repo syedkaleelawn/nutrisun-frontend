@@ -117,7 +117,7 @@ export default function DeliveryDashboard() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[65vh] gap-3 text-center px-4">
         <AlertTriangle className="w-10 h-10 text-amber-500" />
-        <h2 className="text-xl font-black text-[#22222B]">Access Restricted</h2>
+        <h2 className="text-xl font-semibold text-[#22222B]">Access Restricted</h2>
         <p className="text-xs text-slate-500 max-w-sm">Delivery Fleet credentials required. Redirecting to sign in...</p>
       </div>
     );
@@ -128,12 +128,12 @@ export default function DeliveryDashboard() {
       <div className="glass-card rounded-3xl p-5 sm:p-8 border border-[#B0BE8C]/35 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="px-3 py-1 rounded-full bg-[#B92F25]/15 text-[#B92F25] font-bold text-[11px] uppercase tracking-wider">
+            <span className="px-3 py-1 rounded-full bg-[#B92F25]/15 text-[#B92F25] font-medium text-[11px] uppercase tracking-wider">
               Logistics & Delivery Run-Sheet
             </span>
             <span className="text-xs text-slate-500">One row per customer</span>
           </div>
-          <h1 className="text-xl sm:text-3xl font-black text-[#22222B] mt-2 flex items-center gap-2 break-words">
+          <h1 className="text-xl sm:text-3xl font-semibold text-[#22222B] mt-2 flex items-center gap-2 break-words">
             <Truck className="w-6 h-6 sm:w-7 sm:h-7 text-[#741B22] shrink-0" />
             Doorstep Delivery Run-Sheet
           </h1>
@@ -144,12 +144,12 @@ export default function DeliveryDashboard() {
 
         <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center sm:gap-3 w-full md:w-auto">
           <div className="p-3 rounded-2xl bg-white/90 border border-[#B0BE8C]/35 text-center min-w-0 sm:min-w-[100px] shadow-xs flex-1">
-            <span className="text-[10px] font-bold uppercase text-slate-400">Customers</span>
-            <div className="text-xl font-black text-[#22222B]">{deliveries.length}</div>
+            <span className="text-[10px] font-medium uppercase text-slate-400">Customers</span>
+            <div className="text-xl font-semibold text-[#22222B]">{deliveries.length}</div>
           </div>
           <div className="p-3 rounded-2xl bg-white/90 border border-[#B0BE8C]/35 text-center min-w-0 sm:min-w-[100px] shadow-xs flex-1">
-            <span className="text-[10px] font-bold uppercase text-slate-400">Total Portions</span>
-            <div className="text-xl font-black text-[#741B22]">{totalPortions}</div>
+            <span className="text-[10px] font-medium uppercase text-slate-400">Total Portions</span>
+            <div className="text-xl font-semibold text-[#741B22]">{totalPortions}</div>
           </div>
         </div>
       </div>
@@ -159,12 +159,12 @@ export default function DeliveryDashboard() {
           <div className="flex items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
             <Calendar className="w-5 h-5 text-[#B0BE8C] shrink-0" />
             <div className="w-full sm:w-auto">
-              <label className="block text-[10px] font-black uppercase tracking-wider text-slate-400 mb-0.5">Delivery Date</label>
+              <label className="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-0.5">Delivery Date</label>
               <input
                 type="date"
                 value={date}
                 onChange={(event) => setDate(event.target.value)}
-                className="w-full sm:w-auto min-h-[44px] px-3.5 py-2 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20"
+                className="w-full sm:w-auto min-h-[44px] px-3.5 py-2 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20"
               />
             </div>
           </div>
@@ -175,7 +175,7 @@ export default function DeliveryDashboard() {
                 key={mealShift}
                 type="button"
                 onClick={() => setShift(mealShift)}
-                className={`min-h-[44px] px-2.5 sm:px-4 py-2 rounded-xl text-xs font-black capitalize flex items-center justify-center gap-1.5 transition-all ${
+                className={`min-h-[44px] px-2.5 sm:px-4 py-2 rounded-xl text-xs font-semibold capitalize flex items-center justify-center gap-1.5 transition-all ${
                   shift === mealShift ? 'bg-[#B0BE8C] text-[#22222B] shadow-xs' : 'text-[#22222B]/75 hover:bg-[#B0BE8C]/30'
                 }`}
               >
@@ -193,7 +193,7 @@ export default function DeliveryDashboard() {
             value={searchTerm}
             onChange={(event) => setSearchTerm(event.target.value)}
             placeholder="Search customer name, primary or secondary number, or address..."
-            className="w-full min-h-[44px] pl-10 pr-4 py-2 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20"
+            className="w-full min-h-[44px] pl-10 pr-4 py-2 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20"
           />
         </div>
       </div>
@@ -204,11 +204,11 @@ export default function DeliveryDashboard() {
         </div>
       ) : fetchError ? (
         <div className="glass-card rounded-3xl p-6 sm:p-8 border border-rose-300 bg-rose-50/70 text-center shadow-xs space-y-3">
-          <div className="flex items-center justify-center gap-2 text-rose-800 font-bold">
+          <div className="flex items-center justify-center gap-2 text-rose-800 font-medium">
             <AlertTriangle className="w-6 h-6 text-rose-600" />
             <span>{fetchError}</span>
           </div>
-          <button type="button" onClick={fetchSheet} className="min-h-[44px] px-4 py-2 rounded-xl bg-rose-600 text-white font-black text-xs inline-flex items-center gap-2">
+          <button type="button" onClick={fetchSheet} className="min-h-[44px] px-4 py-2 rounded-xl bg-rose-600 text-white font-semibold text-xs inline-flex items-center gap-2">
             <RefreshCw className="w-4 h-4" />
             Retry Fetching Run-Sheet
           </button>
@@ -216,7 +216,7 @@ export default function DeliveryDashboard() {
       ) : filteredDeliveries.length === 0 ? (
         <div className="glass-card rounded-3xl p-8 sm:p-12 text-center text-slate-500 border border-[#B0BE8C]/35">
           <PackageCheck className="w-10 h-10 mx-auto text-[#B0BE8C] mb-2" />
-          <p className="font-bold text-sm text-[#22222B]">No scheduled deliveries match your criteria.</p>
+          <p className="font-medium text-sm text-[#22222B]">No scheduled deliveries match your criteria.</p>
           <p className="text-xs text-slate-400 mt-0.5">Select a different date or shift above.</p>
         </div>
       ) : (
@@ -225,11 +225,11 @@ export default function DeliveryDashboard() {
             <div key={item.customer_id} className="glass-card rounded-3xl p-4 sm:p-5 border border-[#B0BE8C]/35 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="space-y-1.5 flex-1 min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-sm font-black text-[#22222B] break-words">{item.customer_name}</span>
-                  <span className="px-2 py-0.5 rounded-md bg-[#B0BE8C]/20 border border-[#B0BE8C]/30 text-[10px] font-bold text-[#22222B] whitespace-nowrap">
+                  <span className="text-sm font-semibold text-[#22222B] break-words">{item.customer_name}</span>
+                  <span className="px-2 py-0.5 rounded-md bg-[#B0BE8C]/20 border border-[#B0BE8C]/30 text-[10px] font-medium text-[#22222B] whitespace-nowrap">
                     Quantity: {item.quantity} {item.quantity === 1 ? 'Portion' : 'Portions'}
                   </span>
-                  <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${
+                  <span className={`px-2 py-0.5 rounded-md text-[10px] font-medium ${
                     scheduleStatus === 'COMPLETED' ? 'bg-slate-100 text-slate-600' : 'bg-amber-50 text-amber-700'
                   }`}>
                     {scheduleStatus === 'COMPLETED' ? 'Past meal' : 'Scheduled'}
@@ -242,10 +242,10 @@ export default function DeliveryDashboard() {
                 <div className="flex items-start gap-1.5 text-xs text-[#741B22]">
                   <Phone className="w-4 h-4 text-slate-400 shrink-0" />
                   <div className="flex flex-col gap-0.5">
-                    <a className="font-bold hover:underline" href={item.customer_phone ? `tel:${item.customer_phone}` : undefined}>
+                    <a className="font-medium hover:underline" href={item.customer_phone ? `tel:${item.customer_phone}` : undefined}>
                       Primary Number: {item.customer_phone || 'Not recorded'}
                     </a>
-                    <a className="font-bold hover:underline" href={item.customer_secondary_phone ? `tel:${item.customer_secondary_phone}` : undefined}>
+                    <a className="font-medium hover:underline" href={item.customer_secondary_phone ? `tel:${item.customer_secondary_phone}` : undefined}>
                       Secondary Number: {item.customer_secondary_phone || 'Not recorded'}
                     </a>
                   </div>
