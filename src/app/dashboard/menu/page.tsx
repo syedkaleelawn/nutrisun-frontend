@@ -227,7 +227,7 @@ export default function MonthlyMenuPage() {
     const clean = dietType.toLowerCase().replace('-', '_');
     if (clean === 'non_veg') {
       return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider bg-rose-50 text-rose-700 border border-rose-200/80 shadow-2xs">
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wider bg-rose-50 text-rose-700 border border-rose-200/80 shadow-2xs">
           <span className="w-1.5 h-1.5 rounded-full bg-rose-600" />
           Non-Veg
         </span>
@@ -235,14 +235,14 @@ export default function MonthlyMenuPage() {
     }
     if (clean === 'egg') {
       return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider bg-amber-50 text-amber-700 border border-amber-200/80 shadow-2xs">
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wider bg-amber-50 text-amber-700 border border-amber-200/80 shadow-2xs">
           <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
           Egg
         </span>
       );
     }
     return (
-      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200/80 shadow-2xs">
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200/80 shadow-2xs">
         <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
         Veg
       </span>
@@ -263,14 +263,14 @@ export default function MonthlyMenuPage() {
       <div className="glass-card rounded-3xl p-5 sm:p-7 border border-[#B0BE8C]/35 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="px-3 py-1 rounded-full bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80 font-bold text-[11px] uppercase tracking-wider">
+            <span className="px-3 py-1 rounded-full bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80 font-medium text-[11px] uppercase tracking-wider">
               {isAdmin ? 'Admin Master Control' : isChef ? 'Chef Kitchen Menu' : 'Monthly Nutrition Plan'}
             </span>
             <span className="text-xs text-slate-500">
               {isAdmin ? 'PDF / Excel Upload & Browse' : 'Shared Read-Only Schedule'}
             </span>
           </div>
-          <h1 className="text-xl sm:text-3xl font-black text-[#22222B] mt-2 flex items-center gap-2 break-words">
+          <h1 className="text-xl sm:text-3xl font-semibold text-[#22222B] mt-2 flex items-center gap-2 break-words">
             <Calendar className="w-6 h-6 sm:w-7 sm:h-7 text-[#741B22] shrink-0" />
             Monthly Menu Planner
           </h1>
@@ -283,7 +283,7 @@ export default function MonthlyMenuPage() {
           <button
             onClick={() => fetchMenu()}
             disabled={loadingMenu}
-            className="min-h-[44px] px-4 py-2 rounded-2xl bg-white border border-[#B0BE8C]/40 text-[#22222B] font-bold text-xs hover:bg-[#B0BE8C]/20 transition-all flex items-center gap-2 shadow-xs cursor-pointer"
+            className="min-h-[44px] px-4 py-2 rounded-2xl bg-white border border-[#B0BE8C]/40 text-[#22222B] font-medium text-xs hover:bg-[#B0BE8C]/20 transition-all flex items-center gap-2 shadow-xs cursor-pointer"
             title="Refresh menu data"
           >
             <RefreshCw className={`w-3.5 h-3.5 text-[#B92F25] ${loadingMenu ? 'animate-spin' : ''}`} />
@@ -299,7 +299,7 @@ export default function MonthlyMenuPage() {
 
       {/* Current Menu Period */}
       <div className="glass-card rounded-3xl p-4 sm:p-6 border border-[#B0BE8C]/35 shadow-sm">
-        <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-3 bg-[#F3F5F4] px-4 py-3 rounded-2xl border border-[#B0BE8C]/30 text-xs font-bold text-[#22222B]">
+        <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-3 bg-[#F3F5F4] px-4 py-3 rounded-2xl border border-[#B0BE8C]/30 text-xs font-medium text-[#22222B]">
           <span>
             Current menu: <strong className="text-[#741B22]">{selectedMonthName} {selectedYear}</strong>
           </span>
@@ -319,7 +319,7 @@ export default function MonthlyMenuPage() {
                   <FileSpreadsheet className="w-5 h-5 shrink-0" />
                   <FileText className="w-4 h-4 shrink-0 text-[#B92F25]" />
                 </div>
-                <h2 className="text-base font-black text-[#22222B]">
+                <h2 className="text-base font-semibold text-[#22222B]">
                   Upload Monthly Menu (PDF or Excel)
                 </h2>
               </div>
@@ -347,7 +347,7 @@ export default function MonthlyMenuPage() {
                 }
               }}
               disabled={downloadingTemplate}
-              className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-[#B0BE8C]/60 text-xs font-bold text-[#22222B] hover:bg-[#B0BE8C]/20 transition-all shadow-2xs self-start sm:self-auto min-h-[44px] disabled:opacity-50"
+              className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-[#B0BE8C]/60 text-xs font-medium text-[#22222B] hover:bg-[#B0BE8C]/20 transition-all shadow-2xs self-start sm:self-auto min-h-[44px] disabled:opacity-50"
             >
               {downloadingTemplate ? (
                 <Loader2 className="w-4 h-4 text-[#741B22] animate-spin" />
@@ -361,11 +361,11 @@ export default function MonthlyMenuPage() {
           {/* Supported Format Guide Box */}
           <div className="p-4 rounded-2xl bg-[#F3F5F4] border border-[#B0BE8C]/35 space-y-3">
             <div className="flex items-center justify-between flex-wrap gap-2">
-              <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-[#B92F25]" />
                 Supported File Formats & Layout Structures
               </span>
-              <span className="text-[11px] font-bold text-[#741B22] bg-[#F7DE9D]/40 px-2 py-0.5 rounded-full">
+              <span className="text-[11px] font-medium text-[#741B22] bg-[#F7DE9D]/40 px-2 py-0.5 rounded-full">
                 .pdf • .xlsx • .xls
               </span>
             </div>
@@ -373,7 +373,7 @@ export default function MonthlyMenuPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
               {/* Option 1: Standard 4-Column Layout */}
               <div className="p-3 rounded-xl bg-white border border-[#B0BE8C]/30 space-y-1.5">
-                <span className="font-bold text-[#22222B] flex items-center gap-1 text-[11px]">
+                <span className="font-medium text-[#22222B] flex items-center gap-1 text-[11px]">
                   <span className="w-2 h-2 rounded-full bg-[#B92F25]" />
                   Standard Layout (4 Columns)
                 </span>
@@ -387,7 +387,7 @@ export default function MonthlyMenuPage() {
 
               {/* Option 2: Multi-Component Layout (Large, Small 1, Small 2) */}
               <div className="p-3 rounded-xl bg-white border border-[#B0BE8C]/30 space-y-1.5">
-                <span className="font-bold text-[#22222B] flex items-center gap-1 text-[11px]">
+                <span className="font-medium text-[#22222B] flex items-center gap-1 text-[11px]">
                   <span className="w-2 h-2 rounded-full bg-[#B0BE8C]" />
                   Component Layout (11 Columns / PDF Tables)
                 </span>
@@ -410,7 +410,7 @@ export default function MonthlyMenuPage() {
             <div className="p-3.5 sm:p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-2.5">
               <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
               <div className="space-y-1">
-                <span className="font-black">Validation Error:</span>
+                <span className="font-semibold">Validation Error:</span>
                 <p className="break-words font-medium">{uploadError}</p>
                 <p className="text-[11px] text-rose-600">The existing menu remains preserved.</p>
               </div>
@@ -422,7 +422,7 @@ export default function MonthlyMenuPage() {
             <div className="p-3.5 sm:p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-start gap-2.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
               <div className="space-y-1">
-                <span className="font-black">Menu Saved Successfully!</span>
+                <span className="font-semibold">Menu Saved Successfully!</span>
                 <p className="break-words font-medium">{uploadSuccess}</p>
               </div>
             </div>
@@ -433,7 +433,7 @@ export default function MonthlyMenuPage() {
             <div className="p-3.5 sm:p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-800 text-xs flex items-start gap-2.5">
               <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
               <div className="space-y-1">
-                <span className="font-black">Extraction Review Notes ({uploadUncertainties.length}):</span>
+                <span className="font-semibold">Extraction Review Notes ({uploadUncertainties.length}):</span>
                 <ul className="list-disc pl-4 space-y-0.5 text-[11px]">
                   {uploadUncertainties.map((item, idx) => (
                     <li key={idx}>{item}</li>
@@ -446,7 +446,7 @@ export default function MonthlyMenuPage() {
           {/* Upload Progress Bar */}
           {uploadProgress !== null && (
             <div className="space-y-1.5">
-              <div className="flex justify-between text-xs font-bold text-[#22222B]">
+              <div className="flex justify-between text-xs font-medium text-[#22222B]">
                 <span>Uploading & Parsing Document...</span>
                 <span>{uploadProgress}%</span>
               </div>
@@ -468,14 +468,14 @@ export default function MonthlyMenuPage() {
                 accept=".xlsx,.xls,.pdf"
                 onChange={handleFileChange}
                 disabled={uploading}
-                className="w-full min-h-[46px] px-3.5 py-2.5 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-bold text-[#22222B] file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-black file:bg-[#B0BE8C]/30 file:text-[#22222B] hover:file:bg-[#B0BE8C]/50 cursor-pointer bg-white"
+                className="w-full min-h-[46px] px-3.5 py-2.5 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-medium text-[#22222B] file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#B0BE8C]/30 file:text-[#22222B] hover:file:bg-[#B0BE8C]/50 cursor-pointer bg-white"
               />
             </div>
 
             <button
               onClick={() => executeUpload(false)}
               disabled={!selectedFile || uploading}
-              className={`min-h-[46px] px-6 rounded-2xl font-black text-xs shadow-md transition-all flex items-center justify-center gap-2 shrink-0 ${
+              className={`min-h-[46px] px-6 rounded-2xl font-semibold text-xs shadow-md transition-all flex items-center justify-center gap-2 shrink-0 ${
                 selectedFile && !uploading
                   ? 'bg-[#B92F25] hover:bg-[#741B22] text-white active:scale-98 shadow-[#B92F25]/20 cursor-pointer'
                   : 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none'
@@ -512,7 +512,7 @@ export default function MonthlyMenuPage() {
                   <AlertTriangle className="w-5 h-5 text-amber-600" />
                 </div>
                 <div>
-                  <h3 className="text-base font-black text-[#22222B]">
+                  <h3 className="text-base font-semibold text-[#22222B]">
                     Replace Existing Monthly Menu?
                   </h3>
                   <p className="text-xs text-slate-500">
@@ -532,14 +532,14 @@ export default function MonthlyMenuPage() {
             <div className="overflow-y-auto space-y-3.5 pr-1 text-xs text-slate-700">
               <div className="p-3 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 leading-relaxed font-medium">
                 A menu is already registered for <strong>{selectedMonthName} {selectedYear}</strong> with{' '}
-                <span className="font-bold text-[#741B22]">{conflictDetails.existingCount} entries</span>.
+                <span className="font-medium text-[#741B22]">{conflictDetails.existingCount} entries</span>.
                 Saving will replace them with <strong>{conflictDetails.newItemsCount} extracted dishes</strong> ({conflictDetails.newDaysCount} calendar days).
               </div>
 
               {/* Uncertain Entries Section if any */}
               {conflictDetails.uncertainEntries && conflictDetails.uncertainEntries.length > 0 && (
                 <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 space-y-1">
-                  <div className="flex items-center gap-1.5 font-black text-[11px] text-rose-700 uppercase tracking-wide">
+                  <div className="flex items-center gap-1.5 font-semibold text-[11px] text-rose-700 uppercase tracking-wide">
                     <AlertCircle className="w-3.5 h-3.5 text-rose-600" />
                     Uncertain Rows Detected:
                   </div>
@@ -554,7 +554,7 @@ export default function MonthlyMenuPage() {
               {/* Extracted Preview Table */}
               {conflictDetails.extractedPreview && conflictDetails.extractedPreview.length > 0 && (
                 <div className="space-y-1.5">
-                  <div className="flex items-center justify-between text-[11px] font-black uppercase tracking-wider text-slate-500">
+                  <div className="flex items-center justify-between text-[11px] font-semibold uppercase tracking-wider text-slate-500">
                     <span className="flex items-center gap-1">
                       <Eye className="w-3.5 h-3.5 text-[#B92F25]" />
                       Extracted Menu Preview ({conflictDetails.extractedPreview.length} dishes)
@@ -565,7 +565,7 @@ export default function MonthlyMenuPage() {
                   </div>
                   <div className="max-h-56 overflow-y-auto overflow-x-auto rounded-xl border border-slate-200 bg-slate-50">
                     <table className="w-full text-left text-xs border-collapse">
-                      <thead className="bg-slate-100 text-slate-600 font-bold sticky top-0 border-b border-slate-200 text-[11px]">
+                      <thead className="bg-slate-100 text-slate-600 font-medium sticky top-0 border-b border-slate-200 text-[11px]">
                         <tr>
                           <th className="py-2 px-3">Date</th>
                           <th className="py-2 px-3">Slot</th>
@@ -576,7 +576,7 @@ export default function MonthlyMenuPage() {
                       <tbody className="divide-y divide-slate-200 text-[11px] bg-white">
                         {conflictDetails.extractedPreview.slice(0, 45).map((item, idx) => (
                           <tr key={idx} className="hover:bg-slate-50">
-                            <td className="py-1.5 px-3 font-bold text-[#741B22]">
+                            <td className="py-1.5 px-3 font-medium text-[#741B22]">
                               {item.date}
                             </td>
                             <td className="py-1.5 px-3 capitalize font-semibold text-slate-700">
@@ -607,7 +607,7 @@ export default function MonthlyMenuPage() {
               <button
                 type="button"
                 onClick={() => setShowConfirmModal(false)}
-                className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-[#22222B] text-xs font-bold transition-colors cursor-pointer"
+                className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-[#22222B] text-xs font-medium transition-colors cursor-pointer"
               >
                 Cancel & Keep Existing
               </button>
@@ -615,7 +615,7 @@ export default function MonthlyMenuPage() {
                 type="button"
                 onClick={() => executeUpload(true)}
                 disabled={uploading}
-                className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white text-xs font-black shadow-md transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white text-xs font-semibold shadow-md transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 {uploading ? (
                   <>
@@ -634,12 +634,12 @@ export default function MonthlyMenuPage() {
       {/* Main Monthly Menu Display Section */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-base sm:text-lg font-black text-[#22222B] flex items-center gap-2">
+          <h2 className="text-base sm:text-lg font-semibold text-[#22222B] flex items-center gap-2">
             <Calendar className="w-5 h-5 text-[#741B22]" />
             <span>Full Schedule for {selectedMonthName} {selectedYear}</span>
           </h2>
           {groupedMenu.length > 0 && (
-            <span className="text-xs font-bold text-slate-500">
+            <span className="text-xs font-medium text-slate-500">
               {groupedMenu.length} Days Programmed
             </span>
           )}
@@ -648,18 +648,18 @@ export default function MonthlyMenuPage() {
         {loadingMenu ? (
           <div className="glass-card rounded-3xl p-12 text-center border border-[#B0BE8C]/35">
             <RefreshCw className="w-8 h-8 text-[#B92F25] animate-spin mx-auto mb-3" />
-            <p className="text-xs font-bold text-slate-500">Loading monthly menu schedule...</p>
+            <p className="text-xs font-medium text-slate-500">Loading monthly menu schedule...</p>
           </div>
         ) : menuError ? (
           <div className="glass-card rounded-3xl p-6 sm:p-8 border border-rose-300 bg-rose-50/70 text-center shadow-xs space-y-3">
-            <div className="flex items-center justify-center gap-2 text-rose-800 font-bold">
+            <div className="flex items-center justify-center gap-2 text-rose-800 font-medium">
               <AlertTriangle className="w-6 h-6 text-rose-600" />
               <span>{menuError}</span>
             </div>
             <button
               type="button"
               onClick={() => fetchMenu()}
-              className="min-h-[44px] px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-black text-xs inline-flex items-center gap-2 shadow-xs transition-all cursor-pointer"
+              className="min-h-[44px] px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs inline-flex items-center gap-2 shadow-xs transition-all cursor-pointer"
             >
               <RefreshCw className="w-4 h-4" />
               Retry Loading Menu
@@ -671,7 +671,7 @@ export default function MonthlyMenuPage() {
             <div className="w-14 h-14 rounded-full bg-[#B0BE8C]/20 border border-[#B0BE8C]/40 flex items-center justify-center mx-auto text-[#741B22]">
               <Calendar className="w-7 h-7" />
             </div>
-            <h3 className="text-base sm:text-lg font-black text-[#22222B]">
+            <h3 className="text-base sm:text-lg font-semibold text-[#22222B]">
               Menu not uploaded for this month yet
             </h3>
             <p className="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
@@ -701,16 +701,16 @@ export default function MonthlyMenuPage() {
                     {/* Date Header with "Today" badge */}
                     <div className="flex items-center justify-between gap-2 pb-2.5 mb-3 border-b border-[#B0BE8C]/30">
                       <div className="min-w-0">
-                        <span className="text-[11px] font-bold text-slate-400 block">
+                        <span className="text-[11px] font-medium text-slate-400 block">
                           {day.date}
                         </span>
-                        <h4 className="text-sm font-black text-[#22222B] truncate">
+                        <h4 className="text-sm font-semibold text-[#22222B] truncate">
                           {formatDisplayDate(day.date)}
                         </h4>
                       </div>
 
                       {isToday && (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#B92F25] text-white text-[10px] font-black uppercase tracking-wider shadow-xs shrink-0 animate-pulse">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#B92F25] text-white text-[10px] font-semibold uppercase tracking-wider shadow-xs shrink-0 animate-pulse">
                           <Sparkles className="w-3 h-3 text-[#F7DE9D]" />
                           Today&apos;s Menu
                         </span>
@@ -721,14 +721,14 @@ export default function MonthlyMenuPage() {
                     <div className="space-y-2.5">
                       {/* Breakfast */}
                       <div className="p-2.5 rounded-xl bg-white/80 border border-[#B0BE8C]/25 space-y-1">
-                        <div className="flex items-center justify-between text-[11px] font-black uppercase tracking-wide text-amber-700">
+                        <div className="flex items-center justify-between text-[11px] font-semibold uppercase tracking-wide text-amber-700">
                           <span className="flex items-center gap-1.5">
                             <Coffee className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                             Breakfast
                           </span>
                           {renderDietaryBadge(day.breakfast?.dietary_type)}
                         </div>
-                        <p className="text-xs font-bold text-[#22222B] break-words">
+                        <p className="text-xs font-medium text-[#22222B] break-words">
                           {day.breakfast?.item_name || (
                             <span className="text-slate-400 font-normal italic">Not specified</span>
                           )}
@@ -737,14 +737,14 @@ export default function MonthlyMenuPage() {
 
                       {/* Lunch */}
                       <div className="p-2.5 rounded-xl bg-white/80 border border-[#B0BE8C]/25 space-y-1">
-                        <div className="flex items-center justify-between text-[11px] font-black uppercase tracking-wide text-emerald-700">
+                        <div className="flex items-center justify-between text-[11px] font-semibold uppercase tracking-wide text-emerald-700">
                           <span className="flex items-center gap-1.5">
                             <Utensils className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                             Lunch
                           </span>
                           {renderDietaryBadge(day.lunch?.dietary_type)}
                         </div>
-                        <p className="text-xs font-bold text-[#22222B] break-words">
+                        <p className="text-xs font-medium text-[#22222B] break-words">
                           {day.lunch?.item_name || (
                             <span className="text-slate-400 font-normal italic">Not specified</span>
                           )}
@@ -753,14 +753,14 @@ export default function MonthlyMenuPage() {
 
                       {/* Dinner */}
                       <div className="p-2.5 rounded-xl bg-white/80 border border-[#B0BE8C]/25 space-y-1">
-                        <div className="flex items-center justify-between text-[11px] font-black uppercase tracking-wide text-indigo-700">
+                        <div className="flex items-center justify-between text-[11px] font-semibold uppercase tracking-wide text-indigo-700">
                           <span className="flex items-center gap-1.5">
                             <Moon className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
                             Dinner
                           </span>
                           {renderDietaryBadge(day.dinner?.dietary_type)}
                         </div>
-                        <p className="text-xs font-bold text-[#22222B] break-words">
+                        <p className="text-xs font-medium text-[#22222B] break-words">
                           {day.dinner?.item_name || (
                             <span className="text-slate-400 font-normal italic">Not specified</span>
                           )}
