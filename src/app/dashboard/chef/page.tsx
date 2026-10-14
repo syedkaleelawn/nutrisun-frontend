@@ -1,246 +1,143 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { kitchenApi, ShiftKitchenResponse, MealSlot } from '@/lib/api';
-import {
-  ChefHat,
-  Calendar,
-  RefreshCw,
-  Coffee,
-  Utensils,
-  Moon,
-  Clock,
-  AlertTriangle,
-  ChevronRight,
-} from 'lucide-react';
+import { ChefHat, Calendar, RefreshCw, Coffee, Utensils, Moon, Clock, AlertTriangle, ChevronRight } from 'lucide-react';
+
+const MEAL_TYPES: MealSlot[] = ['breakfast', 'lunch', 'dinner'];
+const MEAL_META: Record<MealSlot, { label: string; icon: React.ComponentType<{ className?: string }>; iconClass: string; cardClass: string }> = {
+  breakfast: { label: 'Breakfast', icon: Coffee, iconClass: 'text-amber-600', cardClass: 'border-amber-200 bg-amber-50/60' },
+  lunch: { label: 'Lunch', icon: Utensils, iconClass: 'text-emerald-700', cardClass: 'border-[#B0BE8C] bg-[#B0BE8C]/10' },
+  dinner: { label: 'Dinner', icon: Moon, iconClass: 'text-[#741B22]', cardClass: 'border-[#741B22]/20 bg-[#741B22]/5' },
+};
+type KitchenData = Partial<Record<MealSlot, ShiftKitchenResponse>>;
 
 export default function ChefDashboard() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
-
-  const [date, setDate] = useState<string>(() => new Date().toISOString().split('T')[0]);
-  const [shift, setShift] = useState<MealSlot>('breakfast');
-  const [data, setData] = useState<ShiftKitchenResponse | null>(null);
+  const [date, setDate] = useState(() => new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }));
+  const [data, setData] = useState<KitchenData>({});
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
-  const [lastUpdated, setLastUpdated] = useState<string>('');
+  const [lastUpdated, setLastUpdated] = useState('');
 
   useEffect(() => {
-    if (!authLoading && (!user || (user.role !== 'chef' && user.role !== 'admin'))) {
-      router.push('/login');
-    }
+    if (!authLoading && (!user || (user.role !== 'chef' && user.role !== 'admin'))) router.push('/login');
   }, [user, authLoading, router]);
 
-  const fetchCookingCount = async () => {
+  const fetchKitchenSummary = async () => {
     setLoading(true);
     try {
-      const res = await kitchenApi.getTodayCount({ date, shift });
-      setData(res.data);
+      const responses = await Promise.all(MEAL_TYPES.map((shift) => kitchenApi.getTodayCount({ date, shift })));
+      setData(Object.fromEntries(MEAL_TYPES.map((shift, index) => [shift, responses[index].data])) as KitchenData);
       setFetchError(null);
-      setLastUpdated(new Date().toLocaleTimeString());
+      setLastUpdated(new Date().toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit' }));
     } catch (err: unknown) {
-      console.error('Failed to fetch kitchen preparation count:', err);
+      console.error('Failed to fetch kitchen preparation summary:', err);
       const apiErr = err as { response?: { data?: { error?: string } } };
-      setFetchError(apiErr.response?.data?.error || 'Unable to connect to kitchen prep service. Please retry.');
+      setFetchError(apiErr.response?.data?.error || 'Unable to connect to the kitchen preparation service. Please retry.');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (user && (user.role === 'chef' || user.role === 'admin')) {
-      fetchCookingCount();
-    }
-  }, [user?.id, user?.role, date, shift]);
+    if (user && (user.role === 'chef' || user.role === 'admin')) fetchKitchenSummary();
+  }, [user?.id, user?.role, date]);
 
-  const getShiftIcon = (s: MealSlot) => {
-    switch (s) {
-      case 'breakfast':
-        return <Coffee className="w-5 h-5 text-amber-500" />;
-      case 'lunch':
-        return <Utensils className="w-5 h-5 text-emerald-600" />;
-      case 'dinner':
-        return <Moon className="w-5 h-5 text-indigo-500" />;
-    }
-  };
-
-  if (authLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[65vh]">
-        <RefreshCw className="w-8 h-8 animate-spin text-[#B92F25]" />
-      </div>
-    );
-  }
-
+  if (authLoading) return <div className="flex min-h-[55vh] items-center justify-center"><RefreshCw className="h-8 w-8 animate-spin text-[#B92F25]" /></div>;
   if (!user || (user.role !== 'chef' && user.role !== 'admin')) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[65vh] gap-3 text-center px-4">
-        <AlertTriangle className="w-10 h-10 text-amber-500" />
+      <div className="flex min-h-[55vh] flex-col items-center justify-center gap-3 px-4 text-center">
+        <AlertTriangle className="h-10 w-10 text-amber-500" />
         <h2 className="text-xl font-black text-[#22222B]">Access Restricted</h2>
-        <p className="text-xs text-slate-500 max-w-sm">
-          Head Chef credentials required. Redirecting to sign in...
-        </p>
+        <p className="max-w-sm text-xs text-slate-500">Chef credentials are required. Redirecting to sign in...</p>
       </div>
     );
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-3 sm:px-4 py-4 sm:py-8 space-y-4 sm:space-y-6 w-full max-w-full">
-      {/* Header */}
-      <div className="glass-card rounded-3xl p-5 sm:p-8 border border-[#B0BE8C]/35 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="px-3 py-1 rounded-full bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80 font-bold text-[11px] uppercase tracking-wider">
-              Head Chef Command
-            </span>
-            <span className="text-xs text-slate-500">Live Kitchen View</span>
-          </div>
-          <h1 className="text-xl sm:text-3xl font-black text-[#22222B] mt-2 flex items-center gap-2 break-words">
-            <ChefHat className="w-6 h-6 sm:w-7 sm:h-7 text-[#741B22] shrink-0" />
-            Kitchen Preparation Summary
-          </h1>
-          <p className="text-xs text-slate-600 mt-1">
-            Displaying total portions to prepare for confirmed active subscriptions.
-          </p>
-        </div>
-
-        {lastUpdated && (
-          <div className="text-xs text-slate-500 flex items-center gap-1.5 self-start md:self-auto">
-            <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-            <span>Last synced: <strong className="text-[#22222B]">{lastUpdated}</strong></span>
-          </div>
-        )}
-      </div>
-
-      {/* Date & Shift Selector */}
-      <div className="glass-card rounded-3xl p-4 sm:p-6 border border-[#B0BE8C]/35 shadow-sm space-y-3 sm:space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
-          <div className="flex items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
-            <Calendar className="w-5 h-5 text-[#B0BE8C] shrink-0" />
-            <div className="w-full sm:w-auto">
-              <label className="block text-[10px] font-black uppercase tracking-wider text-slate-400 mb-0.5">
-                Preparation Date
-              </label>
-              <input
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                className="w-full sm:w-auto min-h-[44px] px-3.5 py-2 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-bold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
-              />
+    <div className="mx-auto w-full max-w-6xl space-y-3 px-3 py-3 sm:px-4 sm:py-5">
+      <section className="glass-card rounded-2xl border border-[#B0BE8C]/35 p-4 shadow-sm sm:p-5">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <div className="min-w-0">
+            <div className="flex items-center gap-2">
+              <ChefHat className="h-6 w-6 shrink-0 text-[#741B22]" />
+              <h1 className="text-xl font-black text-[#22222B] sm:text-2xl">Kitchen Preparation</h1>
             </div>
+            <p className="mt-1 text-xs text-slate-600">Confirmed portions and menu for all meal types on the selected date.</p>
           </div>
-
-          {/* Shift selector buttons */}
-          <div className="grid grid-cols-3 gap-1 sm:flex sm:items-center sm:gap-2 p-1 rounded-2xl bg-[#B0BE8C]/20 border border-[#B0BE8C]/30 w-full sm:w-auto">
-            {(['breakfast', 'lunch', 'dinner'] as MealSlot[]).map((s) => (
-              <button
-                key={s}
-                onClick={() => setShift(s)}
-                className={`min-h-[44px] px-2.5 sm:px-4 py-2 rounded-xl text-xs font-black capitalize flex items-center justify-center gap-1 sm:gap-1.5 transition-all ${
-                  shift === s
-                    ? 'bg-[#B0BE8C] text-[#22222B] shadow-xs border border-[#B0BE8C]'
-                    : 'text-[#22222B]/75 hover:text-[#22222B] hover:bg-[#B0BE8C]/30'
-                }`}
-              >
-                {getShiftIcon(s)}
-                <span>{s}</span>
-              </button>
-            ))}
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
+            <label>
+              <span className="mb-1 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-slate-500">
+                <Calendar className="h-3.5 w-3.5 text-[#741B22]" /> Preparation Date
+              </span>
+              <input type="date" value={date} onChange={(event) => setDate(event.target.value)}
+                className="min-h-[44px] w-full rounded-xl border border-[#B0BE8C]/50 bg-white px-3 text-base font-bold text-[#22222B] outline-none focus:border-[#741B22] focus:ring-2 focus:ring-[#741B22]/15 sm:w-auto sm:text-xs" />
+            </label>
+            <Link href="/dashboard/menu" className="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-xl border border-[#B0BE8C]/40 bg-[#B0BE8C]/20 px-3 text-xs font-black text-[#22222B] hover:bg-[#B0BE8C]/35">
+              Monthly Menu <ChevronRight className="h-3.5 w-3.5" />
+            </Link>
           </div>
         </div>
-      </div>
+        {lastUpdated && <div className="mt-2 flex items-center gap-1.5 text-[11px] text-slate-500"><Clock className="h-3.5 w-3.5" /> Last synced at {lastUpdated}</div>}
+      </section>
 
-      {/* Main Preparation Card */}
       {loading ? (
-        <div className="py-12 flex items-center justify-center">
-          <RefreshCw className="w-8 h-8 text-[#B92F25] animate-spin" />
-        </div>
+        <div className="flex min-h-48 items-center justify-center"><RefreshCw className="h-8 w-8 animate-spin text-[#B92F25]" /></div>
       ) : fetchError ? (
-        <div className="glass-card rounded-3xl p-6 sm:p-8 border border-rose-300 bg-rose-50/70 text-center shadow-xs space-y-3">
-          <div className="flex items-center justify-center gap-2 text-rose-800 font-bold">
-            <AlertTriangle className="w-6 h-6 text-rose-600" />
-            <span>{fetchError}</span>
-          </div>
-          <button
-            type="button"
-            onClick={fetchCookingCount}
-            className="min-h-[44px] px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-black text-xs inline-flex items-center gap-2 shadow-xs transition-all"
-          >
-            <RefreshCw className="w-4 h-4" />
-            Retry Fetching Kitchen Prep
+        <div className="rounded-2xl border border-rose-300 bg-rose-50 p-5 text-center shadow-sm">
+          <div className="flex items-center justify-center gap-2 text-sm font-bold text-rose-800"><AlertTriangle className="h-5 w-5" /><span>{fetchError}</span></div>
+          <button type="button" onClick={fetchKitchenSummary} className="mt-3 inline-flex min-h-[44px] items-center gap-2 rounded-xl bg-[#B92F25] px-4 py-2 text-xs font-black text-white hover:bg-[#741B22]">
+            <RefreshCw className="h-4 w-4" /> Retry
           </button>
         </div>
       ) : (
-        <div className="space-y-4 sm:space-y-6">
-          {/* Big Portion Counter */}
-          <div className="glass-card rounded-3xl p-6 sm:p-8 border border-[#B0BE8C]/35 text-center shadow-sm">
-            <span className="text-xs font-black uppercase tracking-wider text-slate-400">
-              Total Portions to Prepare • {date} ({shift.toUpperCase()})
-            </span>
-            <div className="text-5xl sm:text-7xl font-black text-[#741B22] my-2 sm:my-3">
-              {data?.total_portions ?? 0}
-            </div>
-            <p className="text-xs text-slate-500 max-w-md mx-auto">
-              Portions reflect active scheduled meals only. All cancelled/skipped meals are immediately excluded from preparation counts and delivery sheets.
-            </p>
-          </div>
-
-          {/* Late Cancellations Alert if any */}
-          {Boolean(data?.late_cancellations && data.late_cancellations > 0) && (
-            <div className="p-4 rounded-3xl bg-rose-50 border border-rose-300 text-rose-950 flex items-start gap-3 shadow-xs">
-              <Clock className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
-              <div>
-                <h3 className="text-sm font-black text-rose-900">
-                  Late Cancellations Alert ({data?.late_cancellations} meal{(data?.late_cancellations ?? 0) > 1 ? 's' : ''})
-                </h3>
-                <p className="text-xs text-rose-800 mt-0.5">
-                  Customer cancelled {data?.late_cancellations} meal(s) for this shift after the cutoff time. Preparation may already have started in the kitchen. These meals are already stopped and excluded from the delivery list.
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* Admin-entered Menu for this date and shift */}
-          <div className="glass-card rounded-3xl p-4 sm:p-6 border border-[#B0BE8C]/35 shadow-sm">
-            <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-              <h2 className="text-sm font-black uppercase tracking-wider text-[#22222B] flex items-center gap-2">
-                <Utensils className="w-4 h-4 text-[#741B22] shrink-0" />
-                Menu Entered by Admin for {shift.toUpperCase()}
-              </h2>
-              <Link
-                href="/dashboard/menu"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#B0BE8C]/25 text-[#22222B] hover:bg-[#B0BE8C]/40 border border-[#B0BE8C]/40 text-xs font-black transition-all"
-              >
-                <span>View Full Monthly Menu</span>
-                <ChevronRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-
-            {data?.menu_items && data.menu_items.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                {data.menu_items.map((item) => (
-                  <div key={item.id} className="p-4 rounded-2xl bg-[#F3F5F4] border border-[#B0BE8C]/30">
-                    <div className="flex items-center justify-between mb-1 text-[10px] font-bold text-slate-400 uppercase">
-                      <span>Dish #{item.id}</span>
-                      <span className="px-2 py-0.5 rounded-md bg-[#B0BE8C]/25 text-[#22222B] border border-[#B0BE8C]/40">
-                        {item.dietary_type}
-                      </span>
-                    </div>
-                    <p className="text-sm font-black text-[#22222B] mt-1 break-words">{item.item_name}</p>
+        <div className="grid grid-cols-1 gap-3 lg:grid-cols-3">
+          {MEAL_TYPES.map((mealType) => {
+            const mealData = data[mealType];
+            const meta = MEAL_META[mealType];
+            const Icon = meta.icon;
+            const lateCancellations = mealData?.late_cancellations ?? 0;
+            return (
+              <section key={mealType} className={`overflow-hidden rounded-2xl border shadow-sm ${meta.cardClass}`}>
+                <div className="flex items-center justify-between gap-3 border-b border-[#B0BE8C]/25 px-4 py-3">
+                  <div className="flex items-center gap-2"><Icon className={`h-5 w-5 ${meta.iconClass}`} /><h2 className="text-base font-black text-[#22222B]">{meta.label}</h2></div>
+                  <div className="text-right">
+                    <div className="text-3xl font-black leading-none text-[#741B22]">{mealData?.total_portions ?? 0}</div>
+                    <div className="mt-0.5 text-[9px] font-black uppercase tracking-wider text-slate-500">Portions</div>
                   </div>
-                ))}
-              </div>
-            ) : (
-              <div className="p-6 rounded-2xl bg-[#F3F5F4] border border-[#B0BE8C]/30 text-center text-slate-500 text-xs font-medium">
-                No menu items entered by Admin for this shift yet.
-              </div>
-            )}
-          </div>
+                </div>
+                {lateCancellations > 0 && (
+                  <div className="mx-3 mt-3 flex items-start gap-2 rounded-xl border border-rose-200 bg-rose-50 p-2.5 text-[11px] text-rose-900">
+                    <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-rose-600" />
+                    <span><strong>{lateCancellations} late cancellation{lateCancellations === 1 ? '' : 's'}.</strong> Already excluded from the count.</span>
+                  </div>
+                )}
+                <div className="p-3">
+                  <div className="mb-2 text-[10px] font-black uppercase tracking-wider text-slate-500">Menu</div>
+                  {mealData?.menu_items?.length ? (
+                    <div className="space-y-2">
+                      {mealData.menu_items.map((item) => (
+                        <div key={item.id} className="rounded-xl border border-[#B0BE8C]/30 bg-white/80 px-3 py-2.5">
+                          <div className="flex items-start justify-between gap-2">
+                            <p className="text-sm font-black text-[#22222B]">{item.item_name}</p>
+                            {item.dietary_type && <span className="shrink-0 rounded-md border border-[#B0BE8C]/35 bg-[#B0BE8C]/20 px-1.5 py-0.5 text-[9px] font-bold uppercase text-[#22222B]">{item.dietary_type}</span>}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : <div className="rounded-xl border border-dashed border-[#B0BE8C]/50 bg-white/60 px-3 py-5 text-center text-xs font-medium text-slate-500">No menu entered.</div>}
+                </div>
+              </section>
+            );
+          })}
         </div>
       )}
+      {!loading && !fetchError && <p className="px-1 text-[11px] text-slate-500">Counts include active scheduled meals only. Cancelled meals are excluded automatically.</p>}
     </div>
   );
 }
