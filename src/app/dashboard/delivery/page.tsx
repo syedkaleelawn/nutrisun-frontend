@@ -148,7 +148,7 @@ export default function DeliveryDashboard() {
             <div className="text-xl font-semibold text-[#22222B]">{deliveries.length}</div>
           </div>
           <div className="p-3 rounded-2xl bg-white/90 border border-[#B0BE8C]/35 text-center min-w-0 sm:min-w-[100px] shadow-xs flex-1">
-            <span className="text-[10px] font-medium text-slate-400">Total Portions</span>
+            <span className="text-[10px] font-medium text-slate-400">Meals</span>
             <div className="text-xl font-semibold text-[#741B22]">{totalPortions}</div>
           </div>
         </div>
@@ -227,7 +227,7 @@ export default function DeliveryDashboard() {
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="text-sm font-semibold text-[#22222B] break-words">{item.customer_name}</span>
                   <span className="px-2 py-0.5 rounded-md bg-[#B0BE8C]/20 border border-[#B0BE8C]/30 text-[10px] font-medium text-[#22222B] whitespace-nowrap">
-                    Quantity: {item.quantity} {item.quantity === 1 ? 'Portion' : 'Portions'}
+                    Quantity: {item.quantity} {item.quantity === 1 ? 'Meal' : 'Meals'}
                   </span>
                   <span className={`px-2 py-0.5 rounded-md text-[10px] font-medium ${
                     scheduleStatus === 'COMPLETED' ? 'bg-slate-100 text-slate-600' : 'bg-amber-50 text-amber-700'
