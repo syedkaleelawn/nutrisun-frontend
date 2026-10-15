@@ -794,7 +794,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
         <div className="flex flex-col gap-3 rounded-3xl border border-[#B0BE8C]/40 bg-white px-4 py-4 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:px-5">
           <div>
             <h3 className="text-sm sm:text-base font-semibold text-[#22222B]">Daily Meal Counts</h3>
-            <p className="mt-0.5 text-xs text-slate-500">Completed meals by date and meal type for the selected month.</p>
+            <p className="mt-0.5 text-xs text-slate-500">Delivered and scheduled meals by date and meal type for the selected month.</p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <label className="flex items-center gap-2">
@@ -844,7 +844,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
               <h4 className="text-sm font-semibold text-[#22222B]">
                 {dailyMonthOptions[dailyMonthNumber - 1]?.label} {dailyYear}
               </h4>
-              <p className="mt-0.5 text-xs text-slate-500">Current month figures are month to date.</p>
+              <p className="mt-0.5 text-xs text-slate-500">Includes delivered and scheduled meals for the full selected month.</p>
             </div>
             <div className="overflow-auto flex-1 min-h-0">
               <table className="w-full min-w-[560px] text-xs text-right">
@@ -879,7 +879,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
                 </div>
               )}
               {!dailyLoading && dailyMeals.length === 0 && !dailyError && (
-                <div className="p-8 text-center text-xs text-slate-400">No daily meal history is available.</div>
+                <div className="p-8 text-center text-xs text-slate-400">No delivered or scheduled meals are available for this month.</div>
               )}
             </div>
           </div>
@@ -887,7 +887,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
           <div className="glass-card rounded-3xl border border-[#B0BE8C]/40 shadow-sm overflow-hidden flex flex-col xl:h-[500px]">
             <div className="px-5 pt-5 text-center">
               <h4 className="text-base sm:text-lg font-semibold text-[#22222B]">Meals Per Day</h4>
-              <p className="mt-1 text-xs text-slate-500">Breakfast, lunch, dinner, and total completed meals</p>
+              <p className="mt-1 text-xs text-slate-500">Breakfast, lunch, dinner, and total delivered or scheduled meals</p>
             </div>
             <div className="flex min-h-0 flex-1 items-center overflow-x-auto px-2 pb-3">
               {dailyLoading ? (
@@ -901,7 +901,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
                   role="img"
                   aria-labelledby="daily-meal-chart-title daily-meal-chart-description"
                 >
-                  <title id="daily-meal-chart-title">Daily completed meal counts</title>
+                  <title id="daily-meal-chart-title">Daily delivered and scheduled meal counts</title>
                   <desc id="daily-meal-chart-description">Breakfast, lunch, dinner, and total meals for each date in the selected month.</desc>
                   {dailyMealChart.gridValues.map((value) => {
                     const y = dailyMealChart.yFor(value);
