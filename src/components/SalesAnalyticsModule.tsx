@@ -6,6 +6,7 @@ import {
   AnalyticsResponse,
   CustomerReportItem,
   MonthlyMealAverage,
+  DailyMealCount,
 } from '@/lib/api';
 import {
   FileSpreadsheet,
@@ -49,6 +50,11 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
   // 2. Data States
   const [analytics, setAnalytics] = useState<AnalyticsResponse | null>(null);
   const [monthlyMealAverages, setMonthlyMealAverages] = useState<MonthlyMealAverage[]>([]);
+  const [dailyMeals, setDailyMeals] = useState<DailyMealCount[]>([]);
+  const [dailyYear, setDailyYear] = useState<number>(() => new Date().getFullYear());
+  const [dailyMonthNumber, setDailyMonthNumber] = useState<number>(() => new Date().getMonth() + 1);
+  const [dailyLoading, setDailyLoading] = useState<boolean>(true);
+  const [dailyError, setDailyError] = useState<string | null>(null);
   const [customers, setCustomers] = useState<CustomerReportItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -209,6 +215,33 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
   useEffect(() => {
     fetchReportData();
   }, [selectedMonth, useCustomRange, customStartDate, customEndDate]);
+
+  const dailyMonthKey = `${dailyYear}-${String(dailyMonthNumber).padStart(2, '0')}`;
+
+  useEffect(() => {
+    let cancelled = false;
+    const fetchDailyMeals = async () => {
+      setDailyLoading(true);
+      setDailyError(null);
+      try {
+        const response = await adminApi.getDailyMealCounts(dailyMonthKey);
+        if (!cancelled) {
+          setDailyMeals(Array.isArray(response.data.days) ? response.data.days : []);
+        }
+      } catch {
+        if (!cancelled) {
+          setDailyMeals([]);
+          setDailyError('Unable to load daily meal figures for the selected month.');
+        }
+      } finally {
+        if (!cancelled) setDailyLoading(false);
+      }
+    };
+    fetchDailyMeals();
+    return () => {
+      cancelled = true;
+    };
+  }, [dailyMonthKey]);
 
   // Export Monthly Report (.xlsx - 6 Sheets)
   const handleExportMonthly = async () => {
@@ -376,6 +409,52 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
         : '',
     };
   }, [monthlyMealAverages]);
+
+  const dailyMealChart = useMemo(() => {
+    const width = 920;
+    const height = 390;
+    const margin = { top: 34, right: 28, bottom: 70, left: 54 };
+    const plotWidth = width - margin.left - margin.right;
+    const plotHeight = height - margin.top - margin.bottom;
+    const values = dailyMeals.flatMap((day) => [day.total, day.breakfast, day.lunch, day.dinner]);
+    const maxY = Math.max(4, Math.ceil(Math.max(1, ...values) / 5) * 5);
+    const gridValues = Array.from({ length: 6 }, (_, index) => (maxY / 5) * index);
+    const xFor = (index: number) =>
+      margin.left + (dailyMeals.length <= 1 ? plotWidth / 2 : (index / (dailyMeals.length - 1)) * plotWidth);
+    const yFor = (value: number) => margin.top + plotHeight - (value / maxY) * plotHeight;
+    const pathFor = (field: 'total' | 'breakfast' | 'lunch' | 'dinner') =>
+      dailyMeals.map((day, index) => `${index === 0 ? 'M' : 'L'} ${xFor(index)} ${yFor(day[field])}`).join(' ');
+
+    return {
+      width,
+      height,
+      margin,
+      plotWidth,
+      plotHeight,
+      maxY,
+      gridValues,
+      xFor,
+      yFor,
+      totalPath: pathFor('total'),
+      breakfastPath: pathFor('breakfast'),
+      lunchPath: pathFor('lunch'),
+      dinnerPath: pathFor('dinner'),
+    };
+  }, [dailyMeals]);
+
+  const dailyYearOptions = useMemo(
+    () => Array.from({ length: new Date().getFullYear() - 2023 }, (_, index) => new Date().getFullYear() - index),
+    []
+  );
+  const dailyMonthOptions = useMemo(
+    () => Array.from({ length: 12 }, (_, index) => ({
+      value: index + 1,
+      label: new Date(2000, index, 1).toLocaleDateString('en-IN', { month: 'long' }),
+    })),
+    []
+  );
+  const currentYear = new Date().getFullYear();
+  const currentMonthNumber = new Date().getMonth() + 1;
 
   return (
     <div className="space-y-6 w-full max-w-full overflow-x-hidden">
@@ -710,7 +789,174 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
         </div>
       </div>
 
-      {/* 4. Confirmed Sales Breakdown Table */}
+      {/* 4. Daily Meal Counts */}
+      <div className="space-y-3">
+        <div className="flex flex-col gap-3 rounded-3xl border border-[#B0BE8C]/40 bg-white px-4 py-4 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:px-5">
+          <div>
+            <h3 className="text-sm sm:text-base font-semibold text-[#22222B]">Daily Meal Counts</h3>
+            <p className="mt-0.5 text-xs text-slate-500">Completed meals by date and meal type for the selected month.</p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <label className="flex items-center gap-2">
+              <span className="text-xs font-medium text-slate-600">Month</span>
+              <select
+                value={dailyMonthNumber}
+                onChange={(event) => setDailyMonthNumber(Number(event.target.value))}
+                className="min-h-[40px] rounded-xl border border-[#B0BE8C]/50 bg-white px-3 text-xs font-medium text-[#22222B] outline-none focus:ring-2 focus:ring-[#741B22]/20"
+              >
+                {dailyMonthOptions.map((month) => (
+                  <option
+                    key={month.value}
+                    value={month.value}
+                    disabled={dailyYear === currentYear && month.value > currentMonthNumber}
+                  >
+                    {month.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="flex items-center gap-2">
+              <span className="text-xs font-medium text-slate-600">Year</span>
+              <select
+                value={dailyYear}
+                onChange={(event) => {
+                  const nextYear = Number(event.target.value);
+                  setDailyYear(nextYear);
+                  if (nextYear === currentYear && dailyMonthNumber > currentMonthNumber) {
+                    setDailyMonthNumber(currentMonthNumber);
+                  }
+                }}
+                className="min-h-[40px] rounded-xl border border-[#B0BE8C]/50 bg-white px-3 text-xs font-medium text-[#22222B] outline-none focus:ring-2 focus:ring-[#741B22]/20"
+              >
+                {dailyYearOptions.map((year) => <option key={year} value={year}>{year}</option>)}
+              </select>
+            </label>
+          </div>
+        </div>
+
+        {dailyError && (
+          <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-xs text-red-800">{dailyError}</div>
+        )}
+
+        <div className="grid grid-cols-1 xl:grid-cols-[minmax(390px,0.9fr)_minmax(0,1.7fr)] gap-5 items-stretch">
+          <div className="glass-card rounded-3xl border border-[#B0BE8C]/40 shadow-sm overflow-hidden flex flex-col xl:h-[500px]">
+            <div className="border-b border-[#B0BE8C]/30 bg-[#F3F5F4] px-5 py-4">
+              <h4 className="text-sm font-semibold text-[#22222B]">
+                {dailyMonthOptions[dailyMonthNumber - 1]?.label} {dailyYear}
+              </h4>
+              <p className="mt-0.5 text-xs text-slate-500">Current month figures are month to date.</p>
+            </div>
+            <div className="overflow-auto flex-1 min-h-0">
+              <table className="w-full min-w-[560px] text-xs text-right">
+                <thead className="sticky top-0 z-10 bg-[#22222B] text-white">
+                  <tr>
+                    <th className="px-3 py-2.5 text-left font-medium">Date</th>
+                    <th className="px-3 py-2.5 text-left font-medium">Day</th>
+                    <th className="px-3 py-2.5 font-medium">Total</th>
+                    <th className="px-3 py-2.5 font-medium">B</th>
+                    <th className="px-3 py-2.5 font-medium">L</th>
+                    <th className="px-3 py-2.5 font-medium">D</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#B0BE8C]/25">
+                  {dailyMeals.map((day) => (
+                    <tr key={day.date} className="hover:bg-slate-50">
+                      <td className="whitespace-nowrap px-3 py-2 text-left font-medium text-[#22222B]">
+                        {day.date.split('-').reverse().join('-')}
+                      </td>
+                      <td className="px-3 py-2 text-left text-slate-600">{day.day}</td>
+                      <td className="px-3 py-2 font-semibold text-[#22222B]">{day.total}</td>
+                      <td className="px-3 py-2 font-medium text-amber-800">{day.breakfast}</td>
+                      <td className="px-3 py-2 font-medium text-emerald-800">{day.lunch}</td>
+                      <td className="px-3 py-2 font-medium text-indigo-800">{day.dinner}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {dailyLoading && (
+                <div className="flex items-center justify-center gap-2 p-8 text-xs text-slate-500">
+                  <Loader2 className="h-4 w-4 animate-spin text-[#741B22]" /> Loading daily meals…
+                </div>
+              )}
+              {!dailyLoading && dailyMeals.length === 0 && !dailyError && (
+                <div className="p-8 text-center text-xs text-slate-400">No daily meal history is available.</div>
+              )}
+            </div>
+          </div>
+
+          <div className="glass-card rounded-3xl border border-[#B0BE8C]/40 shadow-sm overflow-hidden flex flex-col xl:h-[500px]">
+            <div className="px-5 pt-5 text-center">
+              <h4 className="text-base sm:text-lg font-semibold text-[#22222B]">Meals Per Day</h4>
+              <p className="mt-1 text-xs text-slate-500">Breakfast, lunch, dinner, and total completed meals</p>
+            </div>
+            <div className="flex min-h-0 flex-1 items-center overflow-x-auto px-2 pb-3">
+              {dailyLoading ? (
+                <div className="flex w-full items-center justify-center gap-2 text-xs text-slate-500">
+                  <Loader2 className="h-4 w-4 animate-spin text-[#741B22]" /> Loading chart…
+                </div>
+              ) : (
+                <svg
+                  viewBox={`0 0 ${dailyMealChart.width} ${dailyMealChart.height}`}
+                  className="h-auto w-full min-w-[760px]"
+                  role="img"
+                  aria-labelledby="daily-meal-chart-title daily-meal-chart-description"
+                >
+                  <title id="daily-meal-chart-title">Daily completed meal counts</title>
+                  <desc id="daily-meal-chart-description">Breakfast, lunch, dinner, and total meals for each date in the selected month.</desc>
+                  {dailyMealChart.gridValues.map((value) => {
+                    const y = dailyMealChart.yFor(value);
+                    return (
+                      <g key={value}>
+                        <line x1={dailyMealChart.margin.left} x2={dailyMealChart.margin.left + dailyMealChart.plotWidth} y1={y} y2={y} stroke="#B0BE8C" strokeWidth="1" />
+                        <text x={dailyMealChart.margin.left - 12} y={y + 4} textAnchor="end" fontSize="11" fill="#22222B">{value.toFixed(0)}</text>
+                      </g>
+                    );
+                  })}
+                  <path d={dailyMealChart.totalPath} fill="none" stroke="#22222B" strokeWidth="4" strokeLinejoin="round" strokeLinecap="round" />
+                  <path d={dailyMealChart.breakfastPath} fill="none" stroke="#D97706" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
+                  <path d={dailyMealChart.lunchPath} fill="none" stroke="#047857" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
+                  <path d={dailyMealChart.dinnerPath} fill="none" stroke="#4338CA" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
+                  {dailyMeals.map((day, index) => {
+                    const x = dailyMealChart.xFor(index);
+                    const dayNumber = Number(day.date.slice(-2));
+                    return (
+                      <g key={day.date}>
+                        <circle cx={x} cy={dailyMealChart.yFor(day.total)} r="3" fill="#22222B" />
+                        {(dayNumber === 1 || dayNumber % 2 === 0 || index === dailyMeals.length - 1) && (
+                          <text
+                            x={x}
+                            y={dailyMealChart.margin.top + dailyMealChart.plotHeight + 20}
+                            textAnchor="middle"
+                            fontSize="10"
+                            fill="#22222B"
+                          >
+                            {dayNumber}
+                          </text>
+                        )}
+                      </g>
+                    );
+                  })}
+                  <g transform={`translate(${dailyMealChart.width / 2 - 190} ${dailyMealChart.height - 18})`}>
+                    {[
+                      { label: 'Total', color: '#22222B', x: 0 },
+                      { label: 'Breakfast', color: '#D97706', x: 90 },
+                      { label: 'Lunch', color: '#047857', x: 210 },
+                      { label: 'Dinner', color: '#4338CA', x: 305 },
+                    ].map((item) => (
+                      <g key={item.label} transform={`translate(${item.x} 0)`}>
+                        <line x1="0" x2="28" y1="0" y2="0" stroke={item.color} strokeWidth="3" strokeLinecap="round" />
+                        <text x="35" y="4" fontSize="10.5" fill="#22222B">{item.label}</text>
+                      </g>
+                    ))}
+                  </g>
+                </svg>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 5. Confirmed Sales Breakdown Table */}
       <div className="glass-card rounded-3xl p-5 sm:p-6 border border-[#B0BE8C]/40 shadow-sm space-y-4">
         <div className="flex items-center justify-between gap-3">
           <div>
