@@ -453,9 +453,6 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
     })),
     []
   );
-  const currentYear = new Date().getFullYear();
-  const currentMonthNumber = new Date().getMonth() + 1;
-
   return (
     <div className="space-y-6 w-full max-w-full overflow-x-hidden">
       {/* 1. Header & Period Filter Toolbar */}
@@ -805,11 +802,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
                 className="min-h-[40px] rounded-xl border border-[#B0BE8C]/50 bg-white px-3 text-xs font-medium text-[#22222B] outline-none focus:ring-2 focus:ring-[#741B22]/20"
               >
                 {dailyMonthOptions.map((month) => (
-                  <option
-                    key={month.value}
-                    value={month.value}
-                    disabled={dailyYear === currentYear && month.value > currentMonthNumber}
-                  >
+                  <option key={month.value} value={month.value}>
                     {month.label}
                   </option>
                 ))}
@@ -819,13 +812,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
               <span className="text-xs font-medium text-slate-600">Year</span>
               <select
                 value={dailyYear}
-                onChange={(event) => {
-                  const nextYear = Number(event.target.value);
-                  setDailyYear(nextYear);
-                  if (nextYear === currentYear && dailyMonthNumber > currentMonthNumber) {
-                    setDailyMonthNumber(currentMonthNumber);
-                  }
-                }}
+                onChange={(event) => setDailyYear(Number(event.target.value))}
                 className="min-h-[40px] rounded-xl border border-[#B0BE8C]/50 bg-white px-3 text-xs font-medium text-[#22222B] outline-none focus:ring-2 focus:ring-[#741B22]/20"
               >
                 {dailyYearOptions.map((year) => <option key={year} value={year}>{year}</option>)}
