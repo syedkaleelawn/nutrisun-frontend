@@ -489,6 +489,15 @@ export interface MonthlyMealAverage {
   average_dinner: number;
 }
 
+export interface DailyMealCount {
+  date: string;
+  day: string;
+  total: number;
+  breakfast: number;
+  lunch: number;
+  dinner: number;
+}
+
 export interface CustomerSubscriptionDetail {
   id: number;
   plan_name: string;
@@ -722,6 +731,8 @@ export const adminApi = {
     api.get<AnalyticsResponse>('/admin/analytics', { params }),
   getMonthlyMealAverages: () =>
     api.get<{ months: MonthlyMealAverage[] }>('/admin/analytics/monthly-meal-averages'),
+  getDailyMealCounts: (month: string) =>
+    api.get<{ selected_month: string; start_date: string; end_date: string; days: DailyMealCount[] }>('/admin/analytics/daily-meals', { params: { month } }),
   getCustomerReports: (params?: { month?: string; start_date?: string; end_date?: string; search?: string; customer_id?: number }) =>
     api.get<{ count: number; customers: CustomerReportItem[] }>('/admin/analytics/customers', { params }),
   downloadExportExcel: (params?: { month?: string; report?: string; start_date?: string; end_date?: string }) => {
