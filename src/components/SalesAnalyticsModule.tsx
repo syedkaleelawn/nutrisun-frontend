@@ -37,6 +37,17 @@ const toFiniteNumber = (value: unknown): number => {
   return Number.isFinite(numberValue) ? numberValue : 0;
 };
 
+const getCurrentISTDateKey = (): string => {
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Asia/Kolkata',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(new Date());
+  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+  return `${values.year}-${values.month}-${values.day}`;
+};
+
 export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsModuleProps) {
   // 1. Filter States
   const [selectedMonth, setSelectedMonth] = useState<string>(() => {
@@ -846,18 +857,25 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#B0BE8C]/25">
-                  {dailyMeals.map((day) => (
-                    <tr key={day.date} className="hover:bg-slate-50">
-                      <td className="whitespace-nowrap px-3 py-2 text-left font-medium text-[#22222B]">
-                        {day.date.split('-').reverse().join('-')}
-                      </td>
-                      <td className="px-3 py-2 text-left text-slate-600">{day.day}</td>
-                      <td className="px-3 py-2 font-semibold text-[#22222B]">{day.total}</td>
-                      <td className="px-3 py-2 font-medium text-amber-800">{day.breakfast}</td>
-                      <td className="px-3 py-2 font-medium text-emerald-800">{day.lunch}</td>
-                      <td className="px-3 py-2 font-medium text-indigo-800">{day.dinner}</td>
-                    </tr>
-                  ))}
+                  {dailyMeals.map((day) => {
+                    const isCurrentDay = day.date === getCurrentISTDateKey();
+                    return (
+                      <tr
+                        key={day.date}
+                        className={isCurrentDay ? 'bg-[#F7DE9D]/25 font-medium' : 'hover:bg-slate-50'}
+                      >
+                        <td className="whitespace-nowrap px-3 py-2 text-left font-medium text-[#22222B]">
+                          {day.date.split('-').reverse().join('-')}
+                          {isCurrentDay && <span className="ml-1.5 text-[9px] text-[#741B22]">Today</span>}
+                        </td>
+                        <td className="px-3 py-2 text-left text-slate-600">{day.day}</td>
+                        <td className="px-3 py-2 font-semibold text-[#22222B]">{day.total}</td>
+                        <td className="px-3 py-2 font-medium text-amber-800">{day.breakfast}</td>
+                        <td className="px-3 py-2 font-medium text-emerald-800">{day.lunch}</td>
+                        <td className="px-3 py-2 font-medium text-indigo-800">{day.dinner}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
               {dailyLoading && (
