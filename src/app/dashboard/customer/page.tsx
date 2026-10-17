@@ -81,7 +81,8 @@ export default function CustomerDashboard() {
 
   // "Buy Plan" & Payment Modal state
   const [selectedPlanToBuy, setSelectedPlanToBuy] = useState<SubscriptionPlan | null>(null);
-  const [purchaseQuantity, setPurchaseQuantity] = useState(1);
+  const [purchaseQuantityInput, setPurchaseQuantityInput] = useState('1');
+  const purchaseQuantity = Math.min(5, Math.max(1, Number.parseInt(purchaseQuantityInput, 10) || 1));
   const [buying, setBuying] = useState(false);
   const [availabilityStatus, setAvailabilityStatus] = useState<'unchecked' | 'checking' | 'available' | 'unavailable'>('unchecked');
   const [availabilityMessage, setAvailabilityMessage] = useState('');
@@ -334,7 +335,7 @@ export default function CustomerDashboard() {
     setReceiptFile(null);
     setReceiptPreviewUrl(null);
     setTransactionRef('');
-    setPurchaseQuantity(1);
+    setPurchaseQuantityInput('1');
     setAvailabilityStatus('unchecked');
     setAvailabilityMessage('');
   };
@@ -983,7 +984,7 @@ export default function CustomerDashboard() {
                     <button
                       onClick={() => {
                         setSelectedPlanToBuy(plan);
-                        setPurchaseQuantity(1);
+                        setPurchaseQuantityInput('1');
                         setPurchaseSuccessData(null);
                         setAvailabilityStatus('unchecked');
                         setAvailabilityMessage('');
@@ -1106,13 +1107,16 @@ export default function CustomerDashboard() {
                       min={1}
                       max={5}
                       inputMode="numeric"
-                      value={purchaseQuantity}
+                      value={purchaseQuantityInput}
                       onChange={(event) => {
-                        const nextQuantity = Number.parseInt(event.target.value, 10);
-                        setPurchaseQuantity(Number.isFinite(nextQuantity) ? Math.min(5, Math.max(1, nextQuantity)) : 1);
-                        setAvailabilityStatus('unchecked');
-                        setAvailabilityMessage('');
+                        const nextValue = event.target.value;
+                        if (nextValue === '' || /^\d+$/.test(nextValue)) {
+                          setPurchaseQuantityInput(nextValue);
+                          setAvailabilityStatus('unchecked');
+                          setAvailabilityMessage('');
+                        }
                       }}
+                      onBlur={() => setPurchaseQuantityInput(String(purchaseQuantity))}
                       className="min-h-[44px] w-full rounded-xl border border-[#B0BE8C]/50 bg-white px-3 text-sm font-semibold text-[#22222B] outline-none focus:border-[#741B22] focus:ring-2 focus:ring-[#741B22]/15"
                     />
                   </label>
