@@ -266,6 +266,16 @@ export default function EntryPage() {
           ) : (
             /* REGISTRATION FORM */
             <form onSubmit={handleRegisterSubmit} className="space-y-3.5">
+              <div
+                role="note"
+                className="rounded-2xl border border-[#F7DE9D] bg-[#F7DE9D]/30 p-3.5 text-xs text-[#22222B] flex items-start gap-2.5"
+              >
+                <AlertCircle className="w-4 h-4 text-[#B92F25] shrink-0 mt-0.5" />
+                <p>
+                  Before placing your first order, please contact Customer Care to confirm that delivery is feasible for your location.
+                </p>
+              </div>
+
               <div>
                 <label className="block text-[10px] font-semibold tracking-wider text-[#22222B]/70 mb-1">
                   Full Name
