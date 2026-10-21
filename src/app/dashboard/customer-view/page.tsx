@@ -181,7 +181,7 @@ export default function AdminCustomerViewPage() {
     <div className="max-w-6xl mx-auto px-3 sm:px-4 py-4 sm:py-8 space-y-4 w-full max-w-full">
       <div className="glass-card relative z-30 overflow-visible rounded-3xl p-4 sm:p-5 border border-[#B0BE8C]/35 shadow-sm">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
-          <div className="space-y-2 flex-1 min-w-0">
+          <div className="w-full min-w-0 space-y-1 lg:w-80 lg:flex-none">
             <span className="block text-[10px] font-semibold tracking-wider text-slate-500">Customers</span>
             <details className="relative z-40 group">
               <summary
@@ -245,19 +245,19 @@ export default function AdminCustomerViewPage() {
                 </div>
               </div>
             </details>
-            <label className="flex min-h-[36px] cursor-pointer items-center gap-2 text-[11px] text-[#22222B]/75">
+          </div>
+
+          <div className="flex flex-1 flex-col items-stretch gap-3 sm:flex-row sm:items-end">
+            <label className="flex min-h-[44px] flex-1 cursor-pointer items-center gap-2 text-[11px] text-[#22222B]/75 lg:whitespace-nowrap">
               <input
                 type="checkbox"
                 checked={activeCustomersOnly}
                 onChange={(event) => setActiveCustomersOnly(event.target.checked)}
-                className="h-4 w-4 rounded border-[#B0BE8C] accent-[#741B22]"
+                className="h-4 w-4 shrink-0 rounded border-[#B0BE8C] accent-[#741B22]"
               />
               Only customers with at least one meal in {MONTHS[scheduleMonth - 1]} {scheduleYear}
             </label>
-          </div>
-
-          <div className="flex flex-wrap items-end gap-3">
-            <label className="space-y-1 flex-1 sm:flex-none">
+            <label className="space-y-1 sm:w-36 sm:flex-none">
               <span className="block text-[10px] font-semibold tracking-wider text-slate-500">Month</span>
               <select
                 value={scheduleMonth}
@@ -267,7 +267,7 @@ export default function AdminCustomerViewPage() {
                 {MONTHS.map((month, index) => <option key={month} value={index + 1}>{month}</option>)}
               </select>
             </label>
-            <label className="space-y-1 flex-1 sm:flex-none">
+            <label className="space-y-1 sm:w-28 sm:flex-none">
               <span className="block text-[10px] font-semibold tracking-wider text-slate-500">Year</span>
               <select
                 value={scheduleYear}
