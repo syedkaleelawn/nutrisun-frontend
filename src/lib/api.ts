@@ -677,8 +677,8 @@ export const adminApi = {
     api.get<PendingCountsResponse>('/admin/pending-counts'),
   getSubscriptions: (params?: { status?: string; payment_status?: string }) =>
     api.get<{ count: number; subscriptions: UserSubscription[] }>('/admin/subscriptions', { params }),
-  confirmPayment: (id: number, data: { start_date: string }) =>
-    api.put<{ message: string; subscription: UserSubscription; scheduled_days: number; total_meals: number }>(`/admin/subscriptions/${id}/payment`, data),
+  confirmPayment: (id: number, data: { start_date?: string; start_dates?: Partial<Record<MealSlot, string>> }) =>
+    api.put<{ message: string; subscription: UserSubscription; scheduled_days: number; start_dates?: Partial<Record<MealSlot, string>>; total_meals: number }>(`/admin/subscriptions/${id}/payment`, data),
   rejectPayment: (id: number, data?: { reason?: string }) =>
     api.put<{ message: string; subscription: UserSubscription }>(`/admin/subscriptions/${id}/payment/reject`, data || {}),
   getRequests: (params?: {
