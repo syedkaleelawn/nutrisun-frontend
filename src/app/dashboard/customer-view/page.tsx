@@ -179,11 +179,11 @@ export default function AdminCustomerViewPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-3 sm:px-4 py-4 sm:py-8 space-y-4 w-full max-w-full">
-      <div className="glass-card rounded-3xl p-4 sm:p-5 border border-[#B0BE8C]/35 shadow-sm">
+      <div className="glass-card relative z-30 overflow-visible rounded-3xl p-4 sm:p-5 border border-[#B0BE8C]/35 shadow-sm">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
           <div className="space-y-2 flex-1 min-w-0">
             <span className="block text-[10px] font-semibold tracking-wider text-slate-500">Customers</span>
-            <details className="relative group">
+            <details className="relative z-40 group">
               <summary
                 className="list-none w-full min-h-[44px] rounded-xl border border-[#B0BE8C]/50 bg-white px-3 py-2.5 text-xs font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#741B22]/20 cursor-pointer flex items-center justify-between gap-3"
                 aria-label="Select customers"
@@ -197,7 +197,7 @@ export default function AdminCustomerViewPage() {
                 </span>
                 <ChevronDown className="w-4 h-4 shrink-0 text-slate-500 transition-transform group-open:rotate-180" />
               </summary>
-              <div className="absolute left-0 right-0 z-30 mt-2 rounded-2xl border border-[#B0BE8C]/40 bg-white p-2 shadow-xl">
+              <div className="absolute left-0 right-0 z-50 mt-2 rounded-2xl border border-[#B0BE8C]/40 bg-white p-2 shadow-xl">
                 <div className="flex items-center justify-between gap-2 border-b border-[#B0BE8C]/25 px-2 pb-2 mb-1">
                   <button
                     type="button"
@@ -287,7 +287,7 @@ export default function AdminCustomerViewPage() {
         Showing combined meal totals for {selectedCustomerIds.length} selected {selectedCustomerIds.length === 1 ? 'customer' : 'customers'}.
       </p>
 
-      <div className="glass-card rounded-3xl border border-[#B0BE8C]/35 shadow-sm overflow-hidden relative">
+      <div className="glass-card relative z-0 rounded-3xl border border-[#B0BE8C]/35 shadow-sm overflow-hidden">
         {loadingMeals && (
           <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/70 backdrop-blur-[1px]">
             <RefreshCw className="w-7 h-7 text-[#B92F25] animate-spin" />
