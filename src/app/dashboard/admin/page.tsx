@@ -67,6 +67,20 @@ export default function AdminDashboard() {
       .join(' + ');
   };
 
+  const getApprovalMealSlots = (subscription: UserSubscription): MealSlot[] => {
+    const rawShifts = subscription.selected_shifts || subscription.plan_snapshot_shifts || subscription.plan?.shifts || '';
+    return rawShifts
+      .split(',')
+      .map((shift) => shift.trim().toLowerCase())
+      .filter((shift): shift is MealSlot => ['breakfast', 'lunch', 'dinner'].includes(shift));
+  };
+
+  const todayIST = () => new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+  const createDefaultStartDates = (): Record<MealSlot, string> => {
+    const date = todayIST();
+    return { breakfast: date, lunch: date, dinner: date };
+  };
+
   // Data states
   const [subscriptions, setSubscriptions] = useState<UserSubscription[]>([]);
   const [requests, setRequests] = useState<ServiceRequest[]>([]);
@@ -101,7 +115,7 @@ export default function AdminDashboard() {
 
   // Confirm / Review Payment Modal
   const [confirmSub, setConfirmSub] = useState<UserSubscription | null>(null);
-  const [subStartDate, setSubStartDate] = useState(() => new Date().toISOString().split('T')[0]);
+  const [subStartDates, setSubStartDates] = useState<Record<MealSlot, string>>(createDefaultStartDates);
   const [confirmingPayment, setConfirmingPayment] = useState(false);
   const [rejectReason, setRejectReason] = useState('');
   const [rejectingPayment, setRejectingPayment] = useState(false);
@@ -285,9 +299,20 @@ export default function AdminDashboard() {
 
   const handleConfirmPayment = async () => {
     if (!confirmSub) return;
+    const includedSlots = getApprovalMealSlots(confirmSub);
+    const missingSlot = includedSlots.find((slot) => !subStartDates[slot]);
+    if (missingSlot) {
+      alert(`Please choose a start date for ${missingSlot}.`);
+      return;
+    }
+
+    const startDates = Object.fromEntries(
+      includedSlots.map((slot) => [slot, subStartDates[slot]])
+    ) as Partial<Record<MealSlot, string>>;
+
     setConfirmingPayment(true);
     try {
-      const res = await adminApi.confirmPayment(confirmSub.id, { start_date: subStartDate });
+      const res = await adminApi.confirmPayment(confirmSub.id, { start_dates: startDates });
       setNotification(res.data.message);
       setConfirmSub(null);
       setRejectReason('');
@@ -680,7 +705,7 @@ export default function AdminDashboard() {
                       <button
                         onClick={() => {
                           setConfirmSub(sub);
-                          setSubStartDate(new Date().toISOString().split('T')[0]);
+                          setSubStartDates(createDefaultStartDates());
                           setRejectReason('');
                         }}
                         className="w-full sm:w-auto min-h-[44px] px-4 py-2.5 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white font-semibold text-xs shadow-sm transition-all flex items-center justify-center shrink-0 gap-1.5"
@@ -746,7 +771,7 @@ export default function AdminDashboard() {
                   <button
                     onClick={() => {
                       setConfirmSub(s);
-                      setSubStartDate(new Date().toISOString().split('T')[0]);
+                      setSubStartDates(createDefaultStartDates());
                       setRejectReason('');
                     }}
                     className="w-full min-h-[44px] py-2 px-3 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white text-xs font-medium transition-colors flex items-center justify-center gap-1.5"
@@ -842,7 +867,7 @@ export default function AdminDashboard() {
                         <button
                           onClick={() => {
                             setConfirmSub(s);
-                            setSubStartDate(new Date().toISOString().split('T')[0]);
+                            setSubStartDates(createDefaultStartDates());
                             setRejectReason('');
                           }}
                           className="px-2.5 py-1 rounded-lg bg-[#B92F25] hover:bg-[#741B22] text-white text-[10px] font-medium transition-colors whitespace-nowrap"
@@ -1649,19 +1674,31 @@ export default function AdminDashboard() {
               )}
             </div>
 
-            {/* Set Start Date (Required for approval) */}
-            <div className="space-y-1 text-xs">
-              <label className="block font-medium text-[#22222B]">Set Subscription Start Date</label>
-              <input
-                type="date"
-                required
-                value={subStartDate}
-                onChange={(e) => setSubStartDate(e.target.value)}
-                className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
-              />
-              <p className="text-[10px] text-slate-400">
-                Deliveries and meal schedule will start from this date strictly for {formatShiftName(confirmSub.selected_shifts || confirmSub.plan_snapshot_shifts)}.
-              </p>
+            {/* Meal-specific start dates (required for approval) */}
+            <div className="space-y-2 text-xs">
+              <div>
+                <h4 className="font-medium text-[#22222B]">Set Start Date by Meal Type</h4>
+                <p className="mt-0.5 text-[10px] text-slate-400">
+                  Choose when each included meal type should begin. Only meal types in this purchase are shown.
+                </p>
+              </div>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                {getApprovalMealSlots(confirmSub).map((slot) => (
+                  <label key={slot} className="space-y-1">
+                    <span className="block capitalize text-[11px] font-medium text-slate-600">{slot}</span>
+                    <input
+                      type="date"
+                      required
+                      value={subStartDates[slot]}
+                      onChange={(event) => setSubStartDates((current) => ({
+                        ...current,
+                        [slot]: event.target.value,
+                      }))}
+                      className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
+                    />
+                  </label>
+                ))}
+              </div>
             </div>
 
             {/* Optional Rejection Reason */}
@@ -1698,7 +1735,7 @@ export default function AdminDashboard() {
               <button
                 type="button"
                 onClick={handleConfirmPayment}
-                disabled={confirmingPayment || rejectingPayment}
+                disabled={confirmingPayment || rejectingPayment || getApprovalMealSlots(confirmSub).some((slot) => !subStartDates[slot])}
                 className="order-1 sm:order-3 flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white font-semibold text-xs shadow-md transition-colors flex items-center justify-center disabled:opacity-50"
               >
                 {confirmingPayment ? 'Activating...' : 'Approve & Activate'}
