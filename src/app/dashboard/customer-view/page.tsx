@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { RefreshCw } from 'lucide-react';
+import { Check, ChevronDown, RefreshCw } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { adminApi, DailyMealLog, User } from '@/lib/api';
 
@@ -43,7 +43,8 @@ export default function AdminCustomerViewPage() {
   const currentISTDate = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
   const currentYear = Number(currentISTDate.slice(0, 4));
   const [customers, setCustomers] = useState<User[]>([]);
-  const [selectedCustomerId, setSelectedCustomerId] = useState<number | null>(null);
+  const [selectedCustomerIds, setSelectedCustomerIds] = useState<number[]>([]);
+  const [activeCustomersOnly, setActiveCustomersOnly] = useState(false);
   const [scheduleYear, setScheduleYear] = useState(currentYear);
   const [scheduleMonth, setScheduleMonth] = useState(Number(currentISTDate.slice(5, 7)));
   const [meals, setMeals] = useState<DailyMealLog[]>([]);
@@ -59,12 +60,20 @@ export default function AdminCustomerViewPage() {
     if (!user || user.role !== 'admin') return;
     let active = true;
     setLoadingCustomers(true);
-    adminApi.getCustomers()
+    adminApi.getCustomers(activeCustomersOnly ? {
+      active_only: true,
+      month: String(scheduleMonth).padStart(2, '0'),
+      year: String(scheduleYear),
+    } : undefined)
       .then((response) => {
         if (!active) return;
         const sorted = [...(response.data.customers || [])].sort((a, b) => a.name.localeCompare(b.name));
+        const availableIds = new Set(sorted.map((customer) => customer.id));
         setCustomers(sorted);
-        setSelectedCustomerId((current) => current ?? sorted[0]?.id ?? null);
+        setSelectedCustomerIds((current) => {
+          const retained = current.filter((id) => availableIds.has(id));
+          return retained.length > 0 ? retained : sorted[0] ? [sorted[0].id] : [];
+        });
         setError('');
       })
       .catch(() => {
@@ -74,35 +83,50 @@ export default function AdminCustomerViewPage() {
         if (active) setLoadingCustomers(false);
       });
     return () => { active = false; };
-  }, [user]);
+  }, [activeCustomersOnly, scheduleMonth, scheduleYear, user]);
 
   useEffect(() => {
-    if (!selectedCustomerId || !user || user.role !== 'admin') {
+    if (selectedCustomerIds.length === 0 || !user || user.role !== 'admin') {
       setMeals([]);
       return;
     }
     let active = true;
     setLoadingMeals(true);
-    adminApi.getCustomerMeals(selectedCustomerId, {
-      month: String(scheduleMonth).padStart(2, '0'),
-      year: String(scheduleYear),
-    })
-      .then((response) => {
+    Promise.all(selectedCustomerIds.map((customerId) =>
+      adminApi.getCustomerMeals(customerId, {
+        month: String(scheduleMonth).padStart(2, '0'),
+        year: String(scheduleYear),
+      })
+    ))
+      .then((responses) => {
         if (!active) return;
-        setMeals(response.data.meals || []);
+        setMeals(responses.flatMap((response) => response.data.meals || []));
         setError('');
       })
       .catch(() => {
         if (active) {
           setMeals([]);
-          setError('Unable to load this customer’s meal schedule. Please retry.');
+          setError('Unable to load the selected customers’ meal schedules. Please retry.');
         }
       })
       .finally(() => {
         if (active) setLoadingMeals(false);
       });
     return () => { active = false; };
-  }, [scheduleMonth, scheduleYear, selectedCustomerId, user]);
+  }, [scheduleMonth, scheduleYear, selectedCustomerIds, user]);
+
+  const selectedCustomerNames = useMemo(() => {
+    const selectedIds = new Set(selectedCustomerIds);
+    return customers.filter((customer) => selectedIds.has(customer.id)).map((customer) => customer.name);
+  }, [customers, selectedCustomerIds]);
+
+  const toggleCustomer = (customerId: number) => {
+    setSelectedCustomerIds((current) =>
+      current.includes(customerId)
+        ? current.filter((id) => id !== customerId)
+        : [...current, customerId]
+    );
+  };
 
   const yearOptions = useMemo(() => {
     return Array.from({ length: currentYear - 2024 + 1 }, (_, index) => currentYear - index);
@@ -157,20 +181,80 @@ export default function AdminCustomerViewPage() {
     <div className="max-w-6xl mx-auto px-3 sm:px-4 py-4 sm:py-8 space-y-4 w-full max-w-full">
       <div className="glass-card rounded-3xl p-4 sm:p-5 border border-[#B0BE8C]/35 shadow-sm">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
-          <label className="space-y-1 flex-1">
-            <span className="block text-[10px] font-semibold tracking-wider text-slate-500">Customer</span>
-            <select
-              value={selectedCustomerId ?? ''}
-              onChange={(event) => setSelectedCustomerId(Number(event.target.value))}
-              disabled={customers.length === 0}
-              className="w-full min-h-[44px] rounded-xl border border-[#B0BE8C]/50 bg-white px-3 text-xs font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#741B22]/20 disabled:opacity-60"
-            >
-              {customers.length === 0 && <option value="">No customers found</option>}
-              {customers.map((customer) => (
-                <option key={customer.id} value={customer.id}>{customer.name} — {customer.phone}</option>
-              ))}
-            </select>
-          </label>
+          <div className="space-y-2 flex-1 min-w-0">
+            <span className="block text-[10px] font-semibold tracking-wider text-slate-500">Customers</span>
+            <details className="relative group">
+              <summary
+                className="list-none w-full min-h-[44px] rounded-xl border border-[#B0BE8C]/50 bg-white px-3 py-2.5 text-xs font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#741B22]/20 cursor-pointer flex items-center justify-between gap-3"
+                aria-label="Select customers"
+              >
+                <span className="truncate">
+                  {selectedCustomerNames.length === 0
+                    ? 'Select customers'
+                    : selectedCustomerNames.length === 1
+                      ? selectedCustomerNames[0]
+                      : `${selectedCustomerNames.length} customers selected`}
+                </span>
+                <ChevronDown className="w-4 h-4 shrink-0 text-slate-500 transition-transform group-open:rotate-180" />
+              </summary>
+              <div className="absolute left-0 right-0 z-30 mt-2 rounded-2xl border border-[#B0BE8C]/40 bg-white p-2 shadow-xl">
+                <div className="flex items-center justify-between gap-2 border-b border-[#B0BE8C]/25 px-2 pb-2 mb-1">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedCustomerIds(customers.map((customer) => customer.id))}
+                    disabled={customers.length === 0}
+                    className="min-h-[36px] text-[11px] text-[#741B22] hover:text-[#B92F25] disabled:opacity-50"
+                  >
+                    Select all
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedCustomerIds([])}
+                    disabled={selectedCustomerIds.length === 0}
+                    className="min-h-[36px] text-[11px] text-slate-500 hover:text-[#22222B] disabled:opacity-50"
+                  >
+                    Clear
+                  </button>
+                </div>
+                <div className="max-h-64 overflow-y-auto overscroll-contain">
+                  {customers.length === 0 ? (
+                    <p className="px-2 py-3 text-xs text-slate-500">No customers found for this selection.</p>
+                  ) : customers.map((customer) => {
+                    const checked = selectedCustomerIds.includes(customer.id);
+                    return (
+                      <label
+                        key={customer.id}
+                        className="flex min-h-[44px] cursor-pointer items-center gap-3 rounded-xl px-2 py-2 hover:bg-[#B0BE8C]/10"
+                      >
+                        <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md border ${checked ? 'border-[#741B22] bg-[#741B22] text-white' : 'border-[#B0BE8C] bg-white'}`}>
+                          {checked && <Check className="h-3.5 w-3.5" />}
+                        </span>
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          onChange={() => toggleCustomer(customer.id)}
+                          className="sr-only"
+                        />
+                        <span className="min-w-0">
+                          <span className="block truncate text-xs text-[#22222B]">{customer.name}</span>
+                          <span className="block text-[10px] text-slate-500">{customer.phone}</span>
+                        </span>
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+            </details>
+            <label className="flex min-h-[36px] cursor-pointer items-center gap-2 text-[11px] text-[#22222B]/75">
+              <input
+                type="checkbox"
+                checked={activeCustomersOnly}
+                onChange={(event) => setActiveCustomersOnly(event.target.checked)}
+                className="h-4 w-4 rounded border-[#B0BE8C] accent-[#741B22]"
+              />
+              Only customers with at least one meal in {MONTHS[scheduleMonth - 1]} {scheduleYear}
+            </label>
+          </div>
 
           <div className="flex flex-wrap items-end gap-3">
             <label className="space-y-1 flex-1 sm:flex-none">
@@ -198,6 +282,10 @@ export default function AdminCustomerViewPage() {
       </div>
 
       {error && <div className="rounded-2xl border border-rose-200 bg-rose-50 p-3.5 text-xs font-medium text-rose-800">{error}</div>}
+
+      <p className="px-1 text-[11px] text-slate-500">
+        Showing combined meal totals for {selectedCustomerIds.length} selected {selectedCustomerIds.length === 1 ? 'customer' : 'customers'}.
+      </p>
 
       <div className="glass-card rounded-3xl border border-[#B0BE8C]/35 shadow-sm overflow-hidden relative">
         {loadingMeals && (
