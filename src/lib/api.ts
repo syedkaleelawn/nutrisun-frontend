@@ -699,8 +699,8 @@ export const adminApi = {
     api.post<{ message: string; original_meal_id: number; new_meal_id: number; new_date: string; new_slot: MealSlot }>('/admin/reallocate', data),
   adjustCredits: (data: { subscription_id: number; delta: number; reason: string }) =>
     api.post<{ message: string; remaining_credits: number }>('/admin/adjust-credits', data),
-  getCustomers: () =>
-    api.get<{ count: number; customers: User[] }>('/admin/customers'),
+  getCustomers: (params?: { active_only?: boolean; month?: string; year?: string }) =>
+    api.get<{ count: number; customers: User[] }>('/admin/customers', { params }),
   getCustomerMeals: (id: number, params?: { date?: string; month?: string; year?: string }) =>
     api.get<{ count: number; customer: User; meals: DailyMealLog[] }>(`/admin/customers/${id}/meals`, { params }),
   updateCustomerAddress: (id: number, data: { delivery_address: string }) =>
