@@ -13,7 +13,6 @@ import {
   AnalyticsResponse,
   BusinessHoliday,
   MealSlot,
-  fetchReceiptBlobUrl,
 } from '@/lib/api';
 import {
   CreditCard,
@@ -24,8 +23,6 @@ import {
   FileSpreadsheet,
   SkipForward,
   X,
-  ExternalLink,
-  Image as ImageIcon,
   AlertTriangle,
   Loader2,
   KeyRound,
@@ -119,34 +116,6 @@ export default function AdminDashboard() {
   const [confirmingPayment, setConfirmingPayment] = useState(false);
   const [rejectReason, setRejectReason] = useState('');
   const [rejectingPayment, setRejectingPayment] = useState(false);
-  // Authenticated blob URL for the receipt shown in the confirm modal (never a ?token= URL)
-  const [receiptBlobUrl, setReceiptBlobUrl] = useState<string | null>(null);
-
-  // Fetch receipt as an authenticated blob URL whenever the review modal opens/changes.
-  // The blob URL is revoked on cleanup to prevent memory leaks.
-  useEffect(() => {
-    let revoked = false;
-    let blobToRevoke: string | null = null;
-    const proofPath = confirmSub?.payment_record?.proof_image_url ?? null;
-    if (!proofPath) {
-      setReceiptBlobUrl(null);
-      return;
-    }
-    fetchReceiptBlobUrl(proofPath).then((url) => {
-      if (!revoked) {
-        blobToRevoke = url;
-        setReceiptBlobUrl(url);
-      } else if (url) {
-        URL.revokeObjectURL(url);
-      }
-    });
-    return () => {
-      revoked = true;
-      if (blobToRevoke) URL.revokeObjectURL(blobToRevoke);
-    };
-  }, [confirmSub?.payment_record?.proof_image_url]);
-
-
   // Edit Customer Address Modal
   const [editingCust, setEditingCust] = useState<User | null>(null);
   const [newCustAddress, setNewCustAddress] = useState('');
@@ -675,26 +644,15 @@ export default function AdminDashboard() {
             ) : (
               <div className="space-y-3">
                 {pendingPayments.map((sub) => {
-                  const hasProof = !!(sub.payment_record?.proof_image_url || sub.payment_record?.transaction_ref);
                   return (
                     <div key={sub.id} className="glass-card rounded-2xl p-4 border border-[#F7DE9D] bg-[#F7DE9D]/15 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                           <span className="font-medium text-xs text-[#22222B]">Sub #{sub.id}</span>
                           <span className="text-xs text-slate-600">• Customer: <strong>{sub.user?.name}</strong> ({sub.user?.phone})</span>
-                          {sub.payment_record?.proof_image_url ? (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-100 text-emerald-800 border border-emerald-300">
-                              <ImageIcon className="w-3 h-3" /> Screenshot Attached
-                            </span>
-                          ) : sub.payment_record?.transaction_ref ? (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-blue-100 text-blue-800 border border-blue-300">
-                              Ref: {sub.payment_record.transaction_ref}
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-amber-100 text-amber-800 border border-amber-300">
-                              No Proof Uploaded
-                            </span>
-                          )}
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-100 text-emerald-800 border border-emerald-300">
+                            Payment reported {sub.payment_record?.uploaded_at ? new Date(sub.payment_record.uploaded_at).toLocaleString('en-IN') : ''}
+                          </span>
                         </div>
                         <p className="text-xs text-slate-600 mt-0.5 break-words">
                           Plan: <strong className="text-[#22222B]">{sub.plan_snapshot_name || sub.plan?.name}</strong> × <strong>{sub.quantity || 1}</strong> • Amount: <strong className="text-[#741B22]">₹{sub.plan_snapshot_price?.toFixed(2)}</strong> • Meals: <strong className="text-[#741B22]">{formatShiftName(sub.selected_shifts || sub.plan_snapshot_shifts)}</strong>
@@ -711,7 +669,7 @@ export default function AdminDashboard() {
                         className="w-full sm:w-auto min-h-[44px] px-4 py-2.5 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white font-semibold text-xs shadow-sm transition-all flex items-center justify-center shrink-0 gap-1.5"
                       >
                         <CreditCard className="w-4 h-4 shrink-0" />
-                        <span>{hasProof ? 'Review Proof & Verify' : 'Review & Confirm'}</span>
+                        <span>Review & Confirm</span>
                       </button>
                     </div>
                   );
@@ -760,9 +718,9 @@ export default function AdminDashboard() {
                   <div>Plan: <strong>{s.plan_snapshot_name || s.plan?.name}</strong> × <strong>{s.quantity || 1}</strong> (<span className="text-[#741B22] font-medium">{formatShiftName(s.selected_shifts || s.plan_snapshot_shifts)}</span>)</div>
                   <div>Meals: <strong className="text-emerald-700">{s.remaining_credits}</strong> remaining of {s.total_credits}</div>
                   <div className="text-[11px] text-slate-500">Dates: {s.start_date || 'Pending'} → {s.end_date || 'Pending'}</div>
-                  {s.payment_record?.proof_image_url && (
-                    <div className="text-[10px] text-emerald-700 font-medium flex items-center gap-1">
-                      <ImageIcon className="w-3 h-3" /> Screenshot Attached
+                  {s.payment_record?.uploaded_at && (
+                    <div className="text-[10px] text-emerald-700 font-medium">
+                      Payment reported {new Date(s.payment_record.uploaded_at).toLocaleString('en-IN')}
                     </div>
                   )}
                 </div>
@@ -794,7 +752,7 @@ export default function AdminDashboard() {
                   <th className="p-3">Plan</th>
                   <th className="p-3">Shifts</th>
                   <th className="p-3">Meals (Remaining / Total)</th>
-                  <th className="p-3">Payment Proof</th>
+                  <th className="p-3">Payment Time</th>
                   <th className="p-3">Start & End</th>
                   <th className="p-3">Status</th>
                   <th className="p-3">Action</th>
@@ -821,28 +779,9 @@ export default function AdminDashboard() {
                       <span className="text-emerald-700">{s.remaining_credits}</span> / {s.total_credits}
                     </td>
                     <td className="p-3">
-                      {s.payment_record?.proof_image_url ? (
-                        <button
-                          onClick={async () => {
-                            const blobUrl = await fetchReceiptBlobUrl(s.payment_record!.proof_image_url!);
-                            if (blobUrl) {
-                              const a = document.createElement('a');
-                              a.href = blobUrl;
-                              a.download = '';
-                              a.click();
-                              setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
-                            }
-                          }}
-                          className="inline-flex items-center gap-1 text-emerald-700 hover:text-emerald-900 font-medium underline text-xs"
-                        >
-                          <ImageIcon className="w-3.5 h-3.5" />
-                          <span>View Proof</span>
-                        </button>
-                      ) : s.payment_record?.transaction_ref ? (
-                        <span className="text-[11px] text-slate-600">{s.payment_record.transaction_ref}</span>
-                      ) : (
-                        <span className="text-slate-400 text-[10px] italic">None</span>
-                      )}
+                      {s.payment_record?.uploaded_at
+                        ? <span className="text-[11px] text-slate-600">{new Date(s.payment_record.uploaded_at).toLocaleString('en-IN')}</span>
+                        : <span className="text-slate-400 text-[10px] italic">Not reported</span>}
                     </td>
                     <td className="p-3 text-slate-500 whitespace-nowrap">
                       {s.start_date || 'Pending'} → {s.end_date || 'Pending'}
@@ -1618,58 +1557,20 @@ export default function AdminDashboard() {
               </div>
             </div>
 
-            {/* Payment Proof Section */}
+            {/* Customer-reported payment time */}
             <div className="space-y-2">
               <h4 className="text-xs font-semibold text-[#22222B] flex items-center gap-1.5">
-                <ImageIcon className="w-4 h-4 text-[#741B22] shrink-0" />
-                <span>Customer Uploaded Payment Proof</span>
+                <Clock className="w-4 h-4 text-[#741B22] shrink-0" />
+                <span>Payment Time</span>
               </h4>
-
-              {confirmSub.payment_record?.proof_image_url ? (
-                <div className="p-3 bg-white rounded-2xl border border-slate-200 space-y-2">
-                  <div className="flex justify-center bg-slate-50 p-2 rounded-xl border border-slate-100">
-                    {receiptBlobUrl ? (
-                      <img
-                        src={receiptBlobUrl}
-                        alt="Customer Payment Receipt"
-                        className="max-h-56 max-w-full rounded-lg object-contain shadow-xs"
-                      />
-                    ) : (
-                      <div className="flex items-center gap-2 text-xs text-slate-400 py-4">
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Loading receipt…</span>
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex flex-wrap items-center justify-between gap-2 text-xs pt-1">
-                    {confirmSub.payment_record.transaction_ref ? (
-                      <span className="text-slate-600">
-                        Ref / UTR: <strong className="text-[#22222B]">{confirmSub.payment_record.transaction_ref}</strong>
-                      </span>
-                    ) : (
-                      <span className="text-slate-400 italic">No UTR specified</span>
-                    )}
-                    {receiptBlobUrl && (
-                      <a
-                        href={receiptBlobUrl}
-                        download
-                        className="inline-flex items-center gap-1 text-[#741B22] hover:text-[#B92F25] font-medium underline text-xs ml-auto"
-                      >
-                        <ExternalLink className="w-3.5 h-3.5" />
-                        <span>Download Receipt</span>
-                      </a>
-                    )}
-                  </div>
-                </div>
-              ) : confirmSub.payment_record?.transaction_ref ? (
-                <div className="p-3 bg-blue-50 border border-blue-200 rounded-2xl text-xs space-y-1">
-                  <div className="font-medium text-blue-900">Transaction Reference Provided:</div>
-                  <div className="font-medium text-blue-950 text-sm">{confirmSub.payment_record.transaction_ref}</div>
+              {confirmSub.payment_record?.uploaded_at ? (
+                <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-2xl text-xs text-emerald-950">
+                  Customer marked the payment complete at <strong>{new Date(confirmSub.payment_record.uploaded_at).toLocaleString('en-IN')}</strong>.
                 </div>
               ) : (
                 <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-2xl text-xs text-amber-900 flex items-center gap-2">
                   <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
-                  <span>No payment receipt uploaded by customer yet.</span>
+                  <span>The customer has not yet confirmed completing this payment.</span>
                 </div>
               )}
             </div>
@@ -2028,6 +1929,7 @@ export default function AdminDashboard() {
     </div>
   );
 }
+
 
 
 
