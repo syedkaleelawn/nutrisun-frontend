@@ -1,10 +1,9 @@
 'use client';
 
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   adminApi,
   AnalyticsResponse,
-  CustomerReportItem,
   MonthlyMealAverage,
   DailyMealCount,
 } from '@/lib/api';
@@ -12,20 +11,13 @@ import {
   FileSpreadsheet,
   Download,
   Calendar,
-  Search,
   AlertCircle,
   Clock,
   Loader2,
   TrendingUp,
   CreditCard,
-  Users,
   Truck,
   RefreshCw,
-  Coins,
-  History,
-  Phone,
-  MapPin,
-  Mail,
 } from 'lucide-react';
 
 interface SalesAnalyticsModuleProps {
@@ -66,19 +58,12 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
   const [dailyMonthNumber, setDailyMonthNumber] = useState<number>(() => new Date().getMonth() + 1);
   const [dailyLoading, setDailyLoading] = useState<boolean>(true);
   const [dailyError, setDailyError] = useState<string | null>(null);
-  const [customers, setCustomers] = useState<CustomerReportItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   // 3. Action States
   const [exportingMonthly, setExportingMonthly] = useState<boolean>(false);
   const [exportingFull, setExportingFull] = useState<boolean>(false);
-
-  // 4. Interactive Report States
-  const [customerSearch, setCustomerSearch] = useState<string>('');
-  const [selectedCustomerId, setSelectedCustomerId] = useState<number | null>(null);
-
-  const customerReportRef = useRef<HTMLDivElement>(null);
 
   // Month Options: Last 12 months dynamically
   const monthOptions = useMemo(() => {
@@ -106,10 +91,8 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
         params.month = selectedMonth;
       }
 
-      const [analRes, custRes, averagesRes] = await Promise.allSettled([
-        adminApi.getAnalytics(params),
-        adminApi.getCustomerReports(params),
-        adminApi.getMonthlyMealAverages(),
+      const [analRes, averagesRes] = await Promise.allSettled([
+        adminApi.getAnalytics(params),        adminApi.getMonthlyMealAverages(),
       ]);
 
       if (analRes.status === 'fulfilled') {
@@ -155,49 +138,6 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
         });
       } else {
         throw new Error('Failed to load sales analytics data.');
-      }
-
-      if (custRes.status === 'fulfilled') {
-        const rawCustomers = custRes.value.data.customers;
-        const custList: CustomerReportItem[] = Array.isArray(rawCustomers)
-          ? rawCustomers.map((customer) => ({
-              ...customer,
-              name: customer.name || 'Unnamed customer',
-              phone: customer.phone || '',
-              email: customer.email || '',
-              delivery_address: customer.delivery_address || '',
-              credit_balance: {
-                available: toFiniteNumber(customer.credit_balance?.available),
-                used: toFiniteNumber(customer.credit_balance?.used),
-                total: toFiniteNumber(customer.credit_balance?.total),
-              },
-              subscriptions: Array.isArray(customer.subscriptions)
-                ? customer.subscriptions.map((subscription) => ({
-                    ...subscription,
-                    plan_price: toFiniteNumber(subscription.plan_price),
-                    total_credits: toFiniteNumber(subscription.total_credits),
-                    used_credits: toFiniteNumber(subscription.used_credits),
-                    remaining_credits: toFiniteNumber(subscription.remaining_credits),
-                  }))
-                : [],
-              payment_history: Array.isArray(customer.payment_history)
-                ? customer.payment_history.map((payment) => ({
-                    ...payment,
-                    amount: toFiniteNumber(payment.amount),
-                  }))
-                : [],
-              activity_history: Array.isArray(customer.activity_history)
-                ? customer.activity_history.map((activity) => ({
-                    ...activity,
-                    credit_change: activity.credit_change || 'Not recorded',
-                  }))
-                : [],
-            }))
-          : [];
-        setCustomers(custList);
-        if (custList.length > 0 && !selectedCustomerId) {
-          setSelectedCustomerId(custList[0].id);
-        }
       }
 
       if (averagesRes.status === 'fulfilled') {
@@ -301,25 +241,6 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
       setExportingFull(false);
     }
   };
-
-  // Filtered customers for search
-  const filteredCustomers = useMemo(() => {
-    if (!customerSearch.trim()) return customers;
-    const q = customerSearch.toLowerCase().trim();
-    return customers.filter(
-      (c) =>
-        c.name.toLowerCase().includes(q) ||
-        c.phone.includes(q) ||
-        (c.email && c.email.toLowerCase().includes(q)) ||
-        (c.delivery_address && c.delivery_address.toLowerCase().includes(q))
-    );
-  }, [customers, customerSearch]);
-
-  // Selected customer object
-  const activeCustomer = useMemo(() => {
-    if (!selectedCustomerId) return customers[0] || null;
-    return customers.find((c) => c.id === selectedCustomerId) || customers[0] || null;
-  }, [customers, selectedCustomerId]);
 
   const confirmedSalesBreakdown = useMemo(() => {
     const seenPayments = new Set<number>();
@@ -480,7 +401,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
               Monthly Sales & Customer Intelligence
             </h2>
             <p className="text-xs text-slate-600 mt-0.5">
-              Tracks confirmed manual UPI payments and customer meal balances, and chronological activity.
+              Tracks confirmed manual UPI payments and meal delivery analytics.
             </p>
           </div>
 
@@ -1007,339 +928,6 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
         )}
       </div>
 
-      {/* 5. Customer Details & Chronological Activity History Report */}
-      <div ref={customerReportRef} className="glass-card rounded-3xl p-5 sm:p-7 border border-[#B0BE8C]/45 shadow-md space-y-6">
-        {/* Header & Customer Search Toolbar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#B0BE8C]/30">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="p-1 rounded-lg bg-[#741B22] text-white">
-                <Users className="w-4 h-4" />
-              </span>
-              <h3 className="text-base font-semibold text-[#22222B]">
-                Customer Details & Chronological Activity Report
-              </h3>
-            </div>
-            <p className="text-xs text-slate-500 mt-1">
-              Historical record of subscriptions, UPI payments, meal balances, and IST meal cancellations.
-            </p>
-          </div>
-
-          {/* Search and Customer Dropdown */}
-          <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
-            <div className="relative w-full sm:w-auto sm:min-w-[220px]">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                placeholder="Search name, phone, address..."
-                value={customerSearch}
-                onChange={(e) => setCustomerSearch(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 bg-white rounded-xl border border-[#B0BE8C]/40 text-xs font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#741B22]/20 min-h-[40px]"
-              />
-            </div>
-
-            <select
-              value={selectedCustomerId || ''}
-              onChange={(e) => setSelectedCustomerId(Number(e.target.value))}
-              className="px-3 py-2 bg-white rounded-xl border border-[#B0BE8C]/40 text-xs font-medium text-[#22222B] focus:outline-none min-h-[40px]"
-            >
-              {filteredCustomers.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name} ({c.phone})
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        {activeCustomer ? (
-          <div className="space-y-6">
-            {/* Customer Profile Banner */}
-            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#F3F5F4] via-white to-[#F3F5F4] border border-[#B0BE8C]/40 grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
-              <div>
-                <span className="text-[10px] font-semibold text-slate-400">Customer Identity</span>
-                <div className="font-semibold text-sm text-[#22222B] mt-0.5">{activeCustomer.name}</div>
-                <div className="text-slate-500 mt-0.5 flex items-center gap-1">
-                  <Phone className="w-3 h-3 text-[#741B22]" /> {activeCustomer.phone}
-                </div>
-                {activeCustomer.email && (
-                  <div className="text-slate-400 text-[11px] flex items-center gap-1 mt-0.5">
-                    <Mail className="w-3 h-3" /> {activeCustomer.email}
-                  </div>
-                )}
-              </div>
-
-              <div className="md:col-span-2">
-                <span className="text-[10px] font-semibold text-slate-400">Delivery Address</span>
-                <div className="font-medium text-slate-700 mt-0.5 flex items-start gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-[#741B22] shrink-0 mt-0.5" />
-                  <span className="break-words">{activeCustomer.delivery_address || 'Not recorded'}</span>
-                </div>
-                <div className="text-[11px] text-slate-400 mt-1">
-                  Registered on: {activeCustomer.registered_date}
-                </div>
-              </div>
-
-              <div className="flex flex-col justify-center items-start md:items-end">
-                <span className="text-[10px] font-semibold text-slate-400">Subscription Status</span>
-                <span
-                  className={`mt-1 px-3 py-1 rounded-full font-semibold text-xs tracking-wider ${
-                    activeCustomer.current_status === 'ACTIVE'
-                      ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-                      : 'bg-slate-100 text-slate-700 border border-slate-300'
-                  }`}
-                >
-                  {activeCustomer.current_status}
-                </span>
-                <span className="text-[11px] text-slate-500 font-medium mt-1">
-                  {activeCustomer.active_plans}
-                </span>
-              </div>
-            </div>
-
-            {/* Live Meal Schedule Summary */}
-            <div>
-              <div className="flex items-center gap-2 mb-2">
-                <Coins className="w-4 h-4 text-[#741B22]" />
-                <h4 className="text-xs font-semibold text-slate-600 tracking-wider">
-                  Live Meal Schedule
-                </h4>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-xs space-y-1">
-                  <span className="text-[10px] font-semibold text-emerald-700">Upcoming Meals</span>
-                  <div className="text-2xl font-semibold text-emerald-800">
-                    {activeCustomer.credit_balance.available}
-                  </div>
-                  <p className="text-[10px] text-emerald-600 font-medium">Paid, uncancelled deliveries still scheduled</p>
-                </div>
-
-                <div className="p-3.5 rounded-2xl bg-blue-50/70 border border-blue-200 text-xs space-y-1">
-                  <span className="text-[10px] font-semibold text-blue-700">Completed Meals</span>
-                  <div className="text-2xl font-semibold text-blue-800">
-                    {activeCustomer.credit_balance.used}
-                  </div>
-                  <p className="text-[10px] text-blue-600 font-medium">Past service times</p>
-                </div>
-
-                <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-1">
-                  <span className="text-[10px] font-semibold text-slate-700">Total Meals</span>
-                  <div className="text-2xl font-semibold text-slate-800">
-                    {activeCustomer.credit_balance.total}
-                  </div>
-                  <p className="text-[10px] text-slate-600 font-medium">Completed plus upcoming meals</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Subscriptions & Meal Shifts Table */}
-            <div className="space-y-2">
-              <h4 className="text-xs font-semibold text-slate-600 tracking-wider">
-                Subscriptions & Scheduled Shifts ({activeCustomer.subscriptions.length})
-              </h4>
-              {activeCustomer.subscriptions.length > 0 ? (
-                <div className="overflow-x-auto border border-[#B0BE8C]/30 rounded-2xl">
-                  <table className="w-full min-w-[760px] text-left text-xs">
-                    <thead className="bg-[#F3F5F4] text-[#22222B] font-semibold border-b border-[#B0BE8C]/30 text-[10px]">
-                      <tr>
-                        <th className="py-2.5 px-3">Plan Name</th>
-                        <th className="py-2.5 px-3">Shifts</th>
-                        <th className="py-2.5 px-3">Period</th>
-                        <th className="py-2.5 px-3">Status</th>
-                        <th className="py-2.5 px-3">Payment</th>
-                        <th className="py-2.5 px-3">Original Plan Meals</th>
-                        <th className="py-2.5 px-3">Confirmed (IST)</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100 font-medium">
-                      {activeCustomer.subscriptions.map((s) => (
-                        <tr key={s.id} className="hover:bg-slate-50">
-                          <td className="py-2.5 px-3 font-medium text-[#22222B]">{s.plan_name}</td>
-                          <td className="py-2.5 px-3 text-slate-700">{s.selected_shifts || 'Standard'}</td>
-                          <td className="py-2.5 px-3 text-slate-600 whitespace-nowrap">
-                            {s.start_date} → {s.end_date}
-                          </td>
-                          <td className="py-2.5 px-3">
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-100 text-slate-700">
-                              {s.status}
-                            </span>
-                          </td>
-                          <td className="py-2.5 px-3">
-                            <span
-                              className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${
-                                s.payment_status === 'PAID'
-                                  ? 'bg-emerald-100 text-emerald-800'
-                                  : s.payment_status === 'REJECTED'
-                                    ? 'bg-rose-100 text-rose-800'
-                                    : 'bg-amber-100 text-amber-800'
-                              }`}
-                            >
-                              {s.payment_status}
-                            </span>
-                          </td>
-                          <td className="py-2.5 px-3">
-                            <span className="font-medium text-[#741B22]">{s.total_credits}</span>
-                          </td>
-                          <td className="py-2.5 px-3 text-slate-500 whitespace-nowrap">
-                            {s.payment_confirmed_at}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              ) : (
-                <p className="text-xs text-slate-400 italic">No subscriptions found for this customer.</p>
-              )}
-            </div>
-
-            {/* Payment History Table */}
-            <div className="space-y-2">
-              <h4 className="text-xs font-semibold text-slate-600 tracking-wider">
-                Payment History ({activeCustomer.payment_history.length})
-              </h4>
-              {activeCustomer.payment_history.length > 0 ? (
-                <div className="overflow-x-auto border border-[#B0BE8C]/30 rounded-2xl">
-                  <table className="w-full min-w-[760px] text-left text-xs">
-                    <thead className="bg-[#F3F5F4] text-[#22222B] font-semibold border-b border-[#B0BE8C]/30 text-[10px]">
-                      <tr>
-                        <th className="py-2.5 px-3">Amount</th>
-                        <th className="py-2.5 px-3">Status</th>
-                        <th className="py-2.5 px-3">Method & Ref</th>
-                        <th className="py-2.5 px-3">Submitted</th>
-                        <th className="py-2.5 px-3">Confirmed At</th>
-                        <th className="py-2.5 px-3">Actor / Decided By</th>
-                        <th className="py-2.5 px-3">Notes</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100 font-medium">
-                      {activeCustomer.payment_history.map((p) => (
-                        <tr key={p.id} className="hover:bg-slate-50">
-                          <td className="py-2.5 px-3 font-semibold text-[#741B22]">₹{p.amount.toFixed(2)}</td>
-                          <td className="py-2.5 px-3">
-                            <span
-                              className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${
-                                p.status === 'CONFIRMED'
-                                  ? 'bg-emerald-100 text-emerald-800'
-                                  : p.status === 'PENDING'
-                                  ? 'bg-amber-100 text-amber-800'
-                                  : 'bg-red-100 text-red-800'
-                              }`}
-                            >
-                              {p.status}
-                            </span>
-                          </td>
-                          <td className="py-2.5 px-3 text-slate-700">
-                            {p.payment_method} {p.transaction_ref ? `(${p.transaction_ref})` : ''}
-                          </td>
-                          <td className="py-2.5 px-3 text-slate-500 whitespace-nowrap">{p.created_at}</td>
-                          <td className="py-2.5 px-3 text-slate-500 whitespace-nowrap">{p.confirmed_at}</td>
-                          <td className="py-2.5 px-3 text-slate-600 font-medium">{p.confirmed_by}</td>
-                          <td className="py-2.5 px-3 text-slate-500 text-[11px]">{p.admin_notes || '—'}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              ) : (
-                <p className="text-xs text-slate-400 italic">No payments recorded for this customer.</p>
-              )}
-            </div>
-
-            {/* Chronological Customer Activity History */}
-            <div className="space-y-3 pt-2">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <History className="w-4 h-4 text-[#741B22]" />
-                  <h4 className="text-xs font-semibold text-slate-600 tracking-wider">
-                    Chronological Activity History ({activeCustomer.activity_history.length} events)
-                  </h4>
-                </div>
-                <span className="text-[11px] text-slate-400">Newest first</span>
-              </div>
-
-              {activeCustomer.activity_history.length > 0 ? (
-                <div className="space-y-2 border border-[#B0BE8C]/35 rounded-2xl p-3 sm:p-4 bg-slate-50/50 max-h-[500px] overflow-y-auto">
-                  {activeCustomer.activity_history.map((act, index) => (
-                    <div
-                      key={act.id ? `log-${act.id}` : `act-${index}`}
-                      className="p-3 bg-white rounded-xl border border-slate-200 shadow-2xs hover:border-[#B0BE8C] transition-colors text-xs space-y-1.5"
-                    >
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-slate-100 pb-1.5">
-                        <div className="flex items-center gap-2">
-                          <span
-                            className={`px-2 py-0.5 rounded-full font-semibold text-[10px] ${
-                              act.event_type === 'PAYMENT'
-                                ? 'bg-emerald-100 text-emerald-800'
-                                : act.event_type === 'SKIP'
-                                ? 'bg-amber-100 text-amber-800'
-                                : act.event_type === 'REALLOCATION'
-                                ? 'bg-purple-100 text-purple-800'
-                                : 'bg-slate-100 text-slate-700'
-                            }`}
-                          >
-                            {act.event_type}
-                          </span>
-                          <strong className="text-[#22222B]">{act.action}</strong>
-                        </div>
-                        <span className="text-[11px] font-medium text-slate-400 whitespace-nowrap">
-                          {act.timestamp}
-                        </span>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px] text-slate-600 pt-0.5">
-                        <div>
-                          <span className="text-slate-400">Affected Date / Period:</span>{' '}
-                          <strong className="text-[#22222B]">{act.affected_date}</strong>
-                        </div>
-                        <div>
-                          <span className="text-slate-400">Meal Shift:</span>{' '}
-                          <strong className="text-slate-800">{act.meal_shift}</strong>
-                        </div>
-                        <div>
-                          <span className="text-slate-400">Meal Change:</span>{' '}
-                          <strong
-                            className={
-                              act.credit_change.includes('+')
-                                ? 'text-emerald-700 font-semibold'
-                                : act.credit_change.includes('-')
-                                ? 'text-red-700 font-semibold'
-                                : 'text-slate-700 font-medium'
-                            }
-                          >
-                            {act.credit_change}
-                          </strong>
-                        </div>
-                      </div>
-
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-[11px] pt-1 border-t border-slate-50 text-slate-500">
-                        <div>
-                          <span className="text-slate-400">Actor:</span>{' '}
-                          <span className="font-medium text-[#741B22]">{act.actor}</span>
-                        </div>
-                        <div>
-                          <span className="text-slate-400">Reason / Notes:</span>{' '}
-                          <span className="italic text-slate-700">{act.reason}</span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="p-8 text-center text-xs text-slate-400 border border-dashed border-[#B0BE8C]/40 rounded-2xl">
-                  No activity events recorded for this customer yet.
-                </div>
-              )}
-            </div>
-          </div>
-        ) : (
-          <div className="p-12 text-center text-slate-400 text-xs">
-            No customer selected. Search and select a customer above to view their activity report.
-          </div>
-        )}
-      </div>
     </div>
   );
 }
-
-
