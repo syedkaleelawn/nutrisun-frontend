@@ -617,18 +617,19 @@ export const customerApi = {
       instruction: string;
       upi_url: string;
       status: string;
+      reused_order?: boolean;
+      payment_reported?: boolean;
+      created_at?: string;
+      expires_at?: string;
     }>('/customer/buy-plan', { plan_id, selected_shifts, quantity }),
-  submitPaymentProof: (subscriptionId: number, formData: FormData) =>
+  reportPaymentCompleted: (subscriptionId: number) =>
     api.post<{
       message: string;
       subscription_id: number;
       status: string;
       payment_status: string;
-      proof_image_url?: string;
-      transaction_ref?: string;
-    }>(`/customer/subscriptions/${subscriptionId}/payment-proof`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    }),
+      paid_at: string;
+    }>(`/customer/subscriptions/${subscriptionId}/payment-completed`),
   getSubscriptions: () =>
     api.get<{ count: number; subscriptions: UserSubscription[] }>('/customer/subscriptions'),
   getMyMeals: (params?: { date?: string; month?: string; year?: string }) =>
@@ -744,4 +745,5 @@ export const adminApi = {
   },
   getExportExcelUrl: () => `${API_BASE_URL}/admin/export-excel`,
 };
+
 
