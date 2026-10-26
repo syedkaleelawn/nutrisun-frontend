@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
+import QRCode from 'qrcode';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import CustomerInstructionsModal from '@/components/CustomerInstructionsModal';
@@ -11,7 +12,6 @@ import {
   SubscriptionPlan,
   DailyMealLog,
   ServiceRequest,
-  fetchReceiptBlobUrl,
 } from '@/lib/api';
 import {
   Coffee,
@@ -28,8 +28,6 @@ import {
   CheckCircle2,
   Copy,
   Download,
-  Upload,
-  Image as ImageIcon,
   X,
   ExternalLink,
   AlertCircle,
@@ -98,16 +96,18 @@ export default function CustomerDashboard() {
     instruction?: string;
     upi_url?: string;
     status: string;
+    reused_order?: boolean;
+    payment_reported?: boolean;
+    created_at?: string;
+    expires_at?: string;
   } | null>(null);
 
-  // Payment proof upload states
+  // Payment confirmation states
   const [activePaymentModalSub, setActivePaymentModalSub] = useState<UserSubscription | null>(null);
   const [copiedUpi, setCopiedUpi] = useState(false);
-  const [receiptFile, setReceiptFile] = useState<File | null>(null);
-  const [receiptPreviewUrl, setReceiptPreviewUrl] = useState<string | null>(null);
-  const [transactionRef, setTransactionRef] = useState('');
-  const [uploadingProof, setUploadingProof] = useState(false);
-  const [submittedProofSubIds, setSubmittedProofSubIds] = useState<number[]>([]);
+  const [confirmingPayment, setConfirmingPayment] = useState(false);
+  const [confirmedPaymentSubIds, setConfirmedPaymentSubIds] = useState<number[]>([]);
+  const [dynamicQrUrl, setDynamicQrUrl] = useState<string>('');
 
   // "Skip Meal" Modal
   const [mealsToSkip, setMealsToSkip] = useState<DailyMealLog[]>([]);
@@ -240,9 +240,6 @@ export default function CustomerDashboard() {
         purchaseQuantity
       );
       setPurchaseSuccessData(res.data);
-      setReceiptFile(null);
-      setReceiptPreviewUrl(null);
-      setTransactionRef('');
       await loadData(true);
     } catch (err: any) {
       if (err.response?.status === 409) {
@@ -287,44 +284,17 @@ export default function CustomerDashboard() {
     }
   };
 
-  const handleReceiptFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
-    setReceiptFile(file);
-    if (file && file.type.startsWith('image/')) {
-      const url = URL.createObjectURL(file);
-      setReceiptPreviewUrl(url);
-    } else {
-      setReceiptPreviewUrl(null);
-    }
-  };
-
-  const handleUploadPaymentProof = async (subId: number) => {
-    if (!receiptFile && !transactionRef.trim()) {
-      alert('Please select a payment screenshot or enter your UPI transaction reference number.');
-      return;
-    }
-
-    setUploadingProof(true);
+  const handleReportPaymentCompleted = async (subId: number) => {
+    setConfirmingPayment(true);
     try {
-      const formData = new FormData();
-      if (receiptFile) {
-        formData.append('receipt', receiptFile);
-      }
-      if (transactionRef.trim()) {
-        formData.append('transaction_ref', transactionRef.trim());
-      }
-
-      await customerApi.submitPaymentProof(subId, formData);
-      setNotification('Payment proof submitted. The admin will review and approve your request within a few hours.');
-      setSubmittedProofSubIds((prev) => [...prev, subId]);
-      setReceiptFile(null);
-      setReceiptPreviewUrl(null);
-      setTransactionRef('');
+      await customerApi.reportPaymentCompleted(subId);
+      setNotification('Payment recorded. The admin will review and approve your request within a few hours.');
+      setConfirmedPaymentSubIds((prev) => prev.includes(subId) ? prev : [...prev, subId]);
       await loadData(true);
     } catch (err: any) {
-      alert(err.response?.data?.error || 'Failed to submit payment proof.');
+      alert(err.response?.data?.error || 'Failed to record payment.');
     } finally {
-      setUploadingProof(false);
+      setConfirmingPayment(false);
     }
   };
 
@@ -332,13 +302,42 @@ export default function CustomerDashboard() {
     setSelectedPlanToBuy(null);
     setPurchaseSuccessData(null);
     setActivePaymentModalSub(null);
-    setReceiptFile(null);
-    setReceiptPreviewUrl(null);
-    setTransactionRef('');
+    setDynamicQrUrl('');
     setPurchaseQuantityInput('1');
     setAvailabilityStatus('unchecked');
     setAvailabilityMessage('');
   };
+
+  const activePaymentDetails = useMemo(() => {
+    if (purchaseSuccessData) {
+      return {
+        id: purchaseSuccessData.subscription_id,
+        amount: purchaseSuccessData.amount,
+        upiUrl: purchaseSuccessData.upi_url || `upi://pay?pa=${PAYMENT_CONFIG.upiId}&pn=${encodeURIComponent(PAYMENT_CONFIG.accountHolder)}&am=${purchaseSuccessData.amount.toFixed(2)}&cu=INR&tn=NutriSunSub${purchaseSuccessData.subscription_id}`,
+      };
+    }
+    if (activePaymentModalSub) {
+      const amount = activePaymentModalSub.plan_snapshot_price || activePaymentModalSub.plan?.price || 0;
+      return {
+        id: activePaymentModalSub.id,
+        amount,
+        upiUrl: `upi://pay?pa=${PAYMENT_CONFIG.upiId}&pn=${encodeURIComponent(PAYMENT_CONFIG.accountHolder)}&am=${amount.toFixed(2)}&cu=INR&tn=NutriSunSub${activePaymentModalSub.id}`,
+      };
+    }
+    return null;
+  }, [purchaseSuccessData, activePaymentModalSub]);
+
+  useEffect(() => {
+    let cancelled = false;
+    if (!activePaymentDetails) {
+      setDynamicQrUrl('');
+      return;
+    }
+    QRCode.toDataURL(activePaymentDetails.upiUrl, { width: 720, margin: 2, errorCorrectionLevel: 'M' })
+      .then((url) => { if (!cancelled) setDynamicQrUrl(url); })
+      .catch(() => { if (!cancelled) setDynamicQrUrl(''); });
+    return () => { cancelled = true; };
+  }, [activePaymentDetails]);
 
   const handleConfirmSkip = async () => {
     if (mealsToSkip.length === 0) return;
@@ -696,31 +695,28 @@ export default function CustomerDashboard() {
                       <div className="mt-4 pt-3 border-t border-[#B0BE8C]/25 flex flex-wrap items-center justify-between gap-2">
                         {isPending ? (
                           (() => {
-                            const hasProof = !!(sub.payment_record?.proof_image_url || sub.payment_record?.transaction_ref || submittedProofSubIds.includes(sub.id));
+                            const paymentReported = Boolean(sub.payment_record?.uploaded_at || confirmedPaymentSubIds.includes(sub.id));
                             return (
                               <div className="w-full space-y-2">
-                                {hasProof ? (
+                                {paymentReported ? (
                                   <div className="text-[11px] text-emerald-900 bg-emerald-50 p-2.5 rounded-xl border border-emerald-200 font-medium flex items-center gap-1.5">
                                     <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                                    <span>Payment proof submitted. The admin will review and approve your request within a few hours.</span>
+                                    <span>Payment recorded. The admin will review and approve your request within a few hours.</span>
                                   </div>
                                 ) : (
                                   <div className="text-[11px] text-[#22222B] bg-[#F7DE9D]/40 p-2.5 rounded-xl border border-[#F7DE9D] font-medium flex items-center gap-1.5">
                                     <Clock className="w-4 h-4 text-[#741B22] shrink-0" />
-                                    <span>Payment Pending — Scan QR & upload payment screenshot</span>
+                                    <span>Payment pending — complete it within 24 hours, then confirm below.</span>
                                   </div>
                                 )}
                                 <button
                                   onClick={() => {
                                     setActivePaymentModalSub(sub);
-                                    setReceiptFile(null);
-                                    setReceiptPreviewUrl(null);
-                                    setTransactionRef('');
                                   }}
                                   className="w-full min-h-[44px] px-4 py-2.5 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white text-xs font-semibold transition-all flex items-center justify-center gap-1.5 shadow-xs"
                                 >
                                   <CreditCard className="w-4 h-4 shrink-0" />
-                                  <span>{hasProof ? 'View Payment Details / Re-upload' : 'View QR & Submit Payment Proof'}</span>
+                                  <span>{paymentReported ? 'View Payment Details' : 'Pay Now'}</span>
                                 </button>
                               </div>
                             );
@@ -1290,7 +1286,7 @@ export default function CustomerDashboard() {
             ) : (
               (() => {
                 const subId = purchaseSuccessData.subscription_id;
-                const hasProof = submittedProofSubIds.includes(subId);
+                const paymentReported = Boolean(purchaseSuccessData.payment_reported || confirmedPaymentSubIds.includes(subId));
 
                 return (
                   <div className="space-y-4">
@@ -1339,7 +1335,7 @@ export default function CustomerDashboard() {
                         </button>
 
                         <a
-                          href={`upi://pay?pa=${PAYMENT_CONFIG.upiId}&pn=${encodeURIComponent(PAYMENT_CONFIG.accountHolder)}&am=${purchaseSuccessData.amount.toFixed(2)}&cu=INR&tn=NutriSunSub${subId}`}
+                          href={purchaseSuccessData.upi_url || activePaymentDetails?.upiUrl}
                           className="min-h-[44px] py-2 px-3 rounded-xl bg-white border border-[#B0BE8C] hover:bg-[#B0BE8C]/20 text-[#22222B] text-xs font-medium transition-all flex items-center justify-center gap-1.5 shadow-2xs text-center"
                         >
                           <ExternalLink className="w-4 h-4 text-[#741B22] shrink-0" />
@@ -1347,8 +1343,8 @@ export default function CustomerDashboard() {
                         </a>
 
                         <a
-                          href={PAYMENT_CONFIG.qrAssetPath}
-                          download="NutriSun_KVB_UPI_QR.png"
+                          href={dynamicQrUrl || purchaseSuccessData.upi_url || '#'}
+                          download={`NutriSun_UPI_Order_${subId}.png`}
                           className="min-h-[44px] py-2 px-3 rounded-xl bg-white border border-[#B0BE8C] hover:bg-[#B0BE8C]/20 text-[#22222B] text-xs font-medium transition-all flex items-center justify-center gap-1.5 shadow-2xs text-center"
                         >
                           <Download className="w-4 h-4 text-[#741B22] shrink-0" />
@@ -1360,8 +1356,8 @@ export default function CustomerDashboard() {
                     {/* Karur Vysya Bank UPI QR Image (Displayed clearly without cropping, stretching, overlays, or changes) */}
                     <div className="p-3 sm:p-4 rounded-2xl bg-white border border-[#B0BE8C]/40 flex flex-col items-center justify-center shadow-xs">
                       <img
-                        src={PAYMENT_CONFIG.qrAssetPath}
-                        alt="Karur Vysya Bank UPI QR Code - Syed Kaleel Awn Mohamed Ismail"
+                        src={dynamicQrUrl || PAYMENT_CONFIG.qrAssetPath}
+                        alt={`NutriSun UPI QR code for order ${subId} and amount ₹${purchaseSuccessData.amount.toFixed(2)}`}
                         className="w-full max-w-[260px] sm:max-w-[280px] h-auto object-contain rounded-xl"
                       />
                     </div>
@@ -1375,89 +1371,37 @@ export default function CustomerDashboard() {
                       <p className="leading-relaxed text-slate-800">{PAYMENT_CONFIG.instruction}</p>
                     </div>
 
-                    {/* Submission / Verification Status */}
-                    {hasProof ? (
+                    {/* Customer payment confirmation */}
+                    {paymentReported ? (
                       <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-950 text-xs space-y-1.5">
                         <div className="font-semibold text-emerald-800 flex items-center gap-1.5">
                           <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                          <span>Payment proof submitted.</span>
+                          <span>Payment recorded.</span>
                         </div>
                         <p className="text-emerald-900 leading-relaxed text-[11px]">
                           The admin will review and approve your request within a few hours.
                         </p>
                       </div>
-                    ) : null}
-
-                    {/* Receipt Upload Form */}
-                    <div className="space-y-3 p-3.5 rounded-2xl bg-[#F3F5F4] border border-[#B0BE8C]/40 text-xs">
-                      <div className="font-semibold text-[#22222B] flex items-center gap-1.5">
-                        <Upload className="w-4 h-4 text-[#741B22] shrink-0" />
-                        <span>Upload Payment Screenshot (Receipt)</span>
-                      </div>
-
-                      <label
-                        htmlFor="receipt-file-input"
-                        className="cursor-pointer min-h-[44px] p-3 rounded-xl border-2 border-dashed border-[#B0BE8C] hover:border-[#741B22] bg-white flex flex-col items-center justify-center text-center transition-all"
-                      >
-                        <input
-                          id="receipt-file-input"
-                          type="file"
-                          accept="image/*,.pdf"
-                          onChange={handleReceiptFileChange}
-                          className="hidden"
-                        />
-                        {receiptFile ? (
-                          <div className="flex items-center gap-2 text-[#22222B] font-medium">
-                            <ImageIcon className="w-4 h-4 text-emerald-600 shrink-0" />
-                            <span className="truncate max-w-[200px]">{receiptFile.name}</span>
-                          </div>
-                        ) : (
-                          <div className="text-slate-500 font-medium">
-                            <span className="text-[#741B22] font-medium">Choose Screenshot</span> or drag & drop (PNG, JPG, WEBP, PDF)
-                          </div>
-                        )}
-                      </label>
-
-                      {receiptPreviewUrl && (
-                        <div className="flex justify-center">
-                          <img
-                            src={receiptPreviewUrl}
-                            alt="Receipt Preview"
-                            className="max-h-32 rounded-lg border border-slate-200 object-contain shadow-xs"
-                          />
-                        </div>
-                      )}
-
-                      <div>
-                        <label className="block font-medium text-slate-700 mb-1">UPI Transaction Reference / UTR (Optional)</label>
-                        <input
-                          type="text"
-                          placeholder="e.g. 423589123456"
-                          value={transactionRef}
-                          onChange={(e) => setTransactionRef(e.target.value)}
-                          className="w-full min-h-[44px] px-3 py-2 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C] bg-white"
-                        />
-                      </div>
-
+                    ) : (
                       <button
                         type="button"
-                        onClick={() => handleUploadPaymentProof(subId)}
-                        disabled={uploadingProof || (!receiptFile && !transactionRef.trim())}
+                        onClick={() => handleReportPaymentCompleted(subId)}
+                        disabled={confirmingPayment}
                         className="w-full min-h-[44px] py-2.5 px-4 rounded-xl bg-[#B92F25] hover:bg-[#741B22] disabled:opacity-50 text-white font-semibold text-xs shadow-md transition-all flex items-center justify-center gap-1.5"
                       >
-                        {uploadingProof ? (
+                        {confirmingPayment ? (
                           <>
                             <RefreshCw className="w-4 h-4 animate-spin shrink-0" />
-                            <span>Uploading Proof...</span>
+                            <span>Recording Payment...</span>
                           </>
                         ) : (
                           <>
-                            <Upload className="w-4 h-4 shrink-0" />
-                            <span>{hasProof ? 'Re-upload Payment Proof' : 'Submit Payment Proof'}</span>
+                            <CheckCircle2 className="w-4 h-4 shrink-0" />
+                            <span>I Have Completed Payment</span>
                           </>
                         )}
                       </button>
-                    </div>
+                    )}
 
                     <button
                       type="button"
@@ -1531,7 +1475,7 @@ export default function CustomerDashboard() {
                 </button>
 
                 <a
-                  href={`upi://pay?pa=${PAYMENT_CONFIG.upiId}&pn=${encodeURIComponent(PAYMENT_CONFIG.accountHolder)}&am=${(activePaymentModalSub.plan_snapshot_price || activePaymentModalSub.plan?.price || 0).toFixed(2)}&cu=INR&tn=NutriSunSub${activePaymentModalSub.id}`}
+                  href={activePaymentDetails?.upiUrl}
                   className="min-h-[44px] py-2 px-3 rounded-xl bg-white border border-[#B0BE8C] hover:bg-[#B0BE8C]/20 text-[#22222B] text-xs font-medium transition-all flex items-center justify-center gap-1.5 shadow-2xs text-center"
                 >
                   <ExternalLink className="w-4 h-4 text-[#741B22] shrink-0" />
@@ -1539,8 +1483,8 @@ export default function CustomerDashboard() {
                 </a>
 
                 <a
-                  href={PAYMENT_CONFIG.qrAssetPath}
-                  download="NutriSun_KVB_UPI_QR.png"
+                  href={dynamicQrUrl || activePaymentDetails?.upiUrl || '#'}
+                  download={`NutriSun_UPI_Order_${activePaymentModalSub.id}.png`}
                   className="min-h-[44px] py-2 px-3 rounded-xl bg-white border border-[#B0BE8C] hover:bg-[#B0BE8C]/20 text-[#22222B] text-xs font-medium transition-all flex items-center justify-center gap-1.5 shadow-2xs text-center"
                 >
                   <Download className="w-4 h-4 text-[#741B22] shrink-0" />
@@ -1552,8 +1496,8 @@ export default function CustomerDashboard() {
             {/* Karur Vysya Bank UPI QR Image */}
             <div className="p-3 sm:p-4 rounded-2xl bg-white border border-[#B0BE8C]/40 flex flex-col items-center justify-center shadow-xs">
               <img
-                src={PAYMENT_CONFIG.qrAssetPath}
-                alt="Karur Vysya Bank UPI QR Code - Syed Kaleel Awn Mohamed Ismail"
+                src={dynamicQrUrl || PAYMENT_CONFIG.qrAssetPath}
+                alt={`NutriSun UPI QR code for order ${activePaymentModalSub.id}`}
                 className="w-full max-w-[260px] sm:max-w-[280px] h-auto object-contain rounded-xl"
               />
             </div>
@@ -1567,114 +1511,37 @@ export default function CustomerDashboard() {
               <p className="leading-relaxed text-slate-800">{PAYMENT_CONFIG.instruction}</p>
             </div>
 
-            {/* Verification Status */}
-            {(activePaymentModalSub.payment_record?.proof_image_url || activePaymentModalSub.payment_record?.transaction_ref || submittedProofSubIds.includes(activePaymentModalSub.id)) ? (
+            {/* Customer payment confirmation */}
+            {(Boolean(activePaymentModalSub.payment_record?.uploaded_at) || confirmedPaymentSubIds.includes(activePaymentModalSub.id)) ? (
               <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-950 text-xs space-y-1.5">
                 <div className="font-semibold text-emerald-800 flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>Payment proof submitted.</span>
+                  <span>Payment recorded.</span>
                 </div>
                 <p className="text-emerald-900 leading-relaxed text-[11px]">
                   The admin will review and approve your request within a few hours.
                 </p>
-                {activePaymentModalSub.payment_record?.proof_image_url && (
-                  <div className="pt-1">
-                    <button
-                      onClick={async () => {
-                        const blobUrl = await fetchReceiptBlobUrl(activePaymentModalSub.payment_record!.proof_image_url!);
-                        if (blobUrl) {
-                          const a = document.createElement('a');
-                          a.href = blobUrl;
-                          a.download = '';
-                          a.click();
-                          setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
-                        }
-                      }}
-                      className="inline-flex items-center gap-1 text-xs font-medium text-[#741B22] hover:underline"
-                    >
-                      <ExternalLink className="w-3.5 h-3.5" />
-                      <span>View Uploaded Screenshot</span>
-                    </button>
-                  </div>
-                )}
-                {activePaymentModalSub.payment_record?.transaction_ref && (
-                  <div className="text-[11px] text-slate-600">
-                    Ref / UTR: <strong>{activePaymentModalSub.payment_record.transaction_ref}</strong>
-                  </div>
-                )}
               </div>
-            ) : null}
-
-            {/* Receipt Upload Form */}
-            <div className="space-y-3 p-3.5 rounded-2xl bg-[#F3F5F4] border border-[#B0BE8C]/40 text-xs">
-              <div className="font-semibold text-[#22222B] flex items-center gap-1.5">
-                <Upload className="w-4 h-4 text-[#741B22] shrink-0" />
-                <span>Upload Payment Screenshot (Receipt)</span>
-              </div>
-
-              <label
-                htmlFor="existing-receipt-file-input"
-                className="cursor-pointer min-h-[44px] p-3 rounded-xl border-2 border-dashed border-[#B0BE8C] hover:border-[#741B22] bg-white flex flex-col items-center justify-center text-center transition-all"
-              >
-                <input
-                  id="existing-receipt-file-input"
-                  type="file"
-                  accept="image/*,.pdf"
-                  onChange={handleReceiptFileChange}
-                  className="hidden"
-                />
-                {receiptFile ? (
-                  <div className="flex items-center gap-2 text-[#22222B] font-medium">
-                    <ImageIcon className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span className="truncate max-w-[200px]">{receiptFile.name}</span>
-                  </div>
-                ) : (
-                  <div className="text-slate-500 font-medium">
-                    <span className="text-[#741B22] font-medium">Choose Screenshot</span> or drag & drop (PNG, JPG, WEBP, PDF)
-                  </div>
-                )}
-              </label>
-
-              {receiptPreviewUrl && (
-                <div className="flex justify-center">
-                  <img
-                    src={receiptPreviewUrl}
-                    alt="Receipt Preview"
-                    className="max-h-32 rounded-lg border border-slate-200 object-contain shadow-xs"
-                  />
-                </div>
-              )}
-
-              <div>
-                <label className="block font-medium text-slate-700 mb-1">UPI Transaction Reference / UTR (Optional)</label>
-                <input
-                  type="text"
-                  placeholder="e.g. 423589123456"
-                  value={transactionRef}
-                  onChange={(e) => setTransactionRef(e.target.value)}
-                  className="w-full min-h-[44px] px-3 py-2 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C] bg-white"
-                />
-              </div>
-
+            ) : (
               <button
                 type="button"
-                onClick={() => handleUploadPaymentProof(activePaymentModalSub.id)}
-                disabled={uploadingProof || (!receiptFile && !transactionRef.trim())}
+                onClick={() => handleReportPaymentCompleted(activePaymentModalSub.id)}
+                disabled={confirmingPayment}
                 className="w-full min-h-[44px] py-2.5 px-4 rounded-xl bg-[#B92F25] hover:bg-[#741B22] disabled:opacity-50 text-white font-semibold text-xs shadow-md transition-all flex items-center justify-center gap-1.5"
               >
-                {uploadingProof ? (
+                {confirmingPayment ? (
                   <>
                     <RefreshCw className="w-4 h-4 animate-spin shrink-0" />
-                    <span>Uploading Proof...</span>
+                    <span>Recording Payment...</span>
                   </>
                 ) : (
                   <>
-                    <Upload className="w-4 h-4 shrink-0" />
-                    <span>Submit Payment Proof</span>
+                    <CheckCircle2 className="w-4 h-4 shrink-0" />
+                    <span>I Have Completed Payment</span>
                   </>
                 )}
               </button>
-            </div>
+            )}
 
             <button
               type="button"
@@ -1772,5 +1639,6 @@ export default function CustomerDashboard() {
     </div>
   );
 }
+
 
 
