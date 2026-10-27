@@ -6,6 +6,7 @@ import {
   AnalyticsResponse,
   MonthlyMealAverage,
   DailyMealCount,
+  CustomerAttritionItem,
 } from '@/lib/api';
 import {
   FileSpreadsheet,
@@ -18,6 +19,7 @@ import {
   CreditCard,
   Truck,
   RefreshCw,
+  UserMinus,
 } from 'lucide-react';
 
 interface SalesAnalyticsModuleProps {
@@ -58,6 +60,10 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
   const [dailyMonthNumber, setDailyMonthNumber] = useState<number>(() => new Date().getMonth() + 1);
   const [dailyLoading, setDailyLoading] = useState<boolean>(true);
   const [dailyError, setDailyError] = useState<string | null>(null);
+  const [attritionCustomers, setAttritionCustomers] = useState<CustomerAttritionItem[]>([]);
+  const [attritionFollowingMonth, setAttritionFollowingMonth] = useState<string>('');
+  const [attritionLoading, setAttritionLoading] = useState<boolean>(true);
+  const [attritionError, setAttritionError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -193,6 +199,33 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
       cancelled = true;
     };
   }, [dailyMonthKey]);
+
+  useEffect(() => {
+    let cancelled = false;
+    const fetchAttrition = async () => {
+      setAttritionLoading(true);
+      setAttritionError(null);
+      try {
+        const response = await adminApi.getCustomerAttrition(selectedMonth);
+        if (!cancelled) {
+          setAttritionCustomers(Array.isArray(response.data.customers) ? response.data.customers : []);
+          setAttritionFollowingMonth(response.data.following_month || '');
+        }
+      } catch {
+        if (!cancelled) {
+          setAttritionCustomers([]);
+          setAttritionFollowingMonth('');
+          setAttritionError('Unable to load customer attrition for the selected month.');
+        }
+      } finally {
+        if (!cancelled) setAttritionLoading(false);
+      }
+    };
+    fetchAttrition();
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedMonth]);
 
   // Export Monthly Report (.xlsx - 6 Sheets)
   const handleExportMonthly = async () => {
@@ -926,6 +959,59 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
             No administrator-confirmed sales found for the selected period ({analytics?.selected_month || selectedMonth}).
           </div>
         )}
+      </div>
+
+      {/* 6. Customer Attrition */}
+      <div className="glass-card rounded-3xl p-5 sm:p-6 border border-[#B0BE8C]/40 shadow-sm space-y-4">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h3 className="flex items-center gap-2 text-sm sm:text-base font-semibold text-[#22222B]">
+              <UserMinus className="h-4 w-4 text-[#741B22]" />
+              Customer Attrition
+            </h3>
+            <p className="mt-0.5 text-xs text-slate-500">
+              Customers who received at least one meal in {selectedMonth}, but have no meals scheduled in {attritionFollowingMonth || 'the following month'}.
+            </p>
+          </div>
+          <span className="text-xs font-medium text-slate-400">
+            {attritionCustomers.length} Customer{attritionCustomers.length === 1 ? '' : 's'}
+          </span>
+        </div>
+
+        {attritionError && (
+          <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-xs text-red-800">{attritionError}</div>
+        )}
+
+        {attritionLoading ? (
+          <div className="flex items-center justify-center gap-2 rounded-2xl border border-dashed border-[#B0BE8C]/40 p-8 text-xs text-slate-500">
+            <Loader2 className="h-4 w-4 animate-spin text-[#741B22]" /> Loading customer attrition…
+          </div>
+        ) : attritionCustomers.length > 0 ? (
+          <div className="overflow-x-auto rounded-2xl border border-[#B0BE8C]/30">
+            <table className="w-full min-w-[560px] text-left text-xs">
+              <thead className="border-b border-[#B0BE8C]/30 bg-[#F3F5F4] text-[10px] text-[#22222B]">
+                <tr>
+                  <th className="px-4 py-3">Customer</th>
+                  <th className="px-4 py-3">Phone</th>
+                  <th className="px-4 py-3">Last Meal Date</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {attritionCustomers.map((customer) => (
+                  <tr key={customer.customer_id} className="transition-colors hover:bg-slate-50">
+                    <td className="px-4 py-3 text-[#22222B]">{customer.customer_name}</td>
+                    <td className="px-4 py-3 text-slate-600">{customer.customer_phone}</td>
+                    <td className="px-4 py-3 whitespace-nowrap text-slate-700">{customer.last_meal_date}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : !attritionError ? (
+          <div className="rounded-2xl border border-dashed border-[#B0BE8C]/40 p-8 text-center text-xs text-slate-400">
+            No customer attrition found for {selectedMonth}.
+          </div>
+        ) : null}
       </div>
 
     </div>
