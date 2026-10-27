@@ -988,11 +988,12 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
           </div>
         ) : attritionCustomers.length > 0 ? (
           <div className="overflow-x-auto rounded-2xl border border-[#B0BE8C]/30">
-            <table className="w-full min-w-[560px] text-left text-xs">
+            <table className="w-full min-w-[760px] text-left text-xs">
               <thead className="border-b border-[#B0BE8C]/30 bg-[#F3F5F4] text-[10px] text-[#22222B]">
                 <tr>
                   <th className="px-4 py-3">Customer</th>
                   <th className="px-4 py-3">Phone</th>
+                  <th className="px-4 py-3">Address</th>
                   <th className="px-4 py-3">Last Meal Date</th>
                 </tr>
               </thead>
@@ -1001,6 +1002,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
                   <tr key={customer.customer_id} className="transition-colors hover:bg-slate-50">
                     <td className="px-4 py-3 text-[#22222B]">{customer.customer_name}</td>
                     <td className="px-4 py-3 text-slate-600">{customer.customer_phone}</td>
+                    <td className="max-w-sm px-4 py-3 text-slate-600">{customer.customer_address || 'Not recorded'}</td>
                     <td className="px-4 py-3 whitespace-nowrap text-slate-700">{customer.last_meal_date}</td>
                   </tr>
                 ))}
