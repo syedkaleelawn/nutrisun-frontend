@@ -55,6 +55,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
   // 2. Data States
   const [analytics, setAnalytics] = useState<AnalyticsResponse | null>(null);
   const [monthlyMealAverages, setMonthlyMealAverages] = useState<MonthlyMealAverage[]>([]);
+  const [includeHolidaysInAverages, setIncludeHolidaysInAverages] = useState<boolean>(true);
   const [dailyMeals, setDailyMeals] = useState<DailyMealCount[]>([]);
   const [dailyYear, setDailyYear] = useState<number>(() => new Date().getFullYear());
   const [dailyMonthNumber, setDailyMonthNumber] = useState<number>(() => new Date().getMonth() + 1);
@@ -98,7 +99,8 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
       }
 
       const [analRes, averagesRes] = await Promise.allSettled([
-        adminApi.getAnalytics(params),        adminApi.getMonthlyMealAverages(),
+        adminApi.getAnalytics(params),
+        adminApi.getMonthlyMealAverages(includeHolidaysInAverages),
       ]);
 
       if (analRes.status === 'fulfilled') {
@@ -171,7 +173,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
 
   useEffect(() => {
     fetchReportData();
-  }, [selectedMonth, useCustomRange, customStartDate, customEndDate]);
+  }, [selectedMonth, useCustomRange, customStartDate, customEndDate, includeHolidaysInAverages]);
 
   const dailyMonthKey = `${dailyYear}-${String(dailyMonthNumber).padStart(2, '0')}`;
 
@@ -632,11 +634,30 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
       )}
 
       {/* 3. Monthly Meal Averages */}
-      <div className="grid grid-cols-1 xl:grid-cols-[minmax(390px,0.9fr)_minmax(0,1.7fr)] gap-5 items-stretch">
+      <div className="space-y-3">
+        <div className="flex flex-col gap-3 rounded-3xl border border-[#B0BE8C]/40 bg-white px-4 py-4 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:px-5">
+          <div>
+            <h3 className="text-sm sm:text-base font-semibold text-[#22222B]">Monthly Meal Averages</h3>
+            <p className="mt-0.5 text-xs text-slate-500">Average meals per day from the first recorded month through the current month.</p>
+          </div>
+          <label className="flex min-h-[40px] cursor-pointer items-center gap-2 rounded-xl border border-[#B0BE8C]/50 bg-[#F3F5F4] px-3 text-xs text-[#22222B]">
+            <input
+              type="checkbox"
+              checked={includeHolidaysInAverages}
+              onChange={(event) => setIncludeHolidaysInAverages(event.target.checked)}
+              className="h-4 w-4 accent-[#741B22]"
+            />
+            <span>Include holidays in averages</span>
+          </label>
+        </div>
+
+        <div className="grid grid-cols-1 xl:grid-cols-[minmax(390px,0.9fr)_minmax(0,1.7fr)] gap-5 items-stretch">
         <div className="glass-card rounded-3xl border border-[#B0BE8C]/40 shadow-sm overflow-hidden flex flex-col xl:h-[500px]">
           <div className="px-5 py-4 border-b border-[#B0BE8C]/30 bg-[#F3F5F4]">
-            <h3 className="text-sm sm:text-base font-semibold text-[#22222B]">Monthly Meal Averages</h3>
-            <p className="text-xs text-slate-500 mt-0.5">Average meals per calendar day. The latest month is month to date.</p>
+            <h4 className="text-sm font-semibold text-[#22222B]">Monthly Breakdown</h4>
+            <p className="text-xs text-slate-500 mt-0.5">
+              {includeHolidaysInAverages ? 'Uses every calendar day.' : 'Excludes declared holidays for each meal type.'} The latest month is month to date.
+            </p>
           </div>
           <div className="overflow-auto flex-1 min-h-0">
             <table className="w-full min-w-[560px] text-xs text-right">
@@ -683,8 +704,10 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
 
         <div className="glass-card rounded-3xl border border-[#B0BE8C]/40 shadow-sm overflow-hidden flex flex-col xl:h-[500px]">
           <div className="px-5 pt-5 text-center">
-            <h3 className="text-base sm:text-lg font-semibold text-[#22222B]">Average #Meals Per Meal Type Per Day</h3>
-            <p className="text-xs text-slate-500 mt-1">Monthly averages through the current month (MTD)</p>
+            <h4 className="text-base sm:text-lg font-semibold text-[#22222B]">Average #Meals Per Meal Type Per Day</h4>
+            <p className="text-xs text-slate-500 mt-1">
+              Monthly averages through the current month (MTD), {includeHolidaysInAverages ? 'including holidays' : 'excluding holidays'}
+            </p>
           </div>
           <div className="overflow-x-auto px-2 pb-3 flex-1 min-h-0 flex items-center">
             <svg
@@ -749,6 +772,7 @@ export default function SalesAnalyticsModule({ onNotification }: SalesAnalyticsM
             </svg>
           </div>
         </div>
+      </div>
       </div>
 
       {/* 4. Daily Meal Counts */}
