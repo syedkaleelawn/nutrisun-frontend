@@ -498,6 +498,13 @@ export interface DailyMealCount {
   dinner: number;
 }
 
+export interface CustomerAttritionItem {
+  customer_id: number;
+  customer_name: string;
+  customer_phone: string;
+  last_meal_date: string;
+}
+
 export interface CustomerSubscriptionDetail {
   id: number;
   plan_name: string;
@@ -734,6 +741,8 @@ export const adminApi = {
     api.get<{ months: MonthlyMealAverage[] }>('/admin/analytics/monthly-meal-averages'),
   getDailyMealCounts: (month: string) =>
     api.get<{ selected_month: string; start_date: string; end_date: string; days: DailyMealCount[] }>('/admin/analytics/daily-meals', { params: { month } }),
+  getCustomerAttrition: (month: string) =>
+    api.get<{ selected_month: string; following_month: string; count: number; customers: CustomerAttritionItem[] }>('/admin/analytics/customer-attrition', { params: { month } }),
   getCustomerReports: (params?: { month?: string; start_date?: string; end_date?: string; search?: string; customer_id?: number }) =>
     api.get<{ count: number; customers: CustomerReportItem[] }>('/admin/analytics/customers', { params }),
   downloadExportExcel: (params?: { month?: string; report?: string; start_date?: string; end_date?: string }) => {
@@ -745,5 +754,6 @@ export const adminApi = {
   },
   getExportExcelUrl: () => `${API_BASE_URL}/admin/export-excel`,
 };
+
 
 
