@@ -188,7 +188,7 @@ export default function EntryPage() {
               }`}
             >
               <UserPlus className="w-4 h-4 shrink-0" />
-              Register
+              Sign-up
             </button>
           </div>
 
