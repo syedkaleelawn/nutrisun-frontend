@@ -738,8 +738,10 @@ export const adminApi = {
     api.delete<{ message: string; id: number }>(`/admin/menu/${id}`),
   getAnalytics: (params?: { month?: string; start_date?: string; end_date?: string }) =>
     api.get<AnalyticsResponse>('/admin/analytics', { params }),
-  getMonthlyMealAverages: () =>
-    api.get<{ months: MonthlyMealAverage[] }>('/admin/analytics/monthly-meal-averages'),
+  getMonthlyMealAverages: (includeHolidays: boolean) =>
+    api.get<{ include_holidays: boolean; months: MonthlyMealAverage[] }>('/admin/analytics/monthly-meal-averages', {
+      params: { include_holidays: includeHolidays },
+    }),
   getDailyMealCounts: (month: string) =>
     api.get<{ selected_month: string; start_date: string; end_date: string; days: DailyMealCount[] }>('/admin/analytics/daily-meals', { params: { month } }),
   getCustomerAttrition: (month: string) =>
