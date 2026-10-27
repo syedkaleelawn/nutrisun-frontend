@@ -13,15 +13,15 @@ import {
   Calendar,
   LogOut,
   LogIn,
-  UserPlus,
   Menu,
   X,
   ChefHat,
-  Sparkles,
   ChevronRight,
   KeyRound,
   ChevronDown,
   UsersRound,
+  House,
+  CreditCard,
 } from 'lucide-react';
 
 export default function Navbar() {
@@ -57,8 +57,9 @@ export default function Navbar() {
   const getNavLinks = () => {
     if (!user) {
       return [
-        { label: 'Sign In', href: '/login', icon: LogIn },
-        { label: 'Register', href: '/register', icon: UserPlus },
+        { label: 'Home', href: 'https://nutrisun.cloud/', icon: House },
+        { label: 'Menu', href: '/menu', icon: Calendar },
+        { label: 'Pricing', href: '/pricing', icon: CreditCard },
       ];
     }
 
@@ -290,20 +291,13 @@ export default function Navbar() {
                 )}
               </div>
             ) : (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center">
                 <Link
-                  href="/login"
-                  className="flex items-center gap-1 px-4 py-2 text-xs font-medium text-[#22222B] hover:text-[#B92F25] hover:bg-[#B0BE8C]/20 rounded-xl transition-all min-h-[44px]"
-                >
-                  <LogIn className="w-3.5 h-3.5" />
-                  Log In
-                </Link>
-                <Link
-                  href="/register"
+                  href="/"
                   className="flex items-center gap-1.5 px-4 py-2 text-xs font-medium text-white bg-[#B92F25] hover:bg-[#741B22] rounded-xl shadow-md transition-all duration-200 min-h-[44px]"
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-[#F7DE9D]" />
-                  Get Started
+                  <LogIn className="w-3.5 h-3.5 text-[#F7DE9D]" />
+                  Sign in / Sign up
                 </Link>
               </div>
             )}
@@ -392,22 +386,14 @@ export default function Navbar() {
                   </div>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 gap-2">
+                <div>
                   <Link
-                    href="/login"
+                    href="/"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-center gap-1.5 px-3 py-3 text-xs font-medium text-[#22222B] bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] rounded-xl text-center transition-colors min-h-[44px]"
+                    className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-[#B92F25] px-3 py-3 text-center text-xs font-medium text-white shadow-md transition-all hover:bg-[#741B22] min-h-[44px]"
                   >
                     <LogIn className="w-3.5 h-3.5" />
-                    Log In
-                  </Link>
-                  <Link
-                    href="/register"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-center gap-1.5 px-3 py-3 text-xs font-medium text-white bg-[#B92F25] hover:bg-[#741B22] rounded-xl text-center shadow-md transition-all min-h-[44px]"
-                  >
-                    <UserPlus className="w-3.5 h-3.5" />
-                    Register
+                    Sign in / Sign up
                   </Link>
                 </div>
               )}
