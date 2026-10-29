@@ -18,7 +18,8 @@ import {
 export default function RegisterPage() {
   const { register, redirectToDashboard } = useAuth();
 
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [phone, setPhone] = useState('');
   const [deliveryAddress, setDeliveryAddress] = useState('');
   const [password, setPassword] = useState('');
@@ -33,13 +34,19 @@ export default function RegisterPage() {
     setError(null);
     setSuccess(null);
 
-    const trimmedName = name.trim();
+    const trimmedFirstName = firstName.trim();
+    const trimmedLastName = lastName.trim();
     const trimmedPhone = phone.trim();
     const cleanedDigits = trimmedPhone.replace(/\D/g, '');
     const trimmedAddress = deliveryAddress.trim();
 
-    if (!trimmedName) {
-      setError('Please enter your full name.');
+    if (!trimmedFirstName) {
+      setError('Please enter your first name.');
+      return;
+    }
+
+    if (!trimmedLastName) {
+      setError('Please enter your last name.');
       return;
     }
 
@@ -61,7 +68,7 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      const user = await register(trimmedName, trimmedPhone, trimmedAddress, password);
+      const user = await register(trimmedFirstName, trimmedLastName, trimmedPhone, trimmedAddress, password);
       setSuccess('Account created successfully! Redirecting...');
       setTimeout(() => {
         redirectToDashboard(user.role);
@@ -158,21 +165,44 @@ export default function RegisterPage() {
               </p>
             </div>
 
-            {/* Name */}
-            <div>
-              <label className="block text-[10px] font-semibold tracking-wider text-[#22222B]/70 mb-1.5">
-                Full Name
-              </label>
-              <div className="relative">
-                <UserIcon className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                <input
-                  type="text"
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Your Full Name"
-                  className="w-full min-h-[44px] pl-10 pr-4 py-2.5 rounded-2xl border border-[#B0BE8C]/40 bg-white focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C] text-base sm:text-xs font-medium text-[#22222B]"
-                />
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div>
+                <label htmlFor="first-name" className="block text-[10px] font-semibold tracking-wider text-[#22222B]/70 mb-1.5">
+                  First Name
+                </label>
+                <div className="relative">
+                  <UserIcon className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    id="first-name"
+                    name="first_name"
+                    type="text"
+                    autoComplete="given-name"
+                    required
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    placeholder="First name"
+                    className="w-full min-h-[44px] pl-10 pr-4 py-2.5 rounded-2xl border border-[#B0BE8C]/40 bg-white focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C] text-base sm:text-xs font-medium text-[#22222B]"
+                  />
+                </div>
+              </div>
+              <div>
+                <label htmlFor="last-name" className="block text-[10px] font-semibold tracking-wider text-[#22222B]/70 mb-1.5">
+                  Last Name
+                </label>
+                <div className="relative">
+                  <UserIcon className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    id="last-name"
+                    name="last_name"
+                    type="text"
+                    autoComplete="family-name"
+                    required
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    placeholder="Last name"
+                    className="w-full min-h-[44px] pl-10 pr-4 py-2.5 rounded-2xl border border-[#B0BE8C]/40 bg-white focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C] text-base sm:text-xs font-medium text-[#22222B]"
+                  />
+                </div>
               </div>
             </div>
 
@@ -265,3 +295,4 @@ export default function RegisterPage() {
     </div>
   );
 }
+
