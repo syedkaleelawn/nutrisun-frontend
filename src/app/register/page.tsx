@@ -21,7 +21,9 @@ export default function RegisterPage() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phone, setPhone] = useState('');
-  const [deliveryAddress, setDeliveryAddress] = useState('');
+  const [addressLine1, setAddressLine1] = useState('');
+  const [addressLine2, setAddressLine2] = useState('');
+  const [pincode, setPincode] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -38,7 +40,9 @@ export default function RegisterPage() {
     const trimmedLastName = lastName.trim();
     const trimmedPhone = phone.trim();
     const cleanedDigits = trimmedPhone.replace(/\D/g, '');
-    const trimmedAddress = deliveryAddress.trim();
+    const trimmedAddressLine1 = addressLine1.trim();
+    const trimmedAddressLine2 = addressLine2.trim();
+    const trimmedPincode = pincode.trim();
 
     if (!trimmedFirstName) {
       setError('Please enter your first name.');
@@ -55,8 +59,13 @@ export default function RegisterPage() {
       return;
     }
 
-    if (!trimmedAddress) {
-      setError('Please enter your complete delivery address.');
+    if (!trimmedAddressLine1 || !trimmedAddressLine2) {
+      setError('Please enter both address lines.');
+      return;
+    }
+
+    if (!/^\d{6}$/.test(trimmedPincode)) {
+      setError('Please enter a valid 6-digit pincode.');
       return;
     }
 
@@ -68,7 +77,7 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      const user = await register(trimmedFirstName, trimmedLastName, trimmedPhone, trimmedAddress, password);
+      const user = await register(trimmedFirstName, trimmedLastName, trimmedPhone, trimmedAddressLine1, trimmedAddressLine2, 'Madurai', trimmedPincode, password);
       setSuccess('Account created successfully! Redirecting...');
       setTimeout(() => {
         redirectToDashboard(user.role);
@@ -224,26 +233,39 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            {/* Delivery Address */}
             <div>
-              <label className="block text-[10px] font-semibold tracking-wider text-[#22222B]/70 mb-1.5">
-                Delivery Address
-              </label>
+              <label htmlFor="address-line-1" className="block text-[10px] font-semibold tracking-wider text-[#22222B]/70 mb-1.5">Address Line 1</label>
               <div className="relative">
                 <MapPin className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5 -translate-y-1/2" />
                 <textarea
+                  id="address-line-1"
+                  name="address_line_1"
                   required
                   rows={2}
-                  value={deliveryAddress}
-                  onChange={(e) => setDeliveryAddress(e.target.value)}
-                  placeholder="Complete flat, building, street, and area details"
+                  value={addressLine1}
+                  onChange={(e) => setAddressLine1(e.target.value)}
+                  placeholder="Plot/flat no., floor, building, street and landmark"
                   className="w-full min-h-[44px] pl-10 pr-4 py-2.5 rounded-2xl border border-[#B0BE8C]/40 bg-white focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C] text-base sm:text-xs font-medium text-[#22222B] resize-none"
                 />
               </div>
-              <p className="text-[10px] text-slate-400 mt-1">
-                Note: Customer delivery address changes must be handled by Admin.
-              </p>
             </div>
+
+            <div>
+              <label htmlFor="address-line-2" className="block text-[10px] font-semibold tracking-wider text-[#22222B]/70 mb-1.5">Address Line 2</label>
+              <input id="address-line-2" name="address_line_2" type="text" required value={addressLine2} onChange={(e) => setAddressLine2(e.target.value)} placeholder="Area name" className="w-full min-h-[44px] px-4 py-2.5 rounded-2xl border border-[#B0BE8C]/40 bg-white focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C] text-base sm:text-xs font-medium text-[#22222B]" />
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div>
+                <label htmlFor="city" className="block text-[10px] font-semibold tracking-wider text-[#22222B]/70 mb-1.5">City</label>
+                <input id="city" name="city" type="text" required readOnly value="Madurai" className="w-full min-h-[44px] px-4 py-2.5 rounded-2xl border border-[#B0BE8C]/40 bg-slate-50 text-base sm:text-xs font-medium text-[#22222B]" />
+              </div>
+              <div>
+                <label htmlFor="pincode" className="block text-[10px] font-semibold tracking-wider text-[#22222B]/70 mb-1.5">Pincode</label>
+                <input id="pincode" name="pincode" type="text" inputMode="numeric" pattern="[0-9]{6}" maxLength={6} required value={pincode} onChange={(e) => setPincode(e.target.value.replace(/\D/g, '').slice(0, 6))} placeholder="6-digit pincode" className="w-full min-h-[44px] px-4 py-2.5 rounded-2xl border border-[#B0BE8C]/40 bg-white focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C] text-base sm:text-xs font-medium text-[#22222B]" />
+              </div>
+            </div>
+            <p className="text-[10px] text-slate-400 -mt-2">Customer delivery address changes must be handled by Admin.</p>
 
             {/* Password */}
             <div>
@@ -295,4 +317,5 @@ export default function RegisterPage() {
     </div>
   );
 }
+
 
