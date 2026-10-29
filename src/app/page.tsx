@@ -28,7 +28,8 @@ export default function EntryPage() {
   const [loginPassword, setLoginPassword] = useState('');
 
   // Register form state
-  const [regName, setRegName] = useState('');
+  const [regFirstName, setRegFirstName] = useState('');
+  const [regLastName, setRegLastName] = useState('');
   const [regPhone, setRegPhone] = useState('');
   const [regAddress, setRegAddress] = useState('');
   const [regPassword, setRegPassword] = useState('');
@@ -83,7 +84,8 @@ export default function EntryPage() {
 
     try {
       const newUser = await register(
-        regName.trim(),
+        regFirstName.trim(),
+        regLastName.trim(),
         regPhone.trim(),
         regAddress.trim(),
         regPassword
@@ -276,20 +278,44 @@ export default function EntryPage() {
                 </p>
               </div>
 
-              <div>
-                <label className="block text-[10px] font-semibold tracking-wider text-[#22222B]/70 mb-1">
-                  Full Name
-                </label>
-                <div className="relative">
-                  <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                  <input
-                    type="text"
-                    required
-                    value={regName}
-                    onChange={(e) => setRegName(e.target.value)}
-                    placeholder="Your Name"
-                    className="w-full min-h-[44px] pl-10 pr-4 py-2.5 rounded-2xl border border-[#B0BE8C]/40 bg-white focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C] text-base sm:text-xs font-medium text-[#22222B]"
-                  />
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <div>
+                  <label htmlFor="signup-first-name" className="block text-[10px] font-semibold tracking-wider text-[#22222B]/70 mb-1">
+                    First Name
+                  </label>
+                  <div className="relative">
+                    <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    <input
+                      id="signup-first-name"
+                      name="first_name"
+                      type="text"
+                      autoComplete="given-name"
+                      required
+                      value={regFirstName}
+                      onChange={(e) => setRegFirstName(e.target.value)}
+                      placeholder="First name"
+                      className="w-full min-h-[44px] pl-10 pr-4 py-2.5 rounded-2xl border border-[#B0BE8C]/40 bg-white focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C] text-base sm:text-xs font-medium text-[#22222B]"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label htmlFor="signup-last-name" className="block text-[10px] font-semibold tracking-wider text-[#22222B]/70 mb-1">
+                    Last Name
+                  </label>
+                  <div className="relative">
+                    <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    <input
+                      id="signup-last-name"
+                      name="last_name"
+                      type="text"
+                      autoComplete="family-name"
+                      required
+                      value={regLastName}
+                      onChange={(e) => setRegLastName(e.target.value)}
+                      placeholder="Last name"
+                      className="w-full min-h-[44px] pl-10 pr-4 py-2.5 rounded-2xl border border-[#B0BE8C]/40 bg-white focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C] text-base sm:text-xs font-medium text-[#22222B]"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -400,4 +426,5 @@ export default function EntryPage() {
     </div>
   );
 }
+
 
