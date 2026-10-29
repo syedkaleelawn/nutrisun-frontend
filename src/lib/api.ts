@@ -586,7 +586,7 @@ export interface UploadConflictResponse {
 
 // Typed API Helpers
 export const authApi = {
-  register: (data: { first_name: string; last_name: string; phone: string; delivery_address: string; password: string; email?: string }) =>
+  register: (data: { first_name: string; last_name: string; phone: string; address_line_1: string; address_line_2: string; city: 'Madurai'; pincode: string; password: string; email?: string }) =>
     api.post<{ message: string; token: string; user: User }>('/auth/register', data),
   login: (data: { phone: string; password: string }) =>
     api.post<{ message: string; token: string; user: User }>('/auth/login', data),
@@ -759,6 +759,7 @@ export const adminApi = {
   },
   getExportExcelUrl: () => `${API_BASE_URL}/admin/export-excel`,
 };
+
 
 
 
