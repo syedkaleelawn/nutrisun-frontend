@@ -31,7 +31,9 @@ export default function EntryPage() {
   const [regFirstName, setRegFirstName] = useState('');
   const [regLastName, setRegLastName] = useState('');
   const [regPhone, setRegPhone] = useState('');
-  const [regAddress, setRegAddress] = useState('');
+  const [regAddressLine1, setRegAddressLine1] = useState('');
+  const [regAddressLine2, setRegAddressLine2] = useState('');
+  const [regPincode, setRegPincode] = useState('');
   const [regPassword, setRegPassword] = useState('');
 
   // State
@@ -87,7 +89,10 @@ export default function EntryPage() {
         regFirstName.trim(),
         regLastName.trim(),
         regPhone.trim(),
-        regAddress.trim(),
+        regAddressLine1.trim(),
+        regAddressLine2.trim(),
+        'Madurai',
+        regPincode.trim(),
         regPassword
       );
       setSuccess('Registration successful! Redirecting to your dashboard...');
@@ -337,22 +342,40 @@ export default function EntryPage() {
               </div>
 
               <div>
-                <label className="block text-[10px] font-semibold tracking-wider text-[#22222B]/70 mb-1">
-                  Delivery Address
+                <label htmlFor="signup-address-line-1" className="block text-[10px] font-semibold tracking-wider text-[#22222B]/70 mb-1">
+                  Address Line 1
                 </label>
                 <div className="relative">
                   <MapPin className="w-4 h-4 text-slate-400 absolute left-3.5 top-3 -translate-y-1/2" />
                   <textarea
+                    id="signup-address-line-1"
+                    name="address_line_1"
                     required
                     rows={2}
-                    value={regAddress}
-                    onChange={(e) => setRegAddress(e.target.value)}
-                    placeholder="Full residential / work delivery address"
+                    value={regAddressLine1}
+                    onChange={(e) => setRegAddressLine1(e.target.value)}
+                    placeholder="Plot/flat no., floor, building, street and landmark"
                     className="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-[#B0BE8C]/40 bg-white focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C] text-base sm:text-xs font-medium text-[#22222B] resize-none"
                   />
                 </div>
+              </div>
+
+              <div>
+                <label htmlFor="signup-address-line-2" className="block text-[10px] font-semibold tracking-wider text-[#22222B]/70 mb-1">Address Line 2</label>
+                <input id="signup-address-line-2" name="address_line_2" type="text" required value={regAddressLine2} onChange={(e) => setRegAddressLine2(e.target.value)} placeholder="Area name" className="w-full min-h-[44px] px-4 py-2.5 rounded-2xl border border-[#B0BE8C]/40 bg-white focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C] text-base sm:text-xs font-medium text-[#22222B]" />
+              </div>
+
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <div>
+                  <label htmlFor="signup-city" className="block text-[10px] font-semibold tracking-wider text-[#22222B]/70 mb-1">City</label>
+                  <input id="signup-city" name="city" type="text" required readOnly value="Madurai" className="w-full min-h-[44px] px-4 py-2.5 rounded-2xl border border-[#B0BE8C]/40 bg-slate-50 text-base sm:text-xs font-medium text-[#22222B]" />
+                </div>
+                <div>
+                  <label htmlFor="signup-pincode" className="block text-[10px] font-semibold tracking-wider text-[#22222B]/70 mb-1">Pincode</label>
+                  <input id="signup-pincode" name="pincode" type="text" inputMode="numeric" pattern="[0-9]{6}" maxLength={6} required value={regPincode} onChange={(e) => setRegPincode(e.target.value.replace(/\D/g, '').slice(0, 6))} placeholder="6-digit pincode" className="w-full min-h-[44px] px-4 py-2.5 rounded-2xl border border-[#B0BE8C]/40 bg-white focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C] text-base sm:text-xs font-medium text-[#22222B]" />
+                </div>
                 <p className="text-[10px] text-slate-400 mt-0.5">
-                  Note: Contact an administrator to update this address later.
+                  Contact an administrator to update this address later.
                 </p>
               </div>
 
@@ -426,5 +449,6 @@ export default function EntryPage() {
     </div>
   );
 }
+
 
 

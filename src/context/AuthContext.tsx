@@ -9,7 +9,7 @@ interface AuthContextType {
   token: string | null;
   loading: boolean;
   login: (phone: string, password: string) => Promise<User>;
-  register: (firstName: string, lastName: string, phone: string, delivery_address: string, password: string, email?: string) => Promise<User>;
+  register: (firstName: string, lastName: string, phone: string, addressLine1: string, addressLine2: string, city: 'Madurai', pincode: string, password: string, email?: string) => Promise<User>;
   changePassword: (newPassword: string, currentPassword?: string, confirmPassword?: string) => Promise<void>;
   logout: () => void;
   redirectToDashboard: (role?: Role) => void;
@@ -85,7 +85,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     firstName: string,
     lastName: string,
     phone: string,
-    delivery_address: string,
+    addressLine1: string,
+    addressLine2: string,
+    city: 'Madurai',
+    pincode: string,
     password: string,
     email?: string
   ): Promise<User> => {
@@ -93,7 +96,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       first_name: firstName,
       last_name: lastName,
       phone,
-      delivery_address,
+      address_line_1: addressLine1,
+      address_line_2: addressLine2,
+      city,
+      pincode,
       password,
       email,
     });
@@ -180,4 +186,5 @@ export function useAuth() {
   }
   return context;
 }
+
 
