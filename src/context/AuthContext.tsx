@@ -9,7 +9,7 @@ interface AuthContextType {
   token: string | null;
   loading: boolean;
   login: (phone: string, password: string) => Promise<User>;
-  register: (name: string, phone: string, delivery_address: string, password: string, email?: string) => Promise<User>;
+  register: (firstName: string, lastName: string, phone: string, delivery_address: string, password: string, email?: string) => Promise<User>;
   changePassword: (newPassword: string, currentPassword?: string, confirmPassword?: string) => Promise<void>;
   logout: () => void;
   redirectToDashboard: (role?: Role) => void;
@@ -82,13 +82,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const register = async (
-    name: string,
+    firstName: string,
+    lastName: string,
     phone: string,
     delivery_address: string,
     password: string,
     email?: string
   ): Promise<User> => {
-    const response = await authApi.register({ name, phone, delivery_address, password, email });
+    const response = await authApi.register({
+      first_name: firstName,
+      last_name: lastName,
+      phone,
+      delivery_address,
+      password,
+      email,
+    });
     const { token: receivedToken, user: newUser } = response.data;
     setToken(receivedToken);
     setUser(newUser);
@@ -172,3 +180,4 @@ export function useAuth() {
   }
   return context;
 }
+
