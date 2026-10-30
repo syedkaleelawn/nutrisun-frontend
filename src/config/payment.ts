@@ -11,5 +11,5 @@ export const PAYMENT_CONFIG: PaymentConfig = {
   qrAssetPath: '/KVB_QR.png',
   instruction:
     process.env.NEXT_PUBLIC_PAYMENT_INSTRUCTION ||
-    'Scan this QR using any UPI app, enter the exact amount shown, and upload your payment screenshot for admin verification.',
+    'Scan the QR using any UPI app, pay the exact amount shown, and confirm the completed payment below.',
 };
