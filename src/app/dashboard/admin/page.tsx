@@ -454,7 +454,10 @@ export default function AdminDashboard() {
   }
 
   const pendingPayments = subscriptions.filter(
-    (s) => s.payment_status === 'PENDING' && s.status !== 'CANCELLED'
+    (s) =>
+      s.payment_status === 'PENDING' &&
+      s.status !== 'CANCELLED' &&
+      Boolean(s.payment_record?.uploaded_at)
   );
 
   return (
