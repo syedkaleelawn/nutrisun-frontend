@@ -45,10 +45,17 @@ export default function MonthlyMenuPage() {
   const now = new Date();
   const currentMonthNum = String(now.getMonth() + 1).padStart(2, '0');
   const currentYearNum = String(now.getFullYear());
+  const nextMonthDate = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+  const nextMonthNum = String(nextMonthDate.getMonth() + 1).padStart(2, '0');
+  const nextMonthYear = String(nextMonthDate.getFullYear());
   const todayDateStr = now.toISOString().split('T')[0];
 
   const selectedMonth = currentMonthNum;
   const selectedYear = currentYearNum;
+  const uploadPeriodOptions = [
+    { value: `${currentYearNum}-${currentMonthNum}`, label: `${MONTH_NAMES[now.getMonth()]} ${currentYearNum}` },
+    { value: `${nextMonthYear}-${nextMonthNum}`, label: `${MONTH_NAMES[nextMonthDate.getMonth()]} ${nextMonthYear}` },
+  ];
 
   // Menu Data State
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
@@ -64,6 +71,9 @@ export default function MonthlyMenuPage() {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [uploadUncertainties, setUploadUncertainties] = useState<string[]>([]);
   const [downloadingTemplate, setDownloadingTemplate] = useState<boolean>(false);
+  const [uploadPeriod, setUploadPeriod] = useState<string>(`${currentYearNum}-${currentMonthNum}`);
+  const [uploadYear, uploadMonth] = uploadPeriod.split('-');
+  const uploadMonthName = MONTH_NAMES[parseInt(uploadMonth, 10) - 1] || 'Month';
 
   // Overwrite Confirmation & Preview Modal State
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
@@ -159,8 +169,8 @@ export default function MonthlyMenuPage() {
 
     const formData = new FormData();
     formData.append('file', selectedFile);
-    formData.append('month', selectedMonth);
-    formData.append('year', selectedYear);
+    formData.append('month', uploadMonth);
+    formData.append('year', uploadYear);
     if (confirmReplace) {
       formData.append('confirm_replace', 'true');
     }
@@ -324,19 +334,44 @@ export default function MonthlyMenuPage() {
                 </h2>
               </div>
               <p className="text-xs text-slate-600 mt-0.5">
-                Upload completed menu file for <strong>{selectedMonthName} {selectedYear}</strong>. Supports PDF tables (<code>.pdf</code>) and Excel spreadsheets (<code>.xlsx</code>, <code>.xls</code>).
+                Upload completed menu file for <strong>{uploadMonthName} {uploadYear}</strong>. Supports PDF tables (<code>.pdf</code>) and Excel spreadsheets (<code>.xlsx</code>, <code>.xls</code>).
               </p>
             </div>
 
-            {/* Template Download Button */}
-            <button
-              type="button"
-              onClick={async () => {
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 self-start sm:self-auto">
+              <label className="flex items-center gap-2 min-h-[44px] px-3 rounded-xl bg-white border border-[#B0BE8C]/60 text-xs text-[#22222B]">
+                <span className="text-slate-500 whitespace-nowrap">Upload for</span>
+                <select
+                  value={uploadPeriod}
+                  onChange={(event) => {
+                    setUploadPeriod(event.target.value);
+                    setSelectedFile(null);
+                    setUploadError(null);
+                    setUploadSuccess(null);
+                    setUploadUncertainties([]);
+                    if (fileInputRef.current) fileInputRef.current.value = '';
+                  }}
+                  disabled={uploading}
+                  className="bg-transparent font-medium text-[#741B22] outline-none cursor-pointer min-h-[40px]"
+                  aria-label="Menu upload month"
+                >
+                  {uploadPeriodOptions.map((period) => (
+                    <option key={period.value} value={period.value}>
+                      {period.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              {/* Template Download Button */}
+              <button
+                type="button"
+                onClick={async () => {
                 if (downloadingTemplate) return;
                 setDownloadingTemplate(true);
                 setUploadError(null);
                 try {
-                  const res = await menuApi.downloadMenuTemplate(selectedMonth, selectedYear);
+                  const res = await menuApi.downloadMenuTemplate(uploadMonth, uploadYear);
                   if (!res.success) {
                     setUploadError(res.error || 'Failed to download Excel template');
                   }
@@ -348,14 +383,15 @@ export default function MonthlyMenuPage() {
               }}
               disabled={downloadingTemplate}
               className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-[#B0BE8C]/60 text-xs font-medium text-[#22222B] hover:bg-[#B0BE8C]/20 transition-all shadow-2xs self-start sm:self-auto min-h-[44px] disabled:opacity-50"
-            >
-              {downloadingTemplate ? (
-                <Loader2 className="w-4 h-4 text-[#741B22] animate-spin" />
-              ) : (
-                <Download className="w-4 h-4 text-[#741B22]" />
-              )}
-              <span>{downloadingTemplate ? 'Downloading...' : 'Download Excel Template'}</span>
-            </button>
+              >
+                {downloadingTemplate ? (
+                  <Loader2 className="w-4 h-4 text-[#741B22] animate-spin" />
+                ) : (
+                  <Download className="w-4 h-4 text-[#741B22]" />
+                )}
+                <span>{downloadingTemplate ? 'Downloading...' : 'Download Excel Template'}</span>
+              </button>
+            </div>
           </div>
 
           {/* Supported Format Guide Box */}
@@ -401,7 +437,7 @@ export default function MonthlyMenuPage() {
             </div>
 
             <p className="text-[10px] text-slate-500 italic">
-              • Day numbers (1–31) automatically align to <strong>{selectedMonthName} {selectedYear}</strong>. Dietary types (Veg, Non-Veg, Egg) are intelligently recognized.
+              • Day numbers (1–31) automatically align to <strong>{uploadMonthName} {uploadYear}</strong>. Dietary types (Veg, Non-Veg, Egg) are intelligently recognized.
             </p>
           </div>
 
@@ -531,7 +567,7 @@ export default function MonthlyMenuPage() {
             {/* Modal Body (Scrollable) */}
             <div className="overflow-y-auto space-y-3.5 pr-1 text-xs text-slate-700">
               <div className="p-3 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 leading-relaxed font-medium">
-                A menu is already registered for <strong>{selectedMonthName} {selectedYear}</strong> with{' '}
+                A menu is already registered for <strong>{uploadMonthName} {uploadYear}</strong> with{' '}
                 <span className="font-medium text-[#741B22]">{conflictDetails.existingCount} entries</span>.
                 Saving will replace them with <strong>{conflictDetails.newItemsCount} extracted dishes</strong> ({conflictDetails.newDaysCount} calendar days).
               </div>
