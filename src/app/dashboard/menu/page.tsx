@@ -8,7 +8,6 @@ import {
   Calendar,
   Upload,
   FileSpreadsheet,
-  FileText,
   Download,
   AlertCircle,
   CheckCircle2,
@@ -145,8 +144,8 @@ export default function MonthlyMenuPage() {
     const file = e.target.files?.[0];
     if (file) {
       const lower = file.name.toLowerCase();
-      if (!lower.endsWith('.xlsx') && !lower.endsWith('.xls') && !lower.endsWith('.pdf')) {
-        setUploadError('Please select a valid Excel spreadsheet (.xlsx, .xls) or PDF document (.pdf).');
+      if (!lower.endsWith('.xlsx') && !lower.endsWith('.xls')) {
+        setUploadError('Please select a valid Excel spreadsheet (.xlsx or .xls).');
         setSelectedFile(null);
         return;
       }
@@ -277,7 +276,7 @@ export default function MonthlyMenuPage() {
               {isAdmin ? 'Admin Master Control' : isChef ? 'Chef Kitchen Menu' : 'Monthly Nutrition Plan'}
             </span>
             <span className="text-xs text-slate-500">
-              {isAdmin ? 'PDF / Excel Upload & Browse' : 'Shared Read-Only Schedule'}
+              {isAdmin ? 'Excel Upload & Browse' : 'Shared Read-Only Schedule'}
             </span>
           </div>
           <h1 className="text-xl sm:text-3xl font-semibold text-[#22222B] mt-2 flex items-center gap-2 break-words">
@@ -327,14 +326,13 @@ export default function MonthlyMenuPage() {
               <div className="flex items-center gap-2">
                 <div className="flex items-center gap-1 text-[#741B22]">
                   <FileSpreadsheet className="w-5 h-5 shrink-0" />
-                  <FileText className="w-4 h-4 shrink-0 text-[#B92F25]" />
                 </div>
                 <h2 className="text-base font-semibold text-[#22222B]">
-                  Upload Monthly Menu (PDF or Excel)
+                  Upload Monthly Menu (Excel)
                 </h2>
               </div>
               <p className="text-xs text-slate-600 mt-0.5">
-                Upload completed menu file for <strong>{uploadMonthName} {uploadYear}</strong>. Supports PDF tables (<code>.pdf</code>) and Excel spreadsheets (<code>.xlsx</code>, <code>.xls</code>).
+                Upload completed menu file for <strong>{uploadMonthName} {uploadYear}</strong>. Supports Excel spreadsheets (<code>.xlsx</code>, <code>.xls</code>).
               </p>
             </div>
 
@@ -394,50 +392,33 @@ export default function MonthlyMenuPage() {
             </div>
           </div>
 
-          {/* Supported Format Guide Box */}
+          {/* Required Excel Format Guide */}
           <div className="p-4 rounded-2xl bg-[#F3F5F4] border border-[#B0BE8C]/35 space-y-3">
             <div className="flex items-center justify-between flex-wrap gap-2">
               <span className="text-[10px] font-semibold tracking-wider text-slate-500 flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-[#B92F25]" />
-                Supported File Formats & Layout Structures
+                Required Excel Layout
               </span>
               <span className="text-[11px] font-medium text-[#741B22] bg-[#F7DE9D]/40 px-2 py-0.5 rounded-full">
-                .pdf • .xlsx • .xls
+                .xlsx • .xls
               </span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-              {/* Option 1: Standard 4-Column Layout */}
-              <div className="p-3 rounded-xl bg-white border border-[#B0BE8C]/30 space-y-1.5">
-                <span className="font-medium text-[#22222B] flex items-center gap-1 text-[11px]">
-                  <span className="w-2 h-2 rounded-full bg-[#B92F25]" />
-                  Standard Layout (4 Columns)
-                </span>
-                <p className="text-[11px] text-slate-500">
-                  Columns: <code>Date</code>, <code>Breakfast</code>, <code>Lunch</code>, <code>Dinner</code>
-                </p>
-                <div className="text-[10px] text-slate-600 bg-slate-50 p-2 rounded border border-slate-100">
-                  2026-09-01 | Multigrain Poha | Grilled Paneer & Rice | Soup & Salad
-                </div>
-              </div>
-
-              {/* Option 2: Multi-Component Layout (Large, Small 1, Small 2) */}
-              <div className="p-3 rounded-xl bg-white border border-[#B0BE8C]/30 space-y-1.5">
-                <span className="font-medium text-[#22222B] flex items-center gap-1 text-[11px]">
-                  <span className="w-2 h-2 rounded-full bg-[#B0BE8C]" />
-                  Component Layout (11 Columns / PDF Tables)
-                </span>
-                <p className="text-[11px] text-slate-500">
-                  Breakfast/Lunch/Dinner each with <code>Large</code>, <code>Small 1</code>, <code>Small 2</code>
-                </p>
-                <div className="text-[10px] text-slate-600 bg-slate-50 p-2 rounded border border-slate-100 truncate">
-                  1 | White Rice + Rasam + Chicken Gravy (Combined automatically)
-                </div>
+            <div className="p-3 rounded-xl bg-white border border-[#B0BE8C]/30 space-y-1.5 text-xs">
+              <span className="font-medium text-[#22222B] flex items-center gap-1 text-[11px]">
+                <span className="w-2 h-2 rounded-full bg-[#B92F25]" />
+                Date + three columns per meal type
+              </span>
+              <p className="text-[11px] text-slate-500">
+                Columns: <code>Date</code>, <code>Breakfast × 3</code>, <code>Lunch × 3</code>, <code>Dinner × 3</code>
+              </p>
+              <div className="text-[10px] text-slate-600 bg-slate-50 p-2 rounded border border-slate-100 overflow-x-auto whitespace-nowrap">
+                Date | Breakfast | · | · | Lunch | · | · | Dinner | · | ·
               </div>
             </div>
 
             <p className="text-[10px] text-slate-500 italic">
-              • Day numbers (1–31) automatically align to <strong>{uploadMonthName} {uploadYear}</strong>. Dietary types (Veg, Non-Veg, Egg) are intelligently recognized.
+              Download the template for <strong>{uploadMonthName} {uploadYear}</strong>, enter up to three dishes or components for each meal, and upload the completed Excel file.
             </p>
           </div>
 
@@ -501,7 +482,7 @@ export default function MonthlyMenuPage() {
               <input
                 ref={fileInputRef}
                 type="file"
-                accept=".xlsx,.xls,.pdf"
+                accept=".xlsx,.xls"
                 onChange={handleFileChange}
                 disabled={uploading}
                 className="w-full min-h-[46px] px-3.5 py-2.5 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-medium text-[#22222B] file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#B0BE8C]/30 file:text-[#22222B] hover:file:bg-[#B0BE8C]/50 cursor-pointer bg-white"
