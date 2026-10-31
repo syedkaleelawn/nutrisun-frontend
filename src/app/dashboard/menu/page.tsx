@@ -318,7 +318,7 @@ export default function MonthlyMenuPage() {
         </div>
       </div>
 
-      {/* ADMIN ONLY: Monthly PDF & Excel Menu Upload Box */}
+      {/* ADMIN ONLY: Monthly Excel Menu Upload Box */}
       {isAdmin && (
         <div className="glass-card rounded-3xl p-5 sm:p-7 border border-[#B0BE8C]/45 shadow-sm space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#B0BE8C]/30">
