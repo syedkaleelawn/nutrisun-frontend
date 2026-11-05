@@ -165,6 +165,16 @@ export default function AdminDashboard() {
 
   const [loadErrors, setLoadErrors] = useState<string[]>([]);
 
+  const sortHolidaysLatestFirst = (items: BusinessHoliday[]) =>
+    [...items].sort((a, b) => b.date.localeCompare(a.date) || b.id - a.id);
+
+  const refreshHolidays = async () => {
+    const response = await adminApi.getHolidays();
+    const refreshed = sortHolidaysLatestFirst(response.data.holidays || []);
+    setHolidays(refreshed);
+    return refreshed;
+  };
+
   const loadAll = async () => {
     setLoading(true);
     try {
@@ -217,7 +227,7 @@ export default function AdminDashboard() {
       }
 
       if (holidaysRes.status === 'fulfilled') {
-        setHolidays(holidaysRes.value.data.holidays || []);
+        setHolidays(sortHolidaysLatestFirst(holidaysRes.value.data.holidays || []));
       } else {
         failed.push('Holidays');
       }
@@ -258,8 +268,25 @@ export default function AdminDashboard() {
     try {
       const res = await adminApi.declareHoliday({ date: holidayDate, meal_slot: holidayMealSlot });
       setNotification(res.data.message);
-      await loadAll();
+      await refreshHolidays();
     } catch (err: any) {
+      // Holiday declaration can finish successfully after a long rescheduling
+      // transaction even if the browser loses the final response. Refresh and
+      // verify the exact date/meal combination before reporting a failure.
+      try {
+        const refreshed = await refreshHolidays();
+        const declaredHoliday = refreshed.find(
+          (holiday) => holiday.date === holidayDate && holiday.meal_slot === holidayMealSlot
+        );
+        if (declaredHoliday) {
+          setNotification(
+            `${holidayDate} ${mealLabel} is declared as a holiday. Holiday history has been refreshed.`
+          );
+          return;
+        }
+      } catch {
+        // Fall through to the original declaration error below.
+      }
       alert(err.response?.data?.error || 'Failed to declare business holiday.');
     } finally {
       setDeclaringHoliday(false);
