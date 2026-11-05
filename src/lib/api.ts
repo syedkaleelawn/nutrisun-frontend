@@ -78,15 +78,17 @@ api.interceptors.response.use(
         error.config?.method?.toLowerCase() === 'post' &&
         error.config?.url === '/admin/holidays';
 
-      if (!status && !isHolidayDeclaration) {
+      if (!status) {
         // Network offline or server unreachable. Holiday declaration performs
         // its own follow-up verification because rescheduling can outlive the
         // browser's request while still completing successfully.
-        triggerGlobalToast(
-          'error',
-          'Unable to connect to NutriSun API. Please verify your internet connection.',
-          'Connection Issue'
-        );
+        if (!isHolidayDeclaration) {
+          triggerGlobalToast(
+            'error',
+            'Unable to connect to NutriSun API. Please verify your internet connection.',
+            'Connection Issue'
+          );
+        }
       } else if (status === 401) {
         const currentPath = window.location.pathname;
         if (currentPath !== '/login' && currentPath !== '/register' && currentPath !== '/') {
