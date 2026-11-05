@@ -74,8 +74,14 @@ api.interceptors.response.use(
       const data = error.response?.data;
       const serverMessage = data?.error || data?.message;
 
-      if (!status) {
-        // Network offline or server unreachable
+      const isHolidayDeclaration =
+        error.config?.method?.toLowerCase() === 'post' &&
+        error.config?.url === '/admin/holidays';
+
+      if (!status && !isHolidayDeclaration) {
+        // Network offline or server unreachable. Holiday declaration performs
+        // its own follow-up verification because rescheduling can outlive the
+        // browser's request while still completing successfully.
         triggerGlobalToast(
           'error',
           'Unable to connect to NutriSun API. Please verify your internet connection.',
