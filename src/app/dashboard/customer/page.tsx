@@ -109,7 +109,10 @@ export default function CustomerDashboard() {
   const [confirmedPaymentSubIds, setConfirmedPaymentSubIds] = useState<number[]>([]);
   const [dynamicQrUrl, setDynamicQrUrl] = useState<string>('');
 
-  // "Skip Meal" Modal
+  // Single meal-cancellation action
+  const [showCancelMealsModal, setShowCancelMealsModal] = useState(false);
+  const [cancellationDate, setCancellationDate] = useState(currentISTDate);
+  const [cancellationMealSlot, setCancellationMealSlot] = useState<'breakfast' | 'lunch' | 'dinner'>('breakfast');
   const [mealsToSkip, setMealsToSkip] = useState<DailyMealLog[]>([]);
   const [skipQuantity, setSkipQuantity] = useState(1);
   const [submittingSkip, setSubmittingSkip] = useState(false);
@@ -456,6 +459,49 @@ export default function CustomerDashboard() {
     return { rows, deliveredTotals, scheduledTotals, slots };
   }, [meals, scheduleMonth, scheduleYear]);
 
+  const cancellableMealsInSelectedMonth = useMemo(() => {
+    const monthPrefix = `${scheduleYear}-${String(scheduleMonth).padStart(2, '0')}`;
+    return meals
+      .filter((meal) =>
+        meal.status === 'TAKE' &&
+        meal.date.startsWith(monthPrefix) &&
+        !isMealCompleted(meal)
+      )
+      .sort((a, b) => a.date.localeCompare(b.date) || a.meal_slot.localeCompare(b.meal_slot) || a.id - b.id);
+  }, [meals, scheduleMonth, scheduleYear]);
+
+  const cancellableDates = useMemo(
+    () => Array.from(new Set(cancellableMealsInSelectedMonth.map((meal) => meal.date))),
+    [cancellableMealsInSelectedMonth]
+  );
+
+  const selectCancellationMeals = (
+    date: string,
+    slot: 'breakfast' | 'lunch' | 'dinner'
+  ) => {
+    setCancellationDate(date);
+    setCancellationMealSlot(slot);
+    setMealsToSkip(
+      cancellableMealsInSelectedMonth.filter(
+        (meal) => meal.date === date && meal.meal_slot.toLowerCase() === slot
+      )
+    );
+    setSkipQuantity(1);
+  };
+
+  const openCancellationModal = () => {
+    const firstMeal = cancellableMealsInSelectedMonth[0];
+    if (!firstMeal) {
+      setNotification('There are no scheduled meals available to cancel in the selected month.');
+      return;
+    }
+    selectCancellationMeals(
+      firstMeal.date,
+      firstMeal.meal_slot.toLowerCase() as 'breakfast' | 'lunch' | 'dinner'
+    );
+    setShowCancelMealsModal(true);
+  };
+
   const getSlotIcon = (slot: string) => {
     switch (slot.toLowerCase()) {
       case 'breakfast':
@@ -755,6 +801,15 @@ export default function CustomerDashboard() {
               </div>
 
               <div className="flex flex-wrap items-end gap-3">
+                <button
+                  type="button"
+                  onClick={openCancellationModal}
+                  disabled={cancellableMealsInSelectedMonth.length === 0}
+                  className="min-h-[44px] rounded-xl bg-[#B92F25] px-4 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-[#741B22] disabled:cursor-not-allowed disabled:opacity-45"
+                >
+                  Cancel Meals
+                </button>
+
                 <label className="space-y-1">
                   <span className="block text-[10px] font-semibold tracking-wider text-slate-500">Month</span>
                   <select
@@ -787,7 +842,7 @@ export default function CustomerDashboard() {
             </div>
 
             <p className="text-[11px] font-medium text-slate-600">
-              Future meals can be cancelled using the action shown below their meal count.
+              Use the single Cancel Meals button to choose the delivery date, meal type, and quantity.
             </p>
           </div>
 
@@ -833,22 +888,9 @@ export default function CustomerDashboard() {
                       <td className="px-3 py-3 text-slate-600 font-medium border-r border-[#B0BE8C]/20">{row.dayLabel}</td>
                       {monthlyMealLedger.slots.map((slot) => (
                         <td key={`${row.date}-meal-${slot}`} className="px-2 py-2 text-center border-r last:border-r-0 border-[#B0BE8C]/20">
-                          <div className="flex flex-col items-center gap-1.5">
-                            <span className="font-semibold text-[#22222B]">{row.delivered[slot] + row.scheduled[slot]}</span>
-                            {row.scheduledMeals[slot].length > 0 && (
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  setMealsToSkip(row.scheduledMeals[slot]);
-                                  setSkipQuantity(1);
-                                }}
-                                className="min-h-[32px] px-2.5 py-1 rounded-lg border border-[#B92F25]/40 bg-white hover:bg-[#B92F25]/10 text-[#B92F25] text-[10px] font-semibold transition-colors whitespace-nowrap"
-                                aria-label={`Cancel ${slot} meals on ${row.date}`}
-                              >
-                                Cancel
-                              </button>
-                            )}
-                          </div>
+                          <span className="font-semibold text-[#22222B]">
+                            {row.delivered[slot] + row.scheduled[slot]}
+                          </span>
                         </td>
                       ))}
                     </tr>
@@ -1547,19 +1589,78 @@ export default function CustomerDashboard() {
       )}
 
       {/* MODAL: CANCEL SCHEDULED MEALS */}
-      {mealsToSkip.length > 0 && (() => {
-        const firstMeal = mealsToSkip[0];
-        const isOnTime = checkMealIsOnTime(firstMeal.date, firstMeal.meal_slot);
+      {showCancelMealsModal && (() => {
+        const isOnTime = checkMealIsOnTime(cancellationDate, cancellationMealSlot);
+        const slotCounts = (['breakfast', 'lunch', 'dinner'] as const).reduce(
+          (counts, slot) => ({
+            ...counts,
+            [slot]: cancellableMealsInSelectedMonth.filter(
+              (meal) => meal.date === cancellationDate && meal.meal_slot.toLowerCase() === slot
+            ).length,
+          }),
+          { breakfast: 0, lunch: 0, dinner: 0 }
+        );
         return (
           <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-[100] overflow-y-auto">
             <div className="bg-white rounded-3xl p-5 sm:p-8 max-w-md w-full border border-[#B0BE8C]/40 shadow-2xl space-y-4 max-h-[90dvh] overflow-y-auto overscroll-contain my-auto">
-              <h3 className="text-lg font-semibold text-[#22222B]">Cancel Scheduled Meals</h3>
+              <h3 className="text-lg font-semibold text-[#22222B]">Cancel Meals</h3>
               <p className="text-xs text-slate-600">
-                Meal: <strong className="capitalize">{firstMeal.meal_slot}</strong> on <strong>{firstMeal.date}</strong>.
+                Choose the scheduled delivery date, meal type, and number of meals to cancel.
               </p>
 
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <label className="space-y-1.5">
+                  <span className="block text-xs font-semibold text-[#22222B]">Delivery date</span>
+                  <select
+                    value={cancellationDate}
+                    onChange={(event) => {
+                      const date = event.target.value;
+                      const mealsOnDate = cancellableMealsInSelectedMonth.filter((meal) => meal.date === date);
+                      const currentSlotAvailable = mealsOnDate.some(
+                        (meal) => meal.meal_slot.toLowerCase() === cancellationMealSlot
+                      );
+                      const slot = currentSlotAvailable
+                        ? cancellationMealSlot
+                        : mealsOnDate[0].meal_slot.toLowerCase() as 'breakfast' | 'lunch' | 'dinner';
+                      selectCancellationMeals(date, slot);
+                    }}
+                    className="w-full min-h-[44px] rounded-xl border border-[#B0BE8C]/60 bg-white px-3 text-sm font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#741B22]/20"
+                  >
+                    {cancellableDates.map((date) => (
+                      <option key={date} value={date}>
+                        {new Date(`${date}T00:00:00`).toLocaleDateString('en-IN', {
+                          day: '2-digit',
+                          month: 'short',
+                          year: 'numeric',
+                        })}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <label className="space-y-1.5">
+                  <span className="block text-xs font-semibold text-[#22222B]">Meal type</span>
+                  <select
+                    value={cancellationMealSlot}
+                    onChange={(event) =>
+                      selectCancellationMeals(
+                        cancellationDate,
+                        event.target.value as 'breakfast' | 'lunch' | 'dinner'
+                      )
+                    }
+                    className="w-full min-h-[44px] rounded-xl border border-[#B0BE8C]/60 bg-white px-3 text-sm font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#741B22]/20"
+                  >
+                    {(['breakfast', 'lunch', 'dinner'] as const).map((slot) => (
+                      <option key={slot} value={slot} disabled={slotCounts[slot] === 0}>
+                        {slot.charAt(0).toUpperCase() + slot.slice(1)} ({slotCounts[slot]})
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+
               <label className="block p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
-                <span className="block text-xs font-semibold text-[#22222B] mb-1.5">Number of meals to cancel</span>
+                <span className="block text-xs font-semibold text-[#22222B] mb-1.5">Quantity</span>
                 <input
                   type="number"
                   min={1}
@@ -1572,7 +1673,7 @@ export default function CustomerDashboard() {
                   className="w-full min-h-[44px] rounded-xl border border-[#B0BE8C]/60 bg-white px-3 text-sm font-semibold text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#741B22]/20"
                 />
                 <span className="block text-[10px] text-slate-500 font-medium mt-1.5">
-                  Choose from 1 to {mealsToSkip.length}, the number currently scheduled.
+                  Maximum available for this selection: {mealsToSkip.length}.
                 </span>
               </label>
 
@@ -1600,17 +1701,18 @@ export default function CustomerDashboard() {
               <div className="flex gap-2 pt-2">
                 <button
                   onClick={() => {
+                    setShowCancelMealsModal(false);
                     setMealsToSkip([]);
                     setSkipQuantity(1);
                   }}
                   disabled={submittingSkip}
-                  className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-medium transition-colors flex items-center justify-center disabled:opacity-60"
+                  className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-medium transition-colors flex items-center justify-center disabled:opacity-60"
                 >
                   Keep Meals
                 </button>
                 <button
                   onClick={handleConfirmSkip}
-                  disabled={submittingSkip}
+                  disabled={submittingSkip || mealsToSkip.length === 0}
                   className={`flex-1 min-h-[44px] py-2.5 px-3 rounded-xl text-white text-xs font-semibold shadow-md transition-colors flex items-center justify-center disabled:opacity-60 ${
                     isOnTime ? 'bg-emerald-700 hover:bg-emerald-800' : 'bg-[#B92F25] hover:bg-[#741B22]'
                   }`}
