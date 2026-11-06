@@ -353,6 +353,7 @@ export default function CustomerDashboard() {
         completed += 1;
       }
       setNotification(`${completed} ${completed === 1 ? 'meal' : 'meals'} cancelled successfully.`);
+      setShowCancelMealsModal(false);
       setMealsToSkip([]);
       setSkipQuantity(1);
       await loadData(true);
@@ -360,6 +361,7 @@ export default function CustomerDashboard() {
       const detail = err.response?.data?.error || 'Failed to complete the cancellation.';
       alert(completed > 0 ? `${completed} meal(s) were cancelled before an error occurred. ${detail}` : detail);
       if (completed > 0) {
+        setShowCancelMealsModal(false);
         setMealsToSkip([]);
         setSkipQuantity(1);
         await loadData(true);
