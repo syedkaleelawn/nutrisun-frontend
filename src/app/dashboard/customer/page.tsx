@@ -736,6 +736,9 @@ export default function CustomerDashboard() {
                         <div className="text-[11px] text-slate-500 space-y-0.5">
                           <div>Start Date: <strong className="text-[#22222B]">{sub.start_date || 'Pending Admin Setting'}</strong></div>
                           <div>Valid Until: <strong className="text-[#22222B]">{sub.end_date || 'N/A'}</strong></div>
+                          <p className="pt-1 leading-relaxed text-slate-500">
+                            Actual final delivery dates may differ due to holidays and meal cancellations. Check the Meal Schedule &amp; Cancellations table for the precise final date of each meal type.
+                          </p>
                         </div>
                       </div>
 
