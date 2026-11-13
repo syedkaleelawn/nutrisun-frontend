@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Geist } from 'next/font/google';
 import Image from 'next/image';
+import Link from 'next/link';
 import './globals.css';
 import { AuthProvider } from '@/context/AuthContext';
 import { ToastProvider } from '@/context/ToastContext';
@@ -111,7 +112,7 @@ export default function RootLayout({
                 </div>
               </div>
 
-              <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-[#22222B]/75 font-semibold">
+              <div className="flex flex-wrap items-center justify-center sm:justify-end gap-x-4 gap-y-2 sm:gap-x-6 text-[#22222B]/75 font-medium">
                 <span className="flex items-center gap-1 text-[#22222B]">
                   <Leaf className="w-3.5 h-3.5 text-[#B0BE8C]" />
                   Breakfast, Lunch & Dinner
@@ -120,6 +121,12 @@ export default function RootLayout({
                   <HeartPulse className="w-3.5 h-3.5 text-[#B92F25]" />
                   Flexible Meal Plans
                 </span>
+                <Link
+                  href="/terms"
+                  className="text-[#741B22] underline decoration-[#B0BE8C] underline-offset-4 hover:text-[#B92F25] transition-colors"
+                >
+                  Terms and Conditions
+                </Link>
               </div>
             </div>
           </footer>
