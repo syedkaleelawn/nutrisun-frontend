@@ -12,5 +12,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly',
       priority: 0.8,
     },
+    {
+      url: 'https://app.nutrisun.cloud/terms',
+      changeFrequency: 'yearly',
+      priority: 0.4,
+      lastModified: new Date('2026-11-14'),
+    },
   ];
 }
