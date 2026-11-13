@@ -65,7 +65,7 @@ export default function TermsPage() {
             <div className="rounded-2xl border border-[#F7DE9D] bg-[#F7DE9D]/25 p-4">
               <p>UPI ID: <span className="font-medium text-[#22222B]">nutrisun@kvb</span></p>
               <p>Bank: Karur Vysya Bank</p>
-              <p>Account holder: Syed Kaleel Awn Mohamed Ismail</p>
+              <p>Account holder: NutriSun Foods (OPC) Private Limited</p>
             </div>
             <p>Customers must verify the recipient and amount before authorising payment. NutriSun will never request a UPI PIN, banking password or one-time password.</p>
             <p>A debit is not itself approval. The purchase remains subject to verification and approval. NutriSun normally reviews a paid request within a few hours, but this is an indicative service period rather than a guaranteed approval time.</p>
@@ -95,8 +95,9 @@ export default function TermsPage() {
           </Section>
 
           <Section title="10. Delivery">
-            <p>Customers must ensure that an authorised person is available at the confirmed address. Delivery times are estimates and may vary because of traffic, weather, route conditions, order volume, access restrictions or other operational circumstances.</p>
+            <p>Customers must ensure that an authorised person is available at the confirmed address. All stated delivery timings are tentative only and are not guaranteed. Actual delivery times may vary because of traffic, weather, route conditions, order volume, access restrictions or other operational circumstances.</p>
             <p>If delivery cannot be completed because the recipient is unavailable, the telephone is unanswered, access is denied or the address is inaccurate, the meal may be treated as attempted or fulfilled, subject to applicable consumer rights.</p>
+            <p>Reusable tiffin boxes must be washed thoroughly, fully dried and returned to NutriSun during a subsequent meal delivery. If the required empty tiffin boxes are not returned in this condition, NutriSun may withhold the subsequent meal. A meal withheld for this reason will not qualify for a free replacement, credit or refund.</p>
             <p>The web application operationally classifies a non-cancelled breakfast as delivered after 9:00 a.m., lunch after 3:00 p.m., and dinner after 9:00 p.m. This automated classification does not remove a customer&apos;s statutory right to report genuine non-delivery or another service problem.</p>
             <p>A missing, damaged, incorrect or materially delayed meal should be reported as soon as reasonably possible, preferably on the same day.</p>
           </Section>
@@ -114,7 +115,8 @@ export default function TermsPage() {
           </Section>
 
           <Section title="13. Refunds, replacements and unused meals">
-            <p>Timely customer cancellations are ordinarily resolved through automatic rescheduling rather than a cash refund.</p>
+            <p>Timely customer cancellations are ordinarily resolved through automatic rescheduling rather than a cash refund. Except where a refund is required by applicable law, all refunds are granted solely at the discretion of NutriSun Foods (OPC) Private Limited.</p>
+            <p>If NutriSun agrees to a refund for cancellation before the scheduled end of a subscription, the refunded amount may be reduced by reasonable early-cancellation charges, administrative costs, the value of meals already delivered or scheduled within a non-replaceable period, and any other deductions communicated to the customer when the refund is considered.</p>
             <p>No replacement, credit or refund is ordinarily provided for a late cancellation, an unsuccessful delivery caused by inaccurate information or recipient unavailability, a meal the customer elects not to consume, or unused scheduled meals forfeited at the customer&apos;s request.</p>
             <p>A NutriSun holiday ordinarily results in rescheduling rather than a cash refund. If NutriSun fails to provide a confirmed meal and cannot reasonably replace it, NutriSun will offer an appropriate remedy, which may include rescheduling, account adjustment or refund.</p>
             <p>Nothing in these Terms limits a remedy that cannot lawfully be excluded under applicable consumer law.</p>
