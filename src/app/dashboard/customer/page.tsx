@@ -393,6 +393,36 @@ export default function CustomerDashboard() {
     return summaries;
   }, [meals, subscriptions]);
 
+  const subscriptionMealLastDates = useMemo(() => {
+    type MealSlot = 'breakfast' | 'lunch' | 'dinner';
+    type LastDates = Partial<Record<MealSlot, string>>;
+    const lastDates = new Map<number, LastDates>();
+
+    meals.forEach((meal) => {
+      if (meal.status !== 'TAKE') return;
+      const slot = meal.meal_slot.toLowerCase() as MealSlot;
+      if (!['breakfast', 'lunch', 'dinner'].includes(slot)) return;
+
+      const subscriptionDates = lastDates.get(meal.subscription_id) || {};
+      if (!subscriptionDates[slot] || meal.date > subscriptionDates[slot]!) {
+        subscriptionDates[slot] = meal.date;
+      }
+      lastDates.set(meal.subscription_id, subscriptionDates);
+    });
+
+    return lastDates;
+  }, [meals]);
+
+  const formatMealDate = (date?: string) => {
+    if (!date) return 'Not scheduled';
+    return new Date(`${date}T00:00:00Z`).toLocaleDateString('en-IN', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+      timeZone: 'UTC',
+    });
+  };
+
   const customerMealTotals = useMemo(() => {
     let delivered = 0;
     let scheduled = 0;
@@ -674,6 +704,7 @@ export default function CustomerDashboard() {
                     scheduled: 0,
                     total: 0,
                   };
+                  const lastMealDates = subscriptionMealLastDates.get(sub.id) || {};
 
                   return (
                     <div
@@ -735,10 +766,20 @@ export default function CustomerDashboard() {
 
                         <div className="text-[11px] text-slate-500 space-y-0.5">
                           <div>Start Date: <strong className="text-[#22222B]">{sub.start_date || 'Pending Admin Setting'}</strong></div>
-                          <div>Valid Until: <strong className="text-[#22222B]">{sub.end_date || 'N/A'}</strong></div>
-                          <p className="pt-1 leading-relaxed text-slate-500">
-                            Actual final delivery dates may differ due to holidays and meal cancellations. Check the Meal Schedule &amp; Cancellations table for the precise final date of each meal type.
-                          </p>
+                          <div className="pt-1">
+                            <div className="font-medium text-[#22222B]">Last meal dates</div>
+                            {(['breakfast', 'lunch', 'dinner'] as const).map((slot) =>
+                              lastMealDates[slot] ? (
+                                <div key={slot} className="flex items-center justify-between gap-3">
+                                  <span className="capitalize">{slot}</span>
+                                  <strong className="text-[#22222B]">{formatMealDate(lastMealDates[slot])}</strong>
+                                </div>
+                              ) : null
+                            )}
+                            {!lastMealDates.breakfast && !lastMealDates.lunch && !lastMealDates.dinner && (
+                              <div>Meal dates will appear after the subscription is approved and scheduled.</div>
+                            )}
+                          </div>
                         </div>
                       </div>
 
