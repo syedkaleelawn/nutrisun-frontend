@@ -1406,9 +1406,6 @@ export default function AdminDashboard() {
                   </div>
                   <h3 className="text-base font-semibold text-[#22222B] break-words">{p.name}</h3>
                   <div className="text-xl font-semibold text-[#741B22] my-2">₹{p.price.toFixed(2)}</div>
-                  <p className="text-xs text-slate-600">
-                    Included Shifts: <strong className="uppercase">{formatShiftName(p.shifts)}</strong>
-                  </p>
                 </div>
 
                 <div className="mt-4 pt-3 border-t border-[#B0BE8C]/25 flex items-center justify-between">
