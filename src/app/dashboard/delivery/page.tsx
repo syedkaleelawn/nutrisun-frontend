@@ -86,6 +86,7 @@ export default function DeliveryDashboard() {
     return (
       delivery.customer_name.toLowerCase().includes(query) ||
       delivery.delivery_address.toLowerCase().includes(query) ||
+      (delivery.google_maps_plus_code || '').toLowerCase().includes(query) ||
       delivery.customer_phone.includes(searchTerm) ||
       delivery.customer_secondary_phone?.includes(searchTerm)
     );
@@ -239,6 +240,17 @@ export default function DeliveryDashboard() {
                   <MapPin className="w-4 h-4 text-[#B92F25] shrink-0 mt-0.5" />
                   <span className="break-words">{item.delivery_address}</span>
                 </div>
+                {item.google_maps_plus_code && (
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.google_maps_plus_code)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-xs font-medium text-[#741B22] hover:underline"
+                  >
+                    <MapPin className="w-4 h-4 shrink-0" />
+                    Plus Code: {item.google_maps_plus_code}
+                  </a>
+                )}
                 <div className="flex items-start gap-1.5 text-xs text-[#741B22]">
                   <Phone className="w-4 h-4 text-slate-400 shrink-0" />
                   <div className="flex flex-col gap-0.5">
