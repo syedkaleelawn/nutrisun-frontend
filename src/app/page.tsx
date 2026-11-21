@@ -408,7 +408,7 @@ export default function EntryPage() {
                 disabled={submitting}
                 className="w-full min-h-[44px] py-3 px-4 rounded-xl bg-[#B92F25] hover:bg-[#741B22] text-white font-semibold text-xs shadow-md shadow-[#B92F25]/20 hover:shadow-lg transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 mt-2"
               >
-                {submitting ? 'Registering...' : 'Create Customer Account'}
+                {submitting ? 'Registering...' : 'Create Account'}
               </button>
             </form>
           )}
