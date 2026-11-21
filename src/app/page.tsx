@@ -172,14 +172,17 @@ export default function EntryPage() {
                 setError(null);
                 setSuccess(null);
               }}
-              className={`flex-1 min-h-[44px] py-2.5 rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-1.5 ${
+              className={`flex-1 min-h-[52px] py-2.5 rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-2 ${
                 mode === 'login'
                   ? 'bg-white text-[#B92F25] shadow-xs border border-[#B0BE8C]/30'
                   : 'text-[#22222B]/70 hover:text-[#22222B]'
               }`}
             >
               <LogIn className="w-4 h-4 shrink-0" />
-              Sign In
+              <span className="flex flex-col items-start leading-tight">
+                <span>Existing Customer</span>
+                <span className="text-[10px] font-medium opacity-75">Sign In</span>
+              </span>
             </button>
             <button
               type="button"
@@ -188,14 +191,17 @@ export default function EntryPage() {
                 setError(null);
                 setSuccess(null);
               }}
-              className={`flex-1 min-h-[44px] py-2.5 rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-1.5 ${
+              className={`flex-1 min-h-[52px] py-2.5 rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-2 ${
                 mode === 'register'
                   ? 'bg-white text-[#B92F25] shadow-xs border border-[#B0BE8C]/30'
                   : 'text-[#22222B]/70 hover:text-[#22222B]'
               }`}
             >
               <UserPlus className="w-4 h-4 shrink-0" />
-              Sign-up
+              <span className="flex flex-col items-start leading-tight">
+                <span>New Customer</span>
+                <span className="text-[10px] font-medium opacity-75">Sign Up</span>
+              </span>
             </button>
           </div>
 
