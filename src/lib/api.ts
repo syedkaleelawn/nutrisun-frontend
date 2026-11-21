@@ -190,6 +190,7 @@ export interface User {
   phone: string;
   secondary_phone?: string;
   delivery_address: string;
+  google_maps_plus_code?: string;
   email?: string;
   role: Role;
   must_change_password?: boolean;
@@ -339,6 +340,7 @@ export interface DeliveryItem {
   customer_phone: string;
   customer_secondary_phone?: string;
   delivery_address: string;
+  google_maps_plus_code?: string;
   meal_slot: MealSlot;
   quantity: number;
   schedule_status: 'SCHEDULED' | 'COMPLETED';
@@ -722,7 +724,7 @@ export const adminApi = {
     api.get<{ count: number; customers: User[] }>('/admin/customers', { params }),
   getCustomerMeals: (id: number, params?: { date?: string; month?: string; year?: string }) =>
     api.get<{ count: number; customer: User; meals: DailyMealLog[] }>(`/admin/customers/${id}/meals`, { params }),
-  updateCustomerAddress: (id: number, data: { delivery_address: string }) =>
+  updateCustomerAddress: (id: number, data: { delivery_address: string; google_maps_plus_code?: string }) =>
     api.put<{ message: string; user: User }>(`/admin/customers/${id}/address`, data),
   resetCustomerPassword: (id: number, data: { temporary_password: string }) =>
     api.post<{ message: string }>(`/admin/customers/${id}/reset-password`, data),
