@@ -1205,6 +1205,7 @@ export default function AdminDashboard() {
                         onClick={() => {
                           setEditingCust(c);
                           setNewCustAddress(c.delivery_address);
+                          setNewCustPlusCode(c.google_maps_plus_code || '');
                         }}
                         className="px-2.5 py-1 rounded-lg bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-[10px] font-medium transition-colors"
                       >
