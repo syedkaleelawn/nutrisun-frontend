@@ -119,6 +119,7 @@ export default function AdminDashboard() {
   // Edit Customer Address Modal
   const [editingCust, setEditingCust] = useState<User | null>(null);
   const [newCustAddress, setNewCustAddress] = useState('');
+  const [newCustPlusCode, setNewCustPlusCode] = useState('');
   const [savingCustAddress, setSavingCustAddress] = useState(false);
 
   // Reset Customer Password Modal
@@ -342,7 +343,7 @@ export default function AdminDashboard() {
     if (!editingCust) return;
     setSavingCustAddress(true);
     try {
-      const res = await adminApi.updateCustomerAddress(editingCust.id, { delivery_address: newCustAddress });
+      const res = await adminApi.updateCustomerAddress(editingCust.id, { delivery_address: newCustAddress, google_maps_plus_code: newCustPlusCode });
       setNotification(res.data.message);
       setEditingCust(null);
       await loadAll();
@@ -1129,6 +1130,7 @@ export default function AdminDashboard() {
                   <div className="break-words">
                     Delivery Address: <strong className="text-slate-700">{c.delivery_address || 'None'}</strong>
                   </div>
+                  <div>Plus Code: <strong className="text-[#22222B]">{c.google_maps_plus_code || 'None'}</strong></div>
                   <div>
                     Temp Password Status:{' '}
                     {c.must_change_password ? (
@@ -1145,6 +1147,7 @@ export default function AdminDashboard() {
                     onClick={() => {
                       setEditingCust(c);
                       setNewCustAddress(c.delivery_address);
+                      setNewCustPlusCode(c.google_maps_plus_code || '');
                     }}
                     className="min-h-[44px] px-3 py-2 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-medium transition-colors flex items-center justify-center"
                   >
@@ -1174,6 +1177,7 @@ export default function AdminDashboard() {
                   <th className="p-3">Primary Number</th>
                   <th className="p-3">Secondary Number</th>
                   <th className="p-3">Delivery Address</th>
+                  <th className="p-3">Plus Code</th>
                   <th className="p-3">Temp Password Status</th>
                   <th className="p-3 text-right">Actions</th>
                 </tr>
@@ -1186,6 +1190,7 @@ export default function AdminDashboard() {
                     <td className="p-3">{c.phone}</td>
                     <td className="p-3">{c.secondary_phone || 'None'}</td>
                     <td className="p-3 text-slate-700 max-w-xs truncate">{c.delivery_address || 'None'}</td>
+                    <td className="p-3">{c.google_maps_plus_code || 'None'}</td>
                     <td className="p-3">
                       {c.must_change_password ? (
                         <span className="px-2 py-0.5 rounded-full bg-[#F7DE9D] text-[#22222B] border border-[#F7DE9D]/80 text-[10px] font-medium">
@@ -1689,6 +1694,18 @@ export default function AdminDashboard() {
                 onChange={(e) => setNewCustAddress(e.target.value)}
                 className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
               />
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-slate-700 mb-1">Google Maps Plus Code</label>
+              <input
+                type="text"
+                value={newCustPlusCode}
+                onChange={(e) => setNewCustPlusCode(e.target.value)}
+                placeholder="e.g. X55M+FRR Narasingam, Tamil Nadu"
+                className="w-full min-h-[44px] px-3 py-2.5 rounded-xl border border-[#B0BE8C]/40 text-base sm:text-xs font-medium text-[#22222B] focus:outline-none focus:ring-2 focus:ring-[#B92F25]/20 focus:border-[#B0BE8C]"
+              />
+              <p className="mt-1 text-[10px] text-slate-500">Paste the Plus Code shown in Google Maps. Leave blank if it is not yet available.</p>
             </div>
 
             <div className="flex gap-2">
