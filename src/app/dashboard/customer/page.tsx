@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import QRCode from 'qrcode';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
@@ -55,6 +55,15 @@ function isMealCompleted(meal: DailyMealLog): boolean {
   return hourIST >= completionHour;
 }
 
+type PendingUpiReturn = {
+  subscriptionId: number;
+  startedAt: number;
+  userId: string;
+};
+
+const UPI_RETURN_STORAGE_KEY = 'nutrisun:pending-upi-return';
+const UPI_RETURN_EXPIRY_MS = 24 * 60 * 60 * 1000;
+
 export default function CustomerDashboard() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
@@ -108,6 +117,9 @@ export default function CustomerDashboard() {
   const [confirmingPayment, setConfirmingPayment] = useState(false);
   const [confirmedPaymentSubIds, setConfirmedPaymentSubIds] = useState<number[]>([]);
   const [dynamicQrUrl, setDynamicQrUrl] = useState<string>('');
+  const [pendingUpiReturn, setPendingUpiReturn] = useState<PendingUpiReturn | null>(null);
+  const [showUpiReturnReminder, setShowUpiReturnReminder] = useState(false);
+  const upiHandoffStartedAtRef = useRef<number | null>(null);
 
   // Single meal-cancellation action
   const [showCancelMealsModal, setShowCancelMealsModal] = useState(false);
@@ -287,10 +299,86 @@ export default function CustomerDashboard() {
     }
   };
 
+  const clearPendingUpiReturn = () => {
+    if (typeof window !== 'undefined') {
+      window.localStorage.removeItem(UPI_RETURN_STORAGE_KEY);
+    }
+    upiHandoffStartedAtRef.current = null;
+    setPendingUpiReturn(null);
+    setShowUpiReturnReminder(false);
+  };
+
+  const handleUpiHandoff = (subscriptionId: number) => {
+    if (!user || typeof window === 'undefined') return;
+    const pending: PendingUpiReturn = {
+      subscriptionId,
+      startedAt: Date.now(),
+      userId: String(user.id),
+    };
+    window.localStorage.setItem(UPI_RETURN_STORAGE_KEY, JSON.stringify(pending));
+    upiHandoffStartedAtRef.current = pending.startedAt;
+    setPendingUpiReturn(pending);
+    setShowUpiReturnReminder(false);
+  };
+
+  useEffect(() => {
+    if (!user || typeof window === 'undefined') return;
+
+    const readPendingHandoff = () => {
+      const raw = window.localStorage.getItem(UPI_RETURN_STORAGE_KEY);
+      if (!raw) return null;
+      try {
+        const pending = JSON.parse(raw) as PendingUpiReturn;
+        const isValid =
+          pending.subscriptionId > 0 &&
+          pending.userId === String(user.id) &&
+          Date.now() - pending.startedAt < UPI_RETURN_EXPIRY_MS;
+        if (!isValid) {
+          window.localStorage.removeItem(UPI_RETURN_STORAGE_KEY);
+          return null;
+        }
+        return pending;
+      } catch {
+        window.localStorage.removeItem(UPI_RETURN_STORAGE_KEY);
+        return null;
+      }
+    };
+
+    const offerCompletion = () => {
+      if (document.visibilityState !== 'visible') return;
+      const pending = readPendingHandoff();
+      if (!pending || Date.now() - pending.startedAt < 1500) return;
+      setPendingUpiReturn(pending);
+      setShowUpiReturnReminder(true);
+    };
+
+    const existing = readPendingHandoff();
+    if (existing) {
+      const timer = window.setTimeout(offerCompletion, 500);
+      document.addEventListener('visibilitychange', offerCompletion);
+      window.addEventListener('focus', offerCompletion);
+      return () => {
+        window.clearTimeout(timer);
+        document.removeEventListener('visibilitychange', offerCompletion);
+        window.removeEventListener('focus', offerCompletion);
+      };
+    }
+
+    document.addEventListener('visibilitychange', offerCompletion);
+    window.addEventListener('focus', offerCompletion);
+    return () => {
+      document.removeEventListener('visibilitychange', offerCompletion);
+      window.removeEventListener('focus', offerCompletion);
+    };
+  }, [user]);
+
   const handleReportPaymentCompleted = async (subId: number) => {
     setConfirmingPayment(true);
     try {
       await customerApi.reportPaymentCompleted(subId);
+      if (pendingUpiReturn?.subscriptionId === subId) {
+        clearPendingUpiReturn();
+      }
       setNotification('Payment recorded. The admin will review and approve your request within a few hours.');
       setConfirmedPaymentSubIds((prev) => prev.includes(subId) ? prev : [...prev, subId]);
       await loadData(true);
@@ -1416,6 +1504,7 @@ export default function CustomerDashboard() {
 
                         <a
                           href={purchaseSuccessData.upi_url || activePaymentDetails?.upiUrl}
+                          onClick={() => handleUpiHandoff(subId)}
                           className="min-h-[44px] py-2 px-3 rounded-xl bg-white border border-[#B0BE8C] hover:bg-[#B0BE8C]/20 text-[#22222B] text-xs font-medium transition-all flex items-center justify-center gap-1.5 shadow-2xs text-center"
                         >
                           <ExternalLink className="w-4 h-4 text-[#741B22] shrink-0" />
@@ -1556,6 +1645,7 @@ export default function CustomerDashboard() {
 
                 <a
                   href={activePaymentDetails?.upiUrl}
+                  onClick={() => handleUpiHandoff(activePaymentModalSub.id)}
                   className="min-h-[44px] py-2 px-3 rounded-xl bg-white border border-[#B0BE8C] hover:bg-[#B0BE8C]/20 text-[#22222B] text-xs font-medium transition-all flex items-center justify-center gap-1.5 shadow-2xs text-center"
                 >
                   <ExternalLink className="w-4 h-4 text-[#741B22] shrink-0" />
@@ -1632,6 +1722,64 @@ export default function CustomerDashboard() {
             </button>
           </div>
         </div>
+      )}
+
+      {/* REMINDER: CUSTOMER RETURNED FROM A UPI APP WITHOUT SUBMITTING */}
+      {showUpiReturnReminder && pendingUpiReturn && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 z-[110]">
+          <div className="bg-white rounded-3xl p-5 sm:p-7 max-w-sm w-full border border-[#B0BE8C]/40 shadow-2xl space-y-4">
+            <div className="w-11 h-11 rounded-full bg-[#F7DE9D]/45 border border-[#F7DE9D] flex items-center justify-center">
+              <AlertCircle className="w-5 h-5 text-[#741B22]" />
+            </div>
+            <div className="space-y-1.5">
+              <h3 className="text-lg font-semibold text-[#22222B]">Have you completed the payment?</h3>
+              <p className="text-xs leading-relaxed text-slate-600">
+                Your purchase request has not been submitted yet. Confirm the payment now so the admin can review order #{pendingUpiReturn.subscriptionId}.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => handleReportPaymentCompleted(pendingUpiReturn.subscriptionId)}
+              disabled={confirmingPayment}
+              className="w-full min-h-[46px] px-4 py-2.5 rounded-xl bg-[#B92F25] hover:bg-[#741B22] disabled:opacity-50 text-white text-xs font-semibold shadow-md transition-colors flex items-center justify-center gap-2"
+            >
+              {confirmingPayment ? (
+                <>
+                  <RefreshCw className="w-4 h-4 animate-spin" />
+                  <span>Submitting...</span>
+                </>
+              ) : (
+                <>
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>Payment completed — submit now</span>
+                </>
+              )}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                clearPendingUpiReturn();
+                handleClosePaymentModal();
+                setNotification('Purchase cancelled. No payment confirmation was submitted.');
+              }}
+              disabled={confirmingPayment}
+              className="w-full min-h-[44px] px-4 py-2.5 rounded-xl bg-white hover:bg-[#F3F5F4] border border-[#B0BE8C] text-[#22222B] text-xs font-medium transition-colors"
+            >
+              Cancel purchase
+            </button>
+          </div>
+        </div>
+      )}
+
+      {pendingUpiReturn && !showUpiReturnReminder && (
+        <button
+          type="button"
+          onClick={() => setShowUpiReturnReminder(true)}
+          className="fixed left-3 right-3 bottom-3 sm:left-auto sm:right-5 sm:w-[360px] z-[90] rounded-2xl border border-[#F7DE9D] bg-white px-4 py-3 text-left shadow-xl"
+        >
+          <span className="block text-xs font-semibold text-[#741B22]">Unfinished purchase</span>
+          <span className="block mt-0.5 text-[11px] text-slate-600">Return to order #{pendingUpiReturn.subscriptionId} and complete submission.</span>
+        </button>
       )}
 
       {/* MODAL: CANCEL SCHEDULED MEALS */}
@@ -1779,6 +1927,7 @@ export default function CustomerDashboard() {
     </div>
   );
 }
+
 
 
 
