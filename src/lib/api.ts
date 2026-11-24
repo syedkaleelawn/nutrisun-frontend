@@ -326,12 +326,22 @@ export interface BusinessHoliday {
   admin?: User;
 }
 
+export interface RecipeVideo {
+  id: number;
+  item_name: string;
+  normalized_item_name: string;
+  youtube_url: string;
+  video_title?: string;
+  language: string;
+}
+
 export interface ShiftKitchenResponse {
   date: string;
   shift: MealSlot;
   total_portions: number;
   late_cancellations: number;
   menu_items: MenuItem[];
+  recipe_videos: RecipeVideo[];
 }
 
 export interface DeliveryItem {
