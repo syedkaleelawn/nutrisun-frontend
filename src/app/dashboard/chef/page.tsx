@@ -5,7 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { kitchenApi, ShiftKitchenResponse, MealSlot } from '@/lib/api';
-import { ChefHat, Calendar, RefreshCw, Coffee, Utensils, Moon, Clock, AlertTriangle, ChevronRight } from 'lucide-react';
+import { ChefHat, Calendar, RefreshCw, Coffee, Utensils, Moon, Clock, AlertTriangle, ChevronRight, ExternalLink } from 'lucide-react';
 
 const MEAL_TYPES: MealSlot[] = ['breakfast', 'lunch', 'dinner'];
 const MEAL_META: Record<MealSlot, { label: string; icon: React.ComponentType<{ className?: string }>; iconClass: string; cardClass: string }> = {
@@ -140,6 +140,27 @@ export default function ChefDashboard() {
                       ))}
                     </div>
                   ) : <div className="rounded-xl border border-dashed border-[#B0BE8C]/50 bg-white/60 px-3 py-5 text-center text-xs font-medium text-slate-500">No menu entered.</div>}
+                  {mealData?.recipe_videos?.length ? (
+                    <div className="mt-3 border-t border-[#B0BE8C]/25 pt-3">
+                      <div className="mb-2 text-[10px] font-medium tracking-wide text-slate-500">Tamil recipe videos</div>
+                      <div className="flex flex-wrap gap-2">
+                        {mealData.recipe_videos.map((recipe) => (
+                          <a
+                            key={recipe.id}
+                            href={recipe.youtube_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title={recipe.video_title || `Watch ${recipe.item_name} recipe in Tamil`}
+                            className="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg border border-[#741B22]/20 bg-white px-2.5 py-1.5 text-xs font-medium text-[#741B22] transition-colors hover:bg-[#741B22]/5 focus:outline-none focus:ring-2 focus:ring-[#741B22]/20"
+                          >
+                            <span>{recipe.item_name}</span>
+                            <ExternalLink className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                            <span className="sr-only">opens YouTube in a new tab</span>
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
                 </div>
               </section>
             );
