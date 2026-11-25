@@ -54,9 +54,8 @@ export default function TermsPage() {
             <p>NutriSun may introduce, modify or withdraw plans prospectively. A later pricing or plan change will not alter the price recorded for a previously confirmed purchase.</p>
           </Section>
 
-          <Section title="5. Availability and order acceptance">
-            <p>Availability is assessed separately for every meal type included in a selected plan. The payment option and UPI QR code are made available only after the selected quantity passes the availability check.</p>
-            <p>Availability confirmation permits the customer to proceed with payment but is not final acceptance. A purchase is confirmed only after the customer completes and acknowledges payment, NutriSun verifies it, and an administrator approves the purchase and confirms the applicable start date or dates.</p>
+          <Section title="5. Order and payment approval">
+            <p>A purchase is confirmed only after the customer completes and acknowledges payment, NutriSun verifies it, and an administrator approves the purchase and confirms the applicable start date or dates.</p>
             <p>NutriSun may reject a request because of payment discrepancies, delivery infeasibility, capacity limitations, suspected misuse or another reasonable operational concern.</p>
           </Section>
 
@@ -192,4 +191,5 @@ export default function TermsPage() {
     </div>
   );
 }
+
 
