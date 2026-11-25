@@ -91,8 +91,6 @@ export default function CustomerDashboard() {
   const [purchaseQuantityInput, setPurchaseQuantityInput] = useState('1');
   const purchaseQuantity = Math.min(5, Math.max(1, Number.parseInt(purchaseQuantityInput, 10) || 1));
   const [buying, setBuying] = useState(false);
-  const [availabilityStatus, setAvailabilityStatus] = useState<'unchecked' | 'checking' | 'available' | 'unavailable'>('unchecked');
-  const [availabilityMessage, setAvailabilityMessage] = useState('');
   const [purchaseSuccessData, setPurchaseSuccessData] = useState<{
     subscription_id: number;
     plan_name: string;
@@ -237,10 +235,6 @@ export default function CustomerDashboard() {
 
   const handleBuyPlan = async () => {
     if (!selectedPlanToBuy) return;
-    if (availabilityStatus !== 'available') {
-      alert('Please confirm meal availability before proceeding.');
-      return;
-    }
     const planType = getPlanMealType(selectedPlanToBuy.name);
     if ((planType === 'OR_LUNCH' || planType === 'OR_SIMPLE') && !chosenMealOption) {
       alert('Please select your preferred meal combination before proceeding to payment.');
@@ -257,37 +251,9 @@ export default function CustomerDashboard() {
       setPurchaseSuccessData(res.data);
       await loadData(true);
     } catch (err: any) {
-      if (err.response?.status === 409) {
-        setAvailabilityStatus('unavailable');
-        setAvailabilityMessage(err.response?.data?.error || 'The selected quantity is no longer available.');
-      }
       alert(err.response?.data?.error || 'Failed to initiate plan purchase.');
     } finally {
       setBuying(false);
-    }
-  };
-
-  const handleCheckPlanAvailability = async () => {
-    if (!selectedPlanToBuy) return;
-    const planType = getPlanMealType(selectedPlanToBuy.name);
-    if ((planType === 'OR_LUNCH' || planType === 'OR_SIMPLE') && !chosenMealOption) {
-      alert('Please select your preferred meal combination before checking availability.');
-      return;
-    }
-
-    setAvailabilityStatus('checking');
-    setAvailabilityMessage('');
-    try {
-      await customerApi.checkPlanAvailability(
-        selectedPlanToBuy.id,
-        chosenMealOption || undefined,
-        purchaseQuantity
-      );
-      setAvailabilityStatus('available');
-      setAvailabilityMessage('Available for all included meal types.');
-    } catch (err: any) {
-      setAvailabilityStatus('unavailable');
-      setAvailabilityMessage(err.response?.data?.error || 'The selected quantity is not available.');
     }
   };
 
@@ -395,8 +361,6 @@ export default function CustomerDashboard() {
     setActivePaymentModalSub(null);
     setDynamicQrUrl('');
     setPurchaseQuantityInput('1');
-    setAvailabilityStatus('unchecked');
-    setAvailabilityMessage('');
   };
 
   const activePaymentDetails = useMemo(() => {
@@ -1284,8 +1248,6 @@ export default function CustomerDashboard() {
                         const nextValue = event.target.value;
                         if (nextValue === '' || /^\d+$/.test(nextValue)) {
                           setPurchaseQuantityInput(nextValue);
-                          setAvailabilityStatus('unchecked');
-                          setAvailabilityMessage('');
                         }
                       }}
                       onBlur={() => setPurchaseQuantityInput(String(purchaseQuantity))}
@@ -1311,8 +1273,6 @@ export default function CustomerDashboard() {
                         type="button"
                         onClick={() => {
                           setChosenMealOption('breakfast,lunch');
-                          setAvailabilityStatus('unchecked');
-                          setAvailabilityMessage('');
                         }}
                         className={`p-3 rounded-xl border text-left text-xs transition-all flex items-center justify-between ${
                           chosenMealOption === 'breakfast,lunch'
@@ -1333,8 +1293,6 @@ export default function CustomerDashboard() {
                         type="button"
                         onClick={() => {
                           setChosenMealOption('lunch,dinner');
-                          setAvailabilityStatus('unchecked');
-                          setAvailabilityMessage('');
                         }}
                         className={`p-3 rounded-xl border text-left text-xs transition-all flex items-center justify-between ${
                           chosenMealOption === 'lunch,dinner'
@@ -1364,8 +1322,6 @@ export default function CustomerDashboard() {
                         type="button"
                         onClick={() => {
                           setChosenMealOption('breakfast');
-                          setAvailabilityStatus('unchecked');
-                          setAvailabilityMessage('');
                         }}
                         className={`p-3 rounded-xl border text-left text-xs transition-all flex items-center justify-between ${
                           chosenMealOption === 'breakfast'
@@ -1386,8 +1342,6 @@ export default function CustomerDashboard() {
                         type="button"
                         onClick={() => {
                           setChosenMealOption('dinner');
-                          setAvailabilityStatus('unchecked');
-                          setAvailabilityMessage('');
                         }}
                         className={`p-3 rounded-xl border text-left text-xs transition-all flex items-center justify-between ${
                           chosenMealOption === 'dinner'
@@ -1414,27 +1368,6 @@ export default function CustomerDashboard() {
                   </div>
                 )}
 
-                {availabilityStatus !== 'unchecked' && (
-                  <div className={`rounded-xl border px-3 py-2 text-xs font-medium ${
-                    availabilityStatus === 'available'
-                      ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
-                      : availabilityStatus === 'unavailable'
-                        ? 'border-[#B92F25]/25 bg-[#B92F25]/5 text-[#741B22]'
-                        : 'border-[#B0BE8C]/40 bg-[#F3F5F4] text-[#22222B]'
-                  }`}>
-                    {availabilityStatus === 'checking' ? 'Checking availability...' : availabilityMessage}
-                  </div>
-                )}
-
-                <button
-                  type="button"
-                  onClick={handleCheckPlanAvailability}
-                  disabled={availabilityStatus === 'checking'}
-                  className="w-full min-h-[44px] py-2.5 px-3 rounded-xl bg-[#F7DE9D] text-[#22222B] text-xs font-semibold border border-[#F7DE9D] hover:bg-[#B0BE8C] disabled:opacity-50 transition-colors"
-                >
-                  {availabilityStatus === 'checking' ? 'Checking...' : availabilityStatus === 'available' ? 'Recheck Availability' : 'Check Availability'}
-                </button>
-
                 <div className="flex gap-2">
                   <button
                     onClick={handleClosePaymentModal}
@@ -1444,7 +1377,7 @@ export default function CustomerDashboard() {
                   </button>
                   <button
                     onClick={handleBuyPlan}
-                    disabled={buying || availabilityStatus !== 'available'}
+                    disabled={buying}
                     className="flex-1 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#B92F25] text-white text-xs font-semibold shadow-md hover:bg-[#741B22] disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
                   >
                     {buying ? 'Processing...' : 'Proceed to Payment'}
