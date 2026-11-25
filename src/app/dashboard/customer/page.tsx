@@ -1122,6 +1122,8 @@ export default function CustomerDashboard() {
                         setSelectedPlanToBuy(plan);
                         setPurchaseQuantityInput('1');
                         setPurchaseSuccessData(null);
+                        setAvailabilityStatus('unchecked');
+                        setAvailabilityMessage('');
                         const pType = getPlanMealType(plan.name);
                         if (pType === 'OR_LUNCH') {
                           setChosenMealOption('breakfast,lunch');
@@ -1858,7 +1860,6 @@ export default function CustomerDashboard() {
     </div>
   );
 }
-
 
 
 
