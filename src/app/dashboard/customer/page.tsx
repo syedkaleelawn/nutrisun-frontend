@@ -1503,13 +1503,6 @@ export default function CustomerDashboard() {
                       </button>
                     )}
 
-                    <button
-                      type="button"
-                      onClick={handleClosePaymentModal}
-                      className="w-full min-h-[44px] py-2.5 px-4 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-medium transition-colors flex items-center justify-center"
-                    >
-                      Done (View Order in Dashboard)
-                    </button>
                   </div>
                 );
               })()
