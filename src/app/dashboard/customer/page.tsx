@@ -29,7 +29,6 @@ import {
   Copy,
   Download,
   X,
-  ExternalLink,
   AlertCircle,
 } from 'lucide-react';
 
@@ -1423,7 +1422,7 @@ export default function CustomerDashboard() {
                       </div>
 
                       {/* Mobile convenience buttons: Copy UPI ID, Pay via UPI, and Download QR */}
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
                         <button
                           type="button"
                           onClick={handleCopyUpiId}
@@ -1432,15 +1431,6 @@ export default function CustomerDashboard() {
                           {copiedUpi ? <Check className="w-4 h-4 text-emerald-600 shrink-0" /> : <Copy className="w-4 h-4 text-[#741B22] shrink-0" />}
                           <span>{copiedUpi ? 'Copied!' : 'Copy UPI ID'}</span>
                         </button>
-
-                        <a
-                          href={purchaseSuccessData.upi_url || activePaymentDetails?.upiUrl}
-                          onClick={() => handleUpiHandoff(subId)}
-                          className="min-h-[44px] py-2 px-3 rounded-xl bg-white border border-[#B0BE8C] hover:bg-[#B0BE8C]/20 text-[#22222B] text-xs font-medium transition-all flex items-center justify-center gap-1.5 shadow-2xs text-center"
-                        >
-                          <ExternalLink className="w-4 h-4 text-[#741B22] shrink-0" />
-                          <span>Pay via UPI</span>
-                        </a>
 
                         <a
                           href={dynamicQrUrl || purchaseSuccessData.upi_url || '#'}
@@ -1557,7 +1547,7 @@ export default function CustomerDashboard() {
               </div>
 
               {/* Mobile convenience buttons: Copy UPI ID, Pay via UPI, and Download QR */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
                 <button
                   type="button"
                   onClick={handleCopyUpiId}
@@ -1566,15 +1556,6 @@ export default function CustomerDashboard() {
                   {copiedUpi ? <Check className="w-4 h-4 text-emerald-600 shrink-0" /> : <Copy className="w-4 h-4 text-[#741B22] shrink-0" />}
                   <span>{copiedUpi ? 'Copied!' : 'Copy UPI ID'}</span>
                 </button>
-
-                <a
-                  href={activePaymentDetails?.upiUrl}
-                  onClick={() => handleUpiHandoff(activePaymentModalSub.id)}
-                  className="min-h-[44px] py-2 px-3 rounded-xl bg-white border border-[#B0BE8C] hover:bg-[#B0BE8C]/20 text-[#22222B] text-xs font-medium transition-all flex items-center justify-center gap-1.5 shadow-2xs text-center"
-                >
-                  <ExternalLink className="w-4 h-4 text-[#741B22] shrink-0" />
-                  <span>Pay via UPI</span>
-                </a>
 
                 <a
                   href={dynamicQrUrl || activePaymentDetails?.upiUrl || '#'}
