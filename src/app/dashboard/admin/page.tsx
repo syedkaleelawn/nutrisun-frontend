@@ -30,6 +30,7 @@ import {
 } from 'lucide-react';
 import SalesAnalyticsModule from '@/components/SalesAnalyticsModule';
 import ChangePasswordModal from '@/components/ChangePasswordModal';
+import AdminFeedbackPanel from '@/components/AdminFeedbackPanel';
 
 export default function AdminDashboard() {
   const { user, loading: authLoading } = useAuth();
@@ -37,7 +38,7 @@ export default function AdminDashboard() {
 
   // Admin workspace tabs. Menu management remains available in the Monthly Menu section.
   const [activeTab, setActiveTab] = useState<
-    'pending' | 'subscriptions' | 'requests' | 'customers' | 'staff' | 'plans' | 'holidays' | 'analytics'
+    'pending' | 'subscriptions' | 'requests' | 'customers' | 'staff' | 'plans' | 'holidays' | 'feedback' | 'analytics'
   >('pending');
   const [showAdminChangePassword, setShowAdminChangePassword] = useState(false);
 
@@ -642,6 +643,7 @@ export default function AdminDashboard() {
           { id: 'staff', label: `Staff (${staff.length})` },
           { id: 'plans', label: `Plans (${plans.length})` },
           { id: 'holidays', label: `Holidays (${holidays.length})` },
+          { id: 'feedback', label: 'Feedback' },
           { id: 'analytics', label: 'Analytics' },
         ].map((t) => (
           <button
@@ -1536,6 +1538,9 @@ export default function AdminDashboard() {
           </div>
         </div>
       )}
+
+      {/* CUSTOMER FEEDBACK */}
+      {activeTab === 'feedback' && <AdminFeedbackPanel />}
 
       {/* TAB 8: ANALYTICS */}
       {activeTab === 'analytics' && (
