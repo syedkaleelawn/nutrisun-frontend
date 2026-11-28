@@ -604,6 +604,30 @@ export interface UploadConflictResponse {
   uncertain_entries?: string[];
 }
 
+
+export type FeedbackVote = 'LIKE' | 'DISLIKE';
+
+export interface MenuFeedback {
+  id: number;
+  user_id: number;
+  date: string;
+  meal_slot: MealSlot;
+  vote: FeedbackVote;
+  comment: string;
+  menu_snapshot: string;
+  created_at: string;
+  updated_at: string;
+  user?: User;
+}
+
+export interface FeedbackMenuResponse {
+  date: string;
+  meal_slot: MealSlot;
+  menu: MenuItem[];
+  menu_summary: string;
+  feedback: MenuFeedback | null;
+}
+
 // Typed API Helpers
 export const authApi = {
   register: (data: { first_name: string; last_name: string; phone: string; address_line_1: string; address_line_2: string; city: 'Madurai'; pincode: string; password: string; email?: string }) =>
@@ -659,6 +683,12 @@ export const customerApi = {
     api.get<{ count: number; transactions: CreditTransaction[] }>('/customer/credits', { params }),
   acceptInstructions: (data?: { version?: string }) =>
     api.post<{ message: string; instructions_accepted: boolean; instructions_version: string }>('/customer/accept-instructions', data || {}),
+  getFeedbackMenu: (params: { date: string; meal_slot: MealSlot }) =>
+    api.get<FeedbackMenuResponse>('/customer/feedback/menu', { params }),
+  getFeedback: () =>
+    api.get<{ count: number; feedback: MenuFeedback[] }>('/customer/feedback'),
+  submitFeedback: (data: { date: string; meal_slot: MealSlot; vote: FeedbackVote; comment?: string }) =>
+    api.post<{ message: string; feedback: MenuFeedback }>('/customer/feedback', data),
 };
 
 export const menuApi = {
@@ -711,6 +741,8 @@ export const adminApi = {
     api.get<{ count: number; requests: ServiceRequest[] }>('/admin/requests', { params }),
   getHolidays: () =>
     api.get<{ count: number; holidays: BusinessHoliday[] }>('/admin/holidays'),
+  getFeedback: (params?: { date?: string; meal_slot?: MealSlot; vote?: FeedbackVote }) =>
+    api.get<{ count: number; feedback: MenuFeedback[] }>('/admin/feedback', { params }),
   declareHoliday: (data: { date: string; meal_slot: MealSlot }) =>
     api.post<{ message: string; holiday: BusinessHoliday }>('/admin/holidays', data),
   reallocate: (data: { original_meal_log_id: number; new_date: string; new_slot: MealSlot; reason?: string }) =>
