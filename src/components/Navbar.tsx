@@ -22,6 +22,7 @@ import {
   UsersRound,
   House,
   CreditCard,
+  MessageSquareHeart,
 } from 'lucide-react';
 
 export default function Navbar() {
@@ -86,6 +87,7 @@ export default function Navbar() {
         return [
           { label: 'My Subscriptions', href: '/dashboard/customer', icon: CalendarDays },
           { label: 'Monthly Menu', href: '/dashboard/menu', icon: Calendar },
+          { label: 'Feedback', href: '/dashboard/feedback', icon: MessageSquareHeart },
         ];
     }
   };
