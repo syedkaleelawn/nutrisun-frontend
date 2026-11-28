@@ -864,7 +864,7 @@ export default function CustomerDashboard() {
                               </div>
                             );
                           })()
-                        ) : isActive ? (
+                        ) : isActive && mealSummary.scheduled > 0 ? (
                           <button
                             onClick={() => setActiveTab('schedule')}
                             className="w-full min-h-[44px] px-4 py-2 rounded-xl bg-[#B0BE8C] hover:bg-[#B0BE8C] border border-[#B0BE8C] text-[#22222B] text-xs font-medium transition-all flex items-center justify-center gap-1.5"
